@@ -2,8 +2,6 @@ import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { PARENT_REVIEWS } from "@/content/website/public-site";
 
 export function RkpsParentReviews() {
-  if (PARENT_REVIEWS.length === 0) return null;
-
   return (
     <section id="parent-reviews" className="overflow-hidden bg-white py-12 sm:py-16" aria-label="Parent reviews">
       <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-5">

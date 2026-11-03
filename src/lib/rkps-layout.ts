@@ -18,6 +18,7 @@ export function rkpsCardGridClass(index: number, total: number): string {
 
 /** Three equal columns (4+4+4) for dense card strips — e.g. honour roll. */
 export function rkpsUniformTripleClass(_index: number): string {
+  void _index;
   return "lg:col-span-4";
 }
 
