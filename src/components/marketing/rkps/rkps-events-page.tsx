@@ -96,8 +96,8 @@ export function RkpsEventsPage() {
           />
 
           <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
-            <p className="text-xs font-semibold uppercase tracking-wide text-muted">Filter by theme</p>
-            <div className="flex min-w-0 flex-1 flex-wrap gap-2" role="tablist" aria-label="Event categories">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Filter by theme</p>
+            <div className="flex min-w-0 flex-1 flex-wrap gap-2 rounded-full border border-border/80 bg-[rgba(255,255,255,0.7)] p-2 shadow-[0_12px_24px_rgba(11,61,120,0.05)]" role="tablist" aria-label="Event categories">
               {FILTERS.map((f) => {
                 const active = filter === f;
                 return (
@@ -109,8 +109,8 @@ export function RkpsEventsPage() {
                     onClick={() => setFilter(f)}
                     className={`rkps-ease rkps-press rounded-full px-4 py-2 text-xs font-bold ${
                       active
-                        ? "bg-brand text-white"
-                        : "border border-border bg-surface text-muted hover:border-brand/35 hover:text-brand"
+                        ? "bg-[linear-gradient(135deg,#0b3d78,#1a5bb4)] text-white shadow-[0_12px_22px_rgba(11,61,120,0.18)]"
+                        : "border border-transparent bg-transparent text-muted hover:border-brand/30 hover:text-brand"
                     }`}
                   >
                     {f}

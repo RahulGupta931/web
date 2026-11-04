@@ -201,11 +201,12 @@ export function RkpsCinematicHero() {
   const slide = SLIDES[index];
 
   return (
-    <section className="relative isolate min-h-[28rem] overflow-hidden bg-[var(--brand-maroon-dark)] text-white sm:min-h-[34rem] lg:min-h-[42rem]" aria-roledescription="carousel" aria-label="School highlights">
+    <section className="relative isolate min-h-[28rem] overflow-hidden bg-[linear-gradient(135deg,#081f3b_0%,#0d2c52_44%,#0b1d35_100%)] text-white sm:min-h-[34rem] lg:min-h-[42rem]" aria-roledescription="carousel" aria-label="School highlights">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,200,106,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(28,92,174,0.32),transparent_28%)]" aria-hidden />
       {SLIDES.map((item, i) => (
         <div key={item.title} className={`absolute inset-0 transition-opacity duration-700 ${i === index ? "opacity-100" : "pointer-events-none opacity-0"}`} aria-hidden={i !== index}>
           <img src={item.photo.src} alt={i === index ? item.photo.alt : ""} className={`h-full w-full object-cover ${i === index ? "rkps-ken" : ""}`} />
-          <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/70" />
+          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,31,59,0.8)_0%,rgba(8,31,59,0.5)_35%,rgba(8,31,59,0.24)_100%)]" />
         </div>
       ))}
 
@@ -218,10 +219,10 @@ export function RkpsCinematicHero() {
           </h1>
           <p className="rkps-reveal mt-4 max-w-xl text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base lg:text-lg">{slide.body}</p>
           <div className="rkps-reveal mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-3">
-            <Link href={RKPS_HERO.primary.href} className="rkps-ease rkps-press inline-flex justify-center rounded-full bg-[var(--brand-gold)] px-5 py-2.5 text-sm font-bold text-[var(--brand-maroon-dark)] hover:brightness-105 sm:px-6 sm:py-3">
+            <Link href={RKPS_HERO.primary.href} className="rkps-ease rkps-press inline-flex justify-center rounded-full bg-[linear-gradient(135deg,#f5cf7d_0%,#e9b847_100%)] px-5 py-2.5 text-sm font-bold text-[var(--brand-maroon-dark)] shadow-[0_16px_34px_rgba(233,184,71,0.35)] hover:brightness-105 sm:px-6 sm:py-3">
               {RKPS_HERO.primary.label}
             </Link>
-            <Link href={RKPS_HERO.secondary.href} className="rkps-ease rkps-press inline-flex justify-center rounded-full border border-white/40 px-5 py-2.5 text-sm font-bold text-white hover:bg-white/10 sm:px-6 sm:py-3">
+            <Link href={RKPS_HERO.secondary.href} className="rkps-ease rkps-press inline-flex justify-center rounded-full border border-white/40 bg-white/5 px-5 py-2.5 text-sm font-bold text-white backdrop-blur-sm hover:bg-white/10 sm:px-6 sm:py-3">
               {RKPS_HERO.secondary.label}
             </Link>
           </div>
@@ -235,7 +236,7 @@ export function RkpsCinematicHero() {
               aria-label={`Show slide ${i + 1}: ${item.title}`}
               aria-current={i === index ? "true" : undefined}
               onClick={() => setIndex(i)}
-              className={`h-2.5 rounded-full transition-all ${i === index ? "w-8 bg-[var(--brand-gold)]" : "w-2.5 bg-white/50 hover:bg-white"}`}
+              className={`h-2.5 rounded-full transition-all ${i === index ? "w-8 bg-[var(--brand-gold)] shadow-[0_0_14px_rgba(244,200,106,0.75)]" : "w-2.5 bg-white/50 hover:bg-white"}`}
             />
           ))}
         </div>

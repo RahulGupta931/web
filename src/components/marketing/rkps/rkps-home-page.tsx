@@ -45,9 +45,9 @@ import {
 type Tone = "warm" | "rose" | "dark";
 
 const TONE_CLASS: Record<Tone, string> = {
-  warm: "bg-[#edf5ff] text-heading",
-  rose: "bg-[#f6fbff] text-heading",
-  dark: "bg-[var(--brand-maroon-dark)] text-white",
+  warm: "bg-[linear-gradient(180deg,#edf5ff_0%,#f8fbff_100%)] text-heading",
+  rose: "bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)] text-heading",
+  dark: "bg-[linear-gradient(180deg,#081f3b_0%,#0d2c52_100%)] text-white",
 };
 
 const FOCUS_GOLD = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-gold)]";
@@ -193,9 +193,9 @@ function SectionHead({
 function StatsPanel() {
   return (
     <section aria-label="School at a glance" className="relative z-10 -mt-6 px-3 sm:-mt-8 sm:px-4">
-      <dl className="mx-auto grid max-w-7xl grid-cols-2 gap-px overflow-hidden rounded-2xl bg-black/10 shadow-xl shadow-black/10 lg:grid-cols-4">
+      <dl className="mx-auto grid max-w-7xl grid-cols-2 gap-3 rounded-[1.5rem] bg-white/60 p-2 shadow-[0_20px_44px_rgba(11,61,120,0.12)] backdrop-blur-sm lg:grid-cols-4">
         {SCHOOL_STATS.map((stat) => (
-          <div key={stat.label} className="bg-white px-3 py-4 sm:px-6 sm:py-6 md:px-8 md:py-7">
+          <div key={stat.label} className="rounded-[1rem] border border-[rgba(11,61,120,0.08)] bg-[linear-gradient(180deg,#ffffff_0%,#f5f9ff_100%)] px-3 py-4 shadow-[0_12px_22px_rgba(11,61,120,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_26px_rgba(11,61,120,0.08)] sm:px-6 sm:py-6 md:px-8 md:py-7">
             <dt className="text-2xl font-bold tracking-tight text-brand tabular-nums sm:text-3xl md:text-4xl">
               <RkpsCountValue value={stat.value} />
             </dt>
@@ -289,11 +289,16 @@ function SchoolLifeSection() {
           cta="Browse events"
         />
       </div>
-      <ul className="mt-5 grid gap-6 rounded-xl border border-brand/10 bg-white p-6 sm:grid-cols-3 sm:p-8">
+      <ul className="mt-5 grid gap-5 rounded-[1.5rem] border border-brand/10 bg-[linear-gradient(180deg,#ffffff_0%,#f3f8ff_100%)] p-5 shadow-[0_22px_45px_rgba(11,61,120,0.08)] sm:grid-cols-3 sm:p-8">
         {STUDENT_LIFE.map((item) => (
-          <li key={item.title} className="border-l-4 border-[var(--brand-gold)] pl-4">
-            <p className="text-base font-semibold text-heading">{item.title}</p>
-            <p className="mt-1 text-sm leading-relaxed text-muted">{item.body}</p>
+          <li key={item.title} className="rounded-[1.1rem] border border-[rgba(11,61,120,0.08)] bg-white/80 p-4 shadow-[0_10px_22px_rgba(11,61,120,0.04)]">
+            <div className="flex items-center gap-3">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--brand-gold)]/20 text-[var(--brand-maroon-dark)]">
+                <span className="h-2.5 w-2.5 rounded-full bg-[var(--brand-gold)]" aria-hidden />
+              </span>
+              <p className="text-base font-semibold text-heading">{item.title}</p>
+            </div>
+            <p className="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
           </li>
         ))}
       </ul>
@@ -330,11 +335,12 @@ function CampusSection() {
           {photos.map((photo, i) => (
             <figure
               key={photo.src}
-              className={`relative overflow-hidden rounded-2xl ${i === 0 ? "row-span-2" : ""}`}
+              className={`group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.18)] ${i === 0 ? "row-span-2" : ""}`}
               style={{ ["--rkps-i" as string]: i }}
             >
-              <img src={photo.src} alt={photo.alt ?? ""} loading="lazy" className="h-full w-full object-cover" />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-[var(--brand-maroon-dark)]/90 p-4 pt-14">
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,31,59,0.04),rgba(8,31,59,0.56))] opacity-80 transition duration-500 group-hover:opacity-100" aria-hidden />
+              <img src={photo.src} alt={photo.alt ?? ""} loading="lazy" className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]" />
+              <figcaption className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent_0%,rgba(8,31,59,0.9)_100%)] p-4 pt-14">
                 <p className="text-sm font-bold text-[var(--brand-gold)]">{RKPS_DISCOVER.spaces[i]?.title}</p>
                 <p className="mt-0.5 line-clamp-2 text-sm leading-snug text-white/90">{RKPS_DISCOVER.spaces[i]?.body ?? photo.alt}</p>
               </figcaption>
@@ -352,8 +358,9 @@ function CampusSection() {
 
 function VisitBanner() {
   return (
-    <section aria-label="Visit RMPS" className="bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)]">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 px-3 py-10 sm:px-4 sm:py-12 md:flex-row md:items-center md:justify-between">
+    <section aria-label="Visit RMPS" className="relative overflow-hidden bg-[linear-gradient(135deg,#f3c867_0%,#e7b94a_40%,#d9a741_100%)] text-[var(--brand-maroon-dark)]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.45),transparent_26%)]" aria-hidden />
+      <div className="relative mx-auto flex max-w-7xl flex-col gap-6 px-3 py-10 sm:px-4 sm:py-12 md:flex-row md:items-center md:justify-between">
         <div className="max-w-2xl">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">See RMPS for yourself</h2>
           <p className="mt-2 text-base leading-relaxed text-[var(--brand-maroon-dark)]/80">
@@ -361,10 +368,10 @@ function VisitBanner() {
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link href="/#admissions" className={BTN_MAROON}>
+          <Link href="/#admissions" className={`${BTN_MAROON} shadow-[0_14px_30px_rgba(8,31,59,0.25)]`}>
             Start an enquiry
           </Link>
-          <Link href="/#contact" className={BTN_OUTLINE_MAROON}>
+          <Link href="/#contact" className={`${BTN_OUTLINE_MAROON} bg-white/25 backdrop-blur-sm`}>
             Plan a visit
           </Link>
         </div>

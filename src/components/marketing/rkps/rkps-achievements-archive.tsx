@@ -29,11 +29,11 @@ export function AchievementsArchiveSection({ items, id = "archive" }: { items: A
         }
       />
 
-      <div className="mt-8 flex flex-col gap-4 rounded-[1.25rem] border border-border/80 bg-surface/80 p-4 sm:flex-row sm:flex-wrap sm:items-end sm:gap-6 sm:p-5">
+      <div className="mt-8 flex flex-col gap-4 rounded-[1.5rem] border border-border/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(232,240,255,0.96))] p-4 shadow-[0_20px_42px_rgba(11,61,120,0.08)] sm:flex-row sm:flex-wrap sm:items-end sm:gap-6 sm:p-5">
         <label className="min-w-[10rem] flex-1 text-sm">
-          <span className="text-xs font-semibold uppercase tracking-wide text-muted">Category</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Category</span>
           <select
-            className="input-field rkps-ease mt-2 w-full rounded-xl border-border/80 bg-surface"
+            className="input-field rkps-ease mt-2 w-full rounded-xl border border-border/80 bg-white/90 px-3.5 py-2.5 text-sm text-heading shadow-sm"
             value={category}
             onChange={(e) => setCategory(e.target.value as AchievementCategory | "All")}
           >
@@ -46,9 +46,9 @@ export function AchievementsArchiveSection({ items, id = "archive" }: { items: A
           </select>
         </label>
         <label className="min-w-[8rem] text-sm">
-          <span className="text-xs font-semibold uppercase tracking-wide text-muted">Year</span>
+          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Year</span>
           <select
-            className="input-field rkps-ease mt-2 w-full rounded-xl border-border/80 bg-surface"
+            className="input-field rkps-ease mt-2 w-full rounded-xl border border-border/80 bg-white/90 px-3.5 py-2.5 text-sm text-heading shadow-sm"
             value={year === "All" ? "All" : String(year)}
             onChange={(e) => setYear(e.target.value === "All" ? "All" : Number(e.target.value))}
           >

@@ -99,7 +99,7 @@ function StoryPanel({
   return (
     <article className="grid items-center lg:grid-cols-12">
       <figure
-        className={`overflow-hidden rounded-[1.75rem] shadow-[var(--shadow-card)] lg:col-span-7 lg:row-start-1 ${
+        className={`overflow-hidden rounded-[1.8rem] border border-white/10 shadow-[var(--shadow-card)] lg:col-span-7 lg:row-start-1 ${
           reverse ? "lg:col-start-6" : "lg:col-start-1"
         }`}
       >
@@ -111,7 +111,7 @@ function StoryPanel({
         />
       </figure>
       <div
-        className={`relative z-10 mt-4 rounded-[1.5rem] border border-border/70 bg-white p-5 shadow-[var(--shadow-card-hover)] sm:mx-3 sm:-mt-12 sm:p-8 lg:col-span-6 lg:row-start-1 lg:mx-0 lg:mt-0 ${
+        className={`relative z-10 mt-4 rounded-[1.6rem] border border-[rgba(13,35,65,0.08)] bg-[rgba(255,255,255,0.82)] p-5 shadow-[0_20px_44px_rgba(11,61,120,0.08)] backdrop-blur-sm sm:mx-3 sm:-mt-12 sm:p-8 lg:col-span-6 lg:row-start-1 lg:mx-0 lg:mt-0 ${
           reverse ? "lg:col-start-1 lg:mr-[-6%]" : "lg:col-start-7 lg:ml-[-6%]"
         }`}
       >
@@ -136,7 +136,7 @@ function RecognitionCard({
   const photo = STUDENT_ACHIEVER_CARD_PHOTOS[card.cat];
   return (
     <article
-      className={`rkps-ease group relative flex h-full flex-col justify-between overflow-hidden rounded-[1.75rem] bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)] ${
+      className={`rkps-ease group relative flex h-full flex-col justify-between overflow-hidden rounded-[1.85rem] border border-white/10 bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)] ${
         featured ? "min-h-[20rem] sm:min-h-[26rem] md:min-h-[30rem]" : "min-h-[18rem] sm:min-h-[22rem]"
       }`}
     >
@@ -145,9 +145,9 @@ function RecognitionCard({
         alt={photo.alt}
         className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/55" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,22,39,0.2)_0%,rgba(7,22,39,0.48)_35%,rgba(7,22,39,0.82)_100%)]" />
       <div className="relative flex items-start justify-between gap-3 p-5 sm:p-6">
-        <span className="rounded-full bg-[var(--brand-gold)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--brand-maroon-dark)]">
+        <span className="rounded-full border border-[var(--brand-gold)]/50 bg-[color-mix(in_srgb,var(--brand-gold)_14%,transparent)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--brand-gold)] backdrop-blur-sm">
           {card.cat}
         </span>
         <span className="text-4xl font-black leading-none text-white/30" aria-hidden>

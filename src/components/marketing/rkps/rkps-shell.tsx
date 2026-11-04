@@ -124,7 +124,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
   }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-40 overflow-visible border-b border-white/10 bg-brand text-white shadow-[0_4px_24px_rgba(74,4,4,0.25)]">
+    <header className="sticky top-0 z-40 overflow-visible border-b border-white/10 bg-[linear-gradient(180deg,rgba(8,31,59,0.97),rgba(11,45,86,0.96))] text-white shadow-[0_8px_28px_rgba(8,31,59,0.18)] backdrop-blur-md">
       <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-5">
         <div className="flex h-[4.25rem] items-center justify-between gap-2 sm:gap-3 lg:h-[4.5rem] lg:gap-4">
           <Link href="/" className="flex min-w-0 flex-1 items-center gap-2 sm:gap-2.5 lg:flex-none">
@@ -175,7 +175,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
             </Link>
             <Link
               href={RKPS_HEADER_CTA.enquire.href}
-              className="rkps-ease rkps-press inline-flex shrink-0 items-center whitespace-nowrap rounded-lg bg-[var(--brand-gold)] px-2.5 py-2 text-xs font-bold text-[var(--brand-maroon-dark)] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] hover:brightness-105 sm:px-3 sm:text-sm md:px-4"
+              className="rkps-ease rkps-press inline-flex shrink-0 items-center whitespace-nowrap rounded-lg bg-[linear-gradient(135deg,#f5cf7d_0%,#e9b847_100%)] px-2.5 py-2 text-xs font-bold text-[var(--brand-maroon-dark)] shadow-[0_12px_28px_rgba(233,184,71,0.3)] hover:brightness-105 sm:px-3 sm:text-sm md:px-4"
             >
               {RKPS_HEADER_CTA.enquire.label}
             </Link>
@@ -274,95 +274,96 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
 
 export function RkpsFooter({ prefooter }: { prefooter?: string }) {
   return (
-    <footer className="border-t border-border">
+    <footer className="border-t border-border/80 bg-[linear-gradient(180deg,#071d38_0%,#0b2748_100%)] text-white">
       {prefooter ? (
-        <div className="border-b border-border/80 bg-[var(--rkps-paper)] text-heading">
+        <div className="border-b border-border/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(237,244,255,0.9))] text-heading">
           <div className="mx-auto max-w-3xl px-3 py-10 text-center sm:px-4 sm:py-12 lg:px-5">
             <span aria-hidden className="mx-auto mb-4 block h-1 w-12 rounded-full bg-[var(--brand-gold)]" />
             <p className="text-base font-semibold leading-relaxed sm:text-lg">{prefooter}</p>
           </div>
         </div>
       ) : null}
-      <div className="bg-brand-dark text-white">
-      <div className="mx-auto max-w-7xl px-3 py-14 sm:px-4 lg:px-5">
-        <div className="grid gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <p className="text-xs italic text-brand-gold">{BRAND.motto}</p>
-            <p className="mt-2 text-lg font-semibold">{BRAND.shortName}</p>
-            <p className="text-xs text-white/55">{BRAND.name}</p>
-            <p className="mt-4 text-sm leading-relaxed text-white/75">{RKPS_FOOTER.tagline}</p>
-          </div>
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">Discover RMPS</p>
-              <ul className="mt-3 space-y-2 text-sm text-white/75">
-                {RKPS_FOOTER.columns.discover.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="hover:text-white hover:underline">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+      <div className="relative isolate overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,200,106,0.12),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(255,255,255,0.06),transparent_28%)]" aria-hidden />
+        <div className="relative mx-auto max-w-7xl px-3 py-14 sm:px-4 lg:px-5">
+          <div className="grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <p className="text-xs italic text-brand-gold">{BRAND.motto}</p>
+              <p className="mt-2 text-lg font-semibold">{BRAND.shortName}</p>
+              <p className="text-xs text-white/55">{BRAND.name}</p>
+              <p className="mt-4 text-sm leading-relaxed text-white/75">{RKPS_FOOTER.tagline}</p>
             </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">For families</p>
-              <ul className="mt-3 space-y-2 text-sm text-white/75">
-                {RKPS_FOOTER.columns.families.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="hover:text-white hover:underline">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">School life</p>
-              <ul className="mt-3 space-y-2 text-sm text-white/75">
-                {RKPS_FOOTER.columns.more.map((l) => (
-                  <li key={l.href}>
-                    <Link href={l.href} className="hover:text-white hover:underline">
-                      {l.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">Stay informed</p>
-              <ul className="mt-3 space-y-2 text-sm text-white/75">
-                {RKPS_FOOTER.columns.stay.map((l) => (
-                  <li key={l.href}>
-                    {l.href.startsWith("http") ? (
-                      <a href={l.href} className="hover:text-white hover:underline" target="_blank" rel="noreferrer">
-                        {l.label}
-                      </a>
-                    ) : (
+            <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">Discover RMPS</p>
+                <ul className="mt-3 space-y-2 text-sm text-white/75">
+                  {RKPS_FOOTER.columns.discover.map((l) => (
+                    <li key={l.href}>
                       <Link href={l.href} className="hover:text-white hover:underline">
                         {l.label}
                       </Link>
-                    )}
-                  </li>
-                ))}
-              </ul>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">For families</p>
+                <ul className="mt-3 space-y-2 text-sm text-white/75">
+                  {RKPS_FOOTER.columns.families.map((l) => (
+                    <li key={l.href}>
+                      <Link href={l.href} className="hover:text-white hover:underline">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">School life</p>
+                <ul className="mt-3 space-y-2 text-sm text-white/75">
+                  {RKPS_FOOTER.columns.more.map((l) => (
+                    <li key={l.href}>
+                      <Link href={l.href} className="hover:text-white hover:underline">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-gold/90">Stay informed</p>
+                <ul className="mt-3 space-y-2 text-sm text-white/75">
+                  {RKPS_FOOTER.columns.stay.map((l) => (
+                    <li key={l.href}>
+                      {l.href.startsWith("http") ? (
+                        <a href={l.href} className="hover:text-white hover:underline" target="_blank" rel="noreferrer">
+                          {l.label}
+                        </a>
+                      ) : (
+                        <Link href={l.href} className="hover:text-white hover:underline">
+                          {l.label}
+                        </Link>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
+          <p className="mt-12 text-center text-sm font-semibold text-brand-gold">{RKPS_FOOTER.closing}</p>
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-4 border-t border-white/10 pt-8 text-xs text-white/45">
+            <span>© {new Date().getFullYear()} R.K Memorial Public School. All rights reserved.</span>
+            <Link href="#privacy" className="hover:text-white/70">
+              Privacy policy
+            </Link>
+            <Link href="#accessibility" className="hover:text-white/70">
+              Accessibility
+            </Link>
+            <a href="#" className="hover:text-white/70">
+              Back to top ↑
+            </a>
+          </div>
         </div>
-        <p className="mt-12 text-center text-sm font-semibold text-brand-gold">{RKPS_FOOTER.closing}</p>
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-4 border-t border-white/10 pt-8 text-xs text-white/45">
-          <span>© {new Date().getFullYear()} R.K Memorial Public School. All rights reserved.</span>
-          <Link href="#privacy" className="hover:text-white/70">
-            Privacy policy
-          </Link>
-          <Link href="#accessibility" className="hover:text-white/70">
-            Accessibility
-          </Link>
-          <a href="#" className="hover:text-white/70">
-            Back to top ↑
-          </a>
-        </div>
-      </div>
       </div>
     </footer>
   );

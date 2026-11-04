@@ -121,19 +121,22 @@ export function RkpsAchievementsPage() {
           <ul className="rkps-stagger mt-10 grid gap-4 lg:grid-cols-12">
             {SHINE_CATEGORIES.map(({ title, body, photo }, i) => (
               <li key={title} className={shineCategoryClass(i)} style={{ ["--rkps-i" as string]: i }}>
-                <article className="rkps-ease group relative flex h-full min-h-[20rem] flex-col justify-between overflow-hidden rounded-[1.75rem] bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]">
+                <article className="rkps-ease group relative flex h-full min-h-[20rem] flex-col justify-between overflow-hidden rounded-[1.8rem] border border-white/10 bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)]">
                   <img
                     src={photo.src}
                     alt={photo.alt}
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/55" />
-                  <p className="relative p-5 text-4xl font-black leading-none text-white/30" aria-hidden>
+                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,22,39,0.16)_0%,rgba(7,22,39,0.48)_35%,rgba(7,22,39,0.82)_100%)]" />
+                  <p className="relative p-5 text-4xl font-black leading-none text-white/35" aria-hidden>
                     {String(i + 1).padStart(2, "0")}
                   </p>
                   <div className="relative p-5 sm:p-6">
-                    <h3 className="text-2xl font-bold tracking-tight text-white">{title}</h3>
+                    <span className="inline-flex rounded-full border border-[var(--brand-gold)]/50 bg-[color-mix(in_srgb,var(--brand-gold)_14%,transparent)] px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-[0.14em] text-[var(--brand-gold)]">
+                      Recognition
+                    </span>
+                    <h3 className="mt-4 text-2xl font-bold tracking-tight text-white">{title}</h3>
                     <p className="mt-2 text-sm leading-relaxed text-white/90">{body}</p>
                   </div>
                 </article>
@@ -157,7 +160,7 @@ export function RkpsAchievementsPage() {
             {gallery.map((photo, i) => (
               <figure
                 key={photo.src}
-                className={`rkps-ease group relative overflow-hidden rounded-[1.25rem] bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] ${galleryTileClass(i)} ${i === 0 ? "min-h-[16rem]" : ""}`}
+                className={`rkps-ease group relative overflow-hidden rounded-[1.4rem] border border-white/10 bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] ring-1 ring-[rgba(13,35,65,0.05)] ${galleryTileClass(i)} ${i === 0 ? "min-h-[16rem]" : ""}`}
               >
                 <img
                   src={photo.src}
@@ -165,6 +168,7 @@ export function RkpsAchievementsPage() {
                   className={`w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 ${i === 0 ? "absolute inset-0 h-full" : "aspect-[4/3]"}`}
                   loading="lazy"
                 />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,18,35,0)_45%,rgba(5,18,35,0.42)_100%)]" />
               </figure>
             ))}
           </div>
@@ -212,11 +216,11 @@ export function RkpsAchievementsPage() {
                 style={{ ["--rkps-i" as string]: i }}
               >
                 <article
-                  className={`rkps-ease flex h-full gap-5 rounded-[1.5rem] p-6 shadow-[var(--shadow-card)] transition hover:-translate-y-1 lg:p-8 ${
-                    i === 0 ? "bg-[var(--brand-maroon-dark)] text-white" : "border border-border/80 bg-white"
+                  className={`rkps-ease flex h-full gap-5 rounded-[1.6rem] p-6 shadow-[var(--shadow-card)] transition hover:-translate-y-1 lg:p-8 ${
+                    i === 0 ? "bg-[linear-gradient(135deg,#081f3b,#0c2d57)] text-white" : "border border-border/80 bg-[rgba(255,255,255,0.82)]"
                   }`}
                 >
-                  <span className="text-3xl font-black leading-none text-[var(--brand-gold)]" aria-hidden>
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[var(--brand-gold)]/50 bg-[color-mix(in_srgb,var(--brand-gold)_18%,transparent)] text-lg font-black leading-none text-[var(--brand-gold)]" aria-hidden>
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <div>

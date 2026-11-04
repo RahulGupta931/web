@@ -7,8 +7,8 @@ type Photo = { src: string; alt: string };
 
 export function RkpsHeroShell({ children }: { children: ReactNode }) {
   return (
-    <section className="rkps-hero-atmosphere border-b border-border bg-[var(--background)]">
-      <div className="bg-[var(--background)]">
+    <section className="rkps-hero-atmosphere border-b border-border/80 bg-[linear-gradient(180deg,#edf5ff_0%,#f8fbff_44%,#edf4ff_100%)]">
+      <div className="bg-transparent">
         <div className="mx-auto max-w-7xl px-3 pb-8 pt-6 sm:px-4 sm:pb-10 sm:pt-8">{children}</div>
       </div>
     </section>
@@ -111,22 +111,22 @@ export function RkpsZigzagRow({
     <article
       className={`grid items-center gap-5 lg:grid-cols-2 lg:gap-8 ${reverse ? "[&>figure]:lg:order-2 [&>div]:lg:order-1" : ""}`}
     >
-      <figure className="rkps-ease overflow-hidden rounded-2xl border border-border bg-surface shadow-[var(--shadow-card)]">
+      <figure className="rkps-ease overflow-hidden rounded-[1.6rem] border border-border/80 bg-surface shadow-[var(--shadow-card)] ring-1 ring-[rgba(18,51,94,0.06)]">
         <img
           src={photo.src}
           alt={photo.alt}
-          className="aspect-[16/10] w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.02]"
+          className="aspect-[16/10] w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.025]"
           loading="lazy"
         />
       </figure>
-      <div className={reverse ? "lg:pr-4" : "lg:pl-4"}>
-        <span className="inline-flex items-center rounded-full border border-brand/20 bg-brand/5 px-2.5 py-0.5 text-[0.625rem] font-bold uppercase tracking-wide text-brand">
+      <div className={`rounded-[1.45rem] border border-border/80 bg-[rgba(255,255,255,0.72)] p-5 shadow-[0_18px_36px_rgba(13,35,65,0.08)] backdrop-blur-sm sm:p-6 ${reverse ? "lg:pr-5" : "lg:pl-5"}`}>
+        <span className="inline-flex items-center rounded-full border border-[var(--brand-maroon)]/15 bg-[color-mix(in_srgb,var(--brand-gold)_18%,white)] px-2.5 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-maroon-dark)]">
           {badge}
         </span>
         <h3 className="rkps-display mt-4 text-2xl font-semibold leading-snug sm:text-[1.65rem]">{title}</h3>
-        {kicker ? <p className="mt-2 text-sm font-semibold text-brand">{kicker}</p> : null}
+        {kicker ? <p className="mt-2 text-sm font-semibold text-[var(--brand-maroon-light)]">{kicker}</p> : null}
         <p className="mt-4 text-sm leading-relaxed text-muted">{body}</p>
-        {footnote ? <div className="mt-4 text-sm">{footnote}</div> : null}
+        {footnote ? <div className="mt-4 text-sm text-muted">{footnote}</div> : null}
       </div>
     </article>
   );
@@ -214,13 +214,14 @@ export function RkpsPageSection({
 }) {
   const toneClass =
     tone === "paper"
-      ? "border-y border-border bg-[var(--rkps-paper)]"
+      ? "border-y border-border/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.72),rgba(237,244,255,0.92))]"
       : tone === "inset"
-        ? "bg-[var(--background)]"
-        : "bg-[var(--background)]";
+        ? "bg-[linear-gradient(180deg,#edf5ff_0%,#f8fbff_100%)]"
+        : "bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)]";
   return (
-    <section id={id} className={`relative isolate scroll-mt-28 py-12 sm:py-14 ${toneClass} ${className}`}>
-      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-5">{children}</div>
+    <section id={id} className={`relative isolate scroll-mt-28 overflow-hidden py-12 sm:py-16 ${toneClass} ${className}`}>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,200,106,0.09),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(11,61,120,0.08),transparent_28%)]" aria-hidden />
+      <div className="relative mx-auto max-w-7xl px-3 sm:px-4 lg:px-5">{children}</div>
     </section>
   );
 }
@@ -370,9 +371,9 @@ export function RkpsContactSection({
       <p className="mt-4 max-w-none text-base leading-relaxed text-muted">{detail}</p>
 
       <div className="mt-8 grid items-stretch gap-6 lg:grid-cols-12 lg:gap-8">
-        <figure className="relative min-h-[20rem] overflow-hidden rounded-[1.25rem] border border-border/80 shadow-[var(--rkps-shadow-diffuse,var(--shadow-card))] sm:min-h-[24rem] lg:col-span-8 lg:min-h-[32rem]">
+        <figure className="relative min-h-[20rem] overflow-hidden rounded-[1.6rem] border border-white/10 shadow-[0_30px_55px_rgba(11,61,120,0.12)] sm:min-h-[24rem] lg:col-span-8 lg:min-h-[32rem]">
           <img src={campusPhoto.src} alt={campusPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/55" aria-hidden />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,31,59,0.2)_0%,rgba(8,31,59,0.62)_100%)]" aria-hidden />
           <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8 lg:p-10">
             <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-gold)]">Visit the campus</p>
             <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/92 sm:text-lg">{visitBlurb}</p>
@@ -385,7 +386,7 @@ export function RkpsContactSection({
         <div className="flex flex-col gap-4 lg:col-span-4 lg:min-h-[32rem]">
           <a
             href={telHref}
-            className="rkps-ease rkps-press group flex flex-1 flex-col rounded-[1.25rem] border border-border/80 bg-surface p-6 shadow-[var(--shadow-card)] hover:-translate-y-0.5 hover:border-brand/30"
+            className="rkps-ease rkps-press group flex flex-1 flex-col rounded-[1.4rem] border border-border/80 bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_38px_rgba(11,61,120,0.08)] backdrop-blur-sm hover:-translate-y-0.5 hover:border-brand/30"
           >
             <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-brand">Call the office</p>
             <p className="mt-3 text-xl font-semibold text-heading sm:text-2xl">{phone}</p>
@@ -396,7 +397,7 @@ export function RkpsContactSection({
           </a>
           <a
             href={mailHref}
-            className="rkps-ease rkps-press group flex flex-1 flex-col rounded-[1.25rem] border border-border/80 bg-surface p-6 shadow-[var(--shadow-card)] hover:-translate-y-0.5 hover:border-brand/30"
+            className="rkps-ease rkps-press group flex flex-1 flex-col rounded-[1.4rem] border border-border/80 bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_38px_rgba(11,61,120,0.08)] backdrop-blur-sm hover:-translate-y-0.5 hover:border-brand/30"
           >
             <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-brand">Write to us</p>
             <p className="mt-3 break-all text-lg font-semibold text-heading sm:break-normal sm:text-xl">{email}</p>
@@ -405,7 +406,7 @@ export function RkpsContactSection({
             </p>
             <span className="mt-4 inline-flex text-sm font-semibold text-brand">Send email ↗</span>
           </a>
-          <div className="flex flex-col gap-4 rounded-[1.25rem] border border-brand/20 bg-brand p-6 text-white sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 rounded-[1.4rem] border border-brand/25 bg-[linear-gradient(135deg,#081f3b_0%,#0d2f5d_100%)] p-6 text-white shadow-[0_24px_44px_rgba(8,31,59,0.2)] sm:flex-row sm:items-center sm:justify-between">
             <div className="max-w-sm">
               <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-gold)]">Plan a visit</p>
               <p className="mt-2 text-sm leading-relaxed text-white/90 sm:text-base">
@@ -424,7 +425,7 @@ export function RkpsContactSection({
 
       <ul className="mt-8 grid gap-4 sm:grid-cols-3">
         {reachOut.map((item) => (
-          <li key={item.title} className="rounded-[1.25rem] border border-border/80 bg-white p-5 shadow-[var(--shadow-card)] sm:p-6">
+          <li key={item.title} className="rounded-[1.25rem] border border-border/80 bg-[rgba(255,255,255,0.82)] p-5 shadow-[0_18px_35px_rgba(11,61,120,0.06)] backdrop-blur-sm sm:p-6">
             <p className="text-sm font-bold text-heading">{item.title}</p>
             <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">{item.body}</p>
           </li>
@@ -472,13 +473,13 @@ export function RkpsAdmissionsSection({
       <nav className="mt-6 flex flex-wrap gap-2" aria-label="Admissions shortcuts">
         <a
           href="#enquiry"
-          className="rkps-ease rounded-full bg-brand px-4 py-1.5 text-xs font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:brightness-105"
+          className="rkps-ease rounded-full bg-[linear-gradient(135deg,#0b3d78,#1a5bb4)] px-4 py-1.5 text-xs font-bold text-white shadow-[0_12px_22px_rgba(11,61,120,0.18)] hover:brightness-105"
         >
           Start enquiry
         </a>
         <a
           href="#faq"
-          className="rkps-ease rounded-full border border-border/80 bg-surface px-4 py-1.5 text-xs font-semibold text-brand hover:border-brand/30 hover:bg-brand/5"
+          className="rkps-ease rounded-full border border-border/80 bg-[rgba(255,255,255,0.7)] px-4 py-1.5 text-xs font-semibold text-brand hover:border-brand/30 hover:bg-brand/5"
         >
           FAQ
         </a>
@@ -502,7 +503,7 @@ export function RkpsAdmissionsSection({
                 {i < steps.length - 1 ? (
                   <span className="absolute left-[1.0625rem] top-10 h-[calc(100%-1.5rem)] w-px bg-border" aria-hidden />
                 ) : null}
-                <span className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border-2 border-brand/30 bg-surface text-[0.6875rem] font-bold text-brand shadow-sm">
+                <span className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border-2 border-brand/30 bg-[rgba(255,255,255,0.8)] text-[0.6875rem] font-bold text-brand shadow-sm">
                   {s.num}
                 </span>
                 <p className="rkps-display text-base font-semibold text-heading">{s.title}</p>
@@ -511,10 +512,10 @@ export function RkpsAdmissionsSection({
             ))}
           </ol>
 
-          <figure className="rkps-ease mt-10 overflow-hidden rounded-[1.25rem] border border-border/80 shadow-[var(--rkps-shadow-diffuse,var(--shadow-card))]">
+          <figure className="rkps-ease mt-10 overflow-hidden rounded-[1.5rem] border border-white/10 shadow-[0_24px_44px_rgba(11,61,120,0.12)]">
             <div className="relative aspect-[16/9] min-h-[9rem]">
               <img src={accentPhoto.src} alt={accentPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-              <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/60" aria-hidden />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,31,59,0.2)_0%,rgba(8,31,59,0.7)_100%)]" aria-hidden />
               <figcaption className="absolute inset-0 flex flex-col justify-end p-5 text-white sm:p-6">
                 <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-gold)]">School life</p>
                 <p className="mt-1 text-sm font-semibold leading-snug">See the campus before you decide.</p>
@@ -527,10 +528,10 @@ export function RkpsAdmissionsSection({
           <div id="faq" className="scroll-mt-28 mt-10">
             <h3 className="text-base font-semibold text-heading">Here to help</h3>
             <p className="mt-1 text-sm text-muted">Big decisions. Little questions.</p>
-            <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-border/80 bg-surface divide-y divide-border">
+            <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-border/80 bg-[rgba(255,255,255,0.82)] divide-y divide-border">
               {faq.map((item) => (
                 <details key={item.q} className="group rkps-ease">
-                  <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-semibold text-heading transition hover:bg-[var(--rkps-paper)]/80 [&::-webkit-details-marker]:hidden">
+                  <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-semibold text-heading transition hover:bg-[rgba(11,61,120,0.03)] [&::-webkit-details-marker]:hidden">
                     {item.q}
                   </summary>
                   <p className="border-t border-border px-4 pb-4 pt-2 text-sm leading-relaxed text-muted">{item.a}</p>
