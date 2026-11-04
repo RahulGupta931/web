@@ -357,7 +357,7 @@ export function RkpsStoryHero({
 
   return (
     <section
-      className="relative isolate min-h-[28rem] overflow-hidden bg-[var(--brand-maroon-dark)] text-white sm:min-h-[32rem] lg:min-h-[36rem]"
+      className="relative isolate min-h-[28rem] overflow-hidden bg-[var(--rkps-burgundy)] text-white sm:min-h-[32rem] lg:min-h-[36rem]"
       role="region"
       aria-roledescription="carousel"
       aria-label={slide.title}

@@ -3,10 +3,17 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { RkpsFooter, RkpsHeader } from "@/components/marketing/rkps/rkps-shell";
-import { RkpsPageSection, RkpsSectionIntro } from "@/components/marketing/rkps/rkps-marketing-blocks";
+import {
+  RkpsDestinationLinks,
+  RkpsFilterTabs,
+  RkpsPageSection,
+  RkpsQuickJumpNav,
+  RkpsSectionIntro,
+  RkpsZigzagRow,
+} from "@/components/marketing/rkps/rkps-marketing-blocks";
 import { AnimatedTestimonials } from "@/components/ui/animated-testimonials";
 import { TESTIMONIALS } from "@/content/website/public-site";
-import { RkpsStoryHero } from "@/components/marketing/rkps/rkps-motion-sections";
+import { RkpsInView, RkpsStoryHero } from "@/components/marketing/rkps/rkps-motion-sections";
 import {
   ACHIEVEMENT_THEME_PHOTOS,
   INSTAGRAM_PROFILE,
@@ -36,15 +43,6 @@ const FILTER_TO_CAT: Record<string, (typeof CARDS)[number]["cat"] | null> = {
   "Personal progress": "Personal progress",
 };
 
-const CATEGORY_META: Record<(typeof CARDS)[number]["cat"], { icon: string; badge: string }> = {
-  Academics: { icon: "📚", badge: "border-sky-300/40 bg-sky-950/70 text-sky-200" },
-  Sport: { icon: "⚽", badge: "border-amber-300/40 bg-amber-950/70 text-amber-200" },
-  Creativity: { icon: "🎨", badge: "border-purple-300/40 bg-purple-950/70 text-purple-200" },
-  Leadership: { icon: "⭐", badge: "border-[var(--brand-gold)]/50 bg-[#162744]/80 text-[var(--brand-gold)]" },
-  Service: { icon: "🌱", badge: "border-emerald-300/40 bg-emerald-950/70 text-emerald-200" },
-  "Personal progress": { icon: "🚀", badge: "border-rose-300/40 bg-rose-950/70 text-rose-200" },
-};
-
 const HIGHLIGHTS = [
   { label: "Curiosity", value: "Questions that keep learning alive" },
   { label: "Character", value: "Effort, kindness, and integrity" },
@@ -60,27 +58,27 @@ const BANNER_MOSAIC = [
 const GALLERY_PREVIEW = 12;
 
 const ACHIEVERS_FOOTER_LINE =
-  "Every learner, their own kind of remarkable. Growth in class, on stage, on the field and in the community — honoured here without comparisons. Curiosity, character, and the people we rise with.";
+  "Every learner, their own kind of remarkable. Growth in class, on stage, on the field and in the community — honoured here without comparisons.";
 
 const ZIGZAG_STORIES = [
   {
-    tag: "Curiosity & Inquiry",
+    tag: "Curiosity & inquiry",
     title: "The confidence to keep asking “what if?”",
-    kicker: "Perseverance & Innovation",
+    kicker: "Perseverance & innovation",
     body: "From building first working circuits to conducting environmental surveys — our classrooms foster students who dare to test hypotheses, learn from initial trials, and think critically.",
     photo: ACHIEVEMENT_THEME_PHOTOS.featuredStory,
   },
   {
-    tag: "Athletics & Performing Arts",
+    tag: "Athletics & performing arts",
     title: "Room to perform, compete & celebrate",
-    kicker: "Stage · Track · Festival",
+    kicker: "Stage · track · festival",
     body: "From inter-house sports tournaments to annual theatre productions — we notice courage, teamwork, and the quiet dedication behind every rehearsal and practice drill.",
     photo: ACHIEVEMENT_THEME_PHOTOS.arts,
   },
   {
-    tag: "Kindness & Citizenship",
+    tag: "Kindness & citizenship",
     title: "Wins we share as one united family",
-    kicker: "Belonging & Service",
+    kicker: "Belonging & service",
     body: "Peer mentoring, green campus initiatives, and everyday gestures of empathy — recognition at RMPS shines equally bright on the small moments that make our community warm.",
     photo: ACHIEVEMENT_THEME_PHOTOS.community,
   },
@@ -98,97 +96,30 @@ function recognitionGridClass(index: number, total: number): string {
   return "lg:col-span-4";
 }
 
-function StoryPanel({
-  story,
-  reverse,
-}: {
-  story: (typeof ZIGZAG_STORIES)[number];
-  reverse?: boolean;
-}) {
-  return (
-    <article className="grid items-center gap-6 lg:grid-cols-12 lg:gap-8">
-      <figure
-        className={`overflow-hidden rounded-3xl border border-white/20 shadow-xl lg:col-span-7 ${
-          reverse ? "lg:order-2" : "lg:order-1"
-        }`}
-      >
-        <img
-          src={story.photo.src}
-          alt={story.photo.alt}
-          className="aspect-[16/10] w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
-          loading="lazy"
-        />
-      </figure>
-      <div
-        className={`rounded-3xl border border-border/80 bg-white/95 p-6 sm:p-8 lg:p-10 shadow-md backdrop-blur-md lg:col-span-5 ${
-          reverse ? "lg:order-1" : "lg:order-2"
-        }`}
-      >
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand">
-          <span>★</span>
-          <span>{story.tag}</span>
-        </span>
-        <h3 className="rkps-display mt-3 text-2xl font-bold leading-snug tracking-tight text-heading sm:text-3xl">
-          {story.title}
-        </h3>
-        <p className="mt-1 text-sm font-semibold text-[var(--brand-maroon)]">{story.kicker}</p>
-        <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">{story.body}</p>
-      </div>
-    </article>
-  );
-}
-
 function RecognitionCard({
   card,
   index,
-  featured,
 }: {
   card: (typeof CARDS)[number];
   index: number;
-  featured: boolean;
 }) {
   const photo = STUDENT_ACHIEVER_CARD_PHOTOS[card.cat];
-  const meta = CATEGORY_META[card.cat];
 
   return (
-    <article
-      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-[var(--brand-maroon-dark)] shadow-[0_16px_36px_rgba(96,0,0,0.18)] transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${
-        featured ? "min-h-[22rem] sm:min-h-[26rem] lg:min-h-[30rem]" : "min-h-[18rem] sm:min-h-[22rem]"
-      }`}
-    >
-      <img
-        src={photo.src}
-        alt={photo.alt}
-        className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/5"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/45 to-transparent sm:h-28"
-        aria-hidden
-      />
-
-      {/* Card Header */}
-      <div className="relative z-10 flex items-start justify-between gap-3 p-5 sm:p-6">
-        <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-md ${meta.badge}`}>
-          <span>{meta.icon}</span>
-          <span>{card.cat}</span>
-        </span>
-        <span className="text-3xl sm:text-4xl font-black text-white/30" aria-hidden="true">
-          0{index + 1}
-        </span>
-      </div>
-
-      {/* Card Footer Content */}
-      <div className="relative z-10 max-w-xl p-5 sm:p-6 pt-0">
-        <h3 className="text-xl font-bold tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] sm:text-2xl lg:text-3xl group-hover:text-[var(--brand-gold)] transition">
-          {card.title}
-        </h3>
-        <p className="mt-2 text-xs sm:text-sm leading-relaxed text-white/90">
-          {card.body}
-        </p>
+    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-border/80 bg-white shadow-[0_12px_32px_rgb(143_1_3_/_0.06)]">
+      <figure className="relative aspect-[16/10] overflow-hidden">
+        <img src={photo.src} alt={photo.alt} className="h-full w-full object-cover" loading="lazy" />
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+        <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-4">
+          <p className="text-xs font-medium text-white/90">{card.cat}</p>
+          <span className="text-lg font-medium tabular-nums text-white/40" aria-hidden>
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </figcaption>
+      </figure>
+      <div className="flex flex-1 flex-col p-5 sm:p-6">
+        <h3 className="rkps-display text-lg leading-snug text-heading sm:text-xl">{card.title}</h3>
+        <p className="mt-2 flex-1 text-sm leading-relaxed text-muted">{card.body}</p>
       </div>
     </article>
   );
@@ -215,8 +146,8 @@ export function RkpsStudentAchieversPage() {
         slides={[
           {
             photo: pageHero,
-            kicker: "School Life · Celebrating Growth Without Rankings",
-            title: "Student Achievers",
+            kicker: "School life · Celebrating growth without rankings",
+            title: "Student achievers",
             accent: "Every learner, their own kind of remarkable.",
             body: "Growth in classrooms, on stage, in sports arenas, and throughout our community — honoured here with respect, encouragement, and genuine joy.",
           },
@@ -230,108 +161,83 @@ export function RkpsStudentAchieversPage() {
           {
             photo: BANNER_MOSAIC[2],
             kicker: HIGHLIGHTS[2].label,
-            title: "We Rise and Thrive Together",
+            title: "We rise and thrive together",
             accent: HIGHLIGHTS[2].value,
             body: "Effort, collaboration, and sportsmanship celebrated across every grade without comparisons or labels.",
           },
         ]}
-        primary={{ href: "#recognition", label: "Explore Recognition Areas" }}
+        primary={{ href: "#recognition", label: "Explore recognition areas" }}
         secondary={{ href: INSTAGRAM_PROFILE, label: "@r.k.m.p.s on Instagram", external: true }}
       />
 
-      {/* Sticky Quick Nav */}
-      <nav className="border-b border-border bg-white sticky top-16 z-20 sm:top-[4.5rem]" aria-label="Page navigation">
-        <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto rkps-page-x py-2.5 scrollbar-none">
-          <span className="shrink-0 text-xs font-bold uppercase tracking-wider text-muted pr-1">Jump to:</span>
-          {[
-            { href: "#featured", label: "Stories" },
-            { href: "#recognition", label: "Recognition Areas" },
-            { href: "#voices", label: "Voices" },
-            { href: "#gallery", label: "Gallery" },
-            { href: "/school-life/events", label: "School Events ↗" },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="shrink-0 rounded-full border border-border/80 bg-[var(--surface-elevated)] px-3.5 py-1 text-xs font-semibold text-muted transition hover:border-brand/40 hover:bg-brand hover:text-white"
-            >
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      </nav>
+      <RkpsQuickJumpNav
+        links={[
+          { href: "#featured", label: "Stories" },
+          { href: "#recognition", label: "Recognition" },
+          { href: "#voices", label: "Voices" },
+          { href: "#gallery", label: "Gallery" },
+          { href: "/school-life/events", label: "Events" },
+          { href: "/#contact", label: "Contact", highlight: true },
+        ]}
+      />
 
       <main>
-        {/* Section 01: Featured Stories */}
         <RkpsPageSection id="featured" tone="paper">
           <RkpsSectionIntro
-            num="01 · Inspiring Moments"
+            num="Inspiring moments"
             title="Stories worth celebrating"
             description="Moments from daily school life highlighting perseverance, creative courage, and community empathy."
           />
           <div className="mt-8 space-y-12 sm:space-y-16 lg:space-y-20">
             {ZIGZAG_STORIES.map((story, index) => (
-              <StoryPanel key={story.title} story={story} reverse={index % 2 === 1} />
+              <RkpsZigzagRow
+                key={story.title}
+                reverse={index % 2 === 1}
+                photo={story.photo}
+                badge={story.tag}
+                title={story.title}
+                kicker={story.kicker}
+                body={story.body}
+              />
             ))}
           </div>
         </RkpsPageSection>
 
-        {/* Section 02: Recognition Categories */}
         <RkpsPageSection id="recognition" tone="inset">
-          <RkpsSectionIntro
-            num="02 · Recognition Areas"
-            title="Many talents. Many journeys."
-            description="Filter by area of growth. We honour effort, creativity, teamwork, leadership, and personal bests."
-            action={
-              <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-bold text-brand">
-                {visible.length} {visible.length === 1 ? "area" : "areas"} displayed
-              </span>
-            }
-          />
+          <RkpsInView>
+            <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgb(143_1_3_/_0.07)] sm:rounded-[2rem]">
+              <div className="p-6 sm:p-8 lg:p-10">
+                <RkpsSectionIntro
+                  num="Recognition areas"
+                  title="Many talents. Many journeys."
+                  description="Filter by area of growth. We honour effort, creativity, teamwork, leadership, and personal bests."
+                  action={
+                    <span className="rkps-text-label-soft text-xs">
+                      {visible.length} {visible.length === 1 ? "area" : "areas"} shown
+                    </span>
+                  }
+                />
 
-          {/* Filter Pills */}
-          <div className="mt-8 rounded-3xl border border-border/80 bg-white p-3 sm:p-4 shadow-sm">
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none -mx-1 px-1">
-              <span className="shrink-0 text-xs font-bold uppercase tracking-wider text-muted pr-1">Area:</span>
-              {FILTERS.map((f) => {
-                const active = filter === f;
-                return (
-                  <button
-                    key={f}
-                    type="button"
-                    role="tab"
-                    aria-selected={active}
-                    onClick={() => setFilter(f)}
-                    className={`rkps-pill-tab shrink-0 ${
-                      active
-                        ? "bg-[var(--brand-maroon-dark)] text-white shadow-md"
-                        : "border border-border/80 bg-[var(--surface-elevated)] text-heading hover:border-brand/40 hover:text-brand"
-                    }`}
-                  >
-                    <span>{f}</span>
-                  </button>
-                );
-              })}
+                <RkpsFilterTabs label="Recognition area" options={FILTERS} active={filter} onSelect={setFilter} />
+
+                <ul className="rkps-stagger mt-8 grid gap-5 lg:grid-cols-12">
+                  {visible.map((c, i) => (
+                    <li key={c.title} className={recognitionGridClass(i, visible.length)} style={{ ["--rkps-i" as string]: i }}>
+                      <RecognitionCard card={c} index={i} />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
-          </div>
-
-          {/* Cards Grid */}
-          <ul className="rkps-stagger mt-8 grid gap-5 lg:grid-cols-12">
-            {visible.map((c, i) => (
-              <li key={c.title} className={recognitionGridClass(i, visible.length)} style={{ ["--rkps-i" as string]: i }}>
-                <RecognitionCard card={c} index={i} featured={visible.length > 1 && (i % 6 === 0 || i % 6 === 3)} />
-              </li>
-            ))}
-          </ul>
+          </RkpsInView>
         </RkpsPageSection>
 
-        {/* Section 03: School Voices */}
-        <section id="voices" className="bg-white py-14 sm:py-20 scroll-mt-28 border-b border-border/80" aria-label="School voices">
+        <section id="voices" className="scroll-mt-28 border-y border-border/80 bg-[var(--rkps-ivory)] py-14 sm:py-20" aria-label="School voices">
           <div className="mx-auto max-w-7xl rkps-page-x mb-8">
             <RkpsSectionIntro
-              num="03 · Community Voices"
-              title="From our students, faculty & community"
-              description="Reflections on curiosity, sportsmanship, and growth from members of the RMPS family."
+              num="Community voices"
+              title="From our students, faculty & families"
+              description="Reflections on curiosity, sportsmanship, and growth from members of the RMPS community."
             />
           </div>
           <AnimatedTestimonials
@@ -344,111 +250,105 @@ export function RkpsStudentAchieversPage() {
           />
         </section>
 
-        {/* Section 04: Photo Gallery */}
         <RkpsPageSection id="gallery" tone="paper">
           <RkpsSectionIntro
-            num="04 · Photo Gallery"
+            num="Photo gallery"
             title="Moments from @r.k.m.p.s"
             description="Celebrations, performances, project presentations, and awards captured in our living album."
             action={
-              <a
-                href={INSTAGRAM_PROFILE}
-                target="_blank"
-                rel="noreferrer"
-                className="rkps-btn-gold text-xs sm:text-sm"
-              >
-                Open Instagram ↗
+              <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className="rkps-btn-gold rkps-btn-sm">
+                Open Instagram
               </a>
             }
           />
 
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {galleryPhotos.map((photo) => (
-              <figure key={photo.src} className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-slate-900 shadow-md">
+              <figure
+                key={photo.src}
+                className="group relative aspect-[4/3] overflow-hidden rounded-2xl border border-border/80 bg-[var(--rkps-taupe)]"
+              >
                 <img
                   src={photo.src}
                   alt={photo.alt}
-                  className="h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                  className="h-full w-full object-cover transition duration-500 group-hover:brightness-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-85 group-hover:opacity-100 transition" />
-                <figcaption className="absolute inset-x-0 bottom-0 p-3 text-xs font-medium text-white line-clamp-2">
-                  {photo.alt}
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-transparent" />
+                <figcaption className="absolute inset-x-0 bottom-0 p-3 text-xs leading-snug text-white">
+                  <span className="line-clamp-2">{photo.alt}</span>
                 </figcaption>
               </figure>
             ))}
           </div>
 
-          {STUDENT_ACHIEVER_GALLERY.length > GALLERY_PREVIEW && (
+          {STUDENT_ACHIEVER_GALLERY.length > GALLERY_PREVIEW ? (
             <div className="mt-8 text-center">
-              <button
-                type="button"
-                onClick={() => setGalleryExpanded((v) => !v)}
-                className="rkps-btn-navy text-xs sm:text-sm"
-              >
-                {galleryExpanded ? "Show Fewer Photos ↑" : `Show All ${STUDENT_ACHIEVER_GALLERY.length} Photos ↓`}
+              <button type="button" onClick={() => setGalleryExpanded((v) => !v)} className="rkps-btn-navy rkps-btn-sm">
+                {galleryExpanded ? "Show fewer photos" : `Show all ${STUDENT_ACHIEVER_GALLERY.length} photos`}
               </button>
             </div>
-          )}
+          ) : null}
         </RkpsPageSection>
 
-        {/* Section 05: Call to action block */}
-        <div className="mx-auto max-w-7xl rkps-page-x py-14 sm:py-20 space-y-8">
-          <RkpsSectionIntro
-            num="05 · Growth Beyond Medals"
-            title="Celebrating every child's courage and daily effort"
-            description="Everyday wins matter. First attempts and quiet progress are celebrated here without ranking or comparisons."
-          />
-
-          <section className="relative min-h-[20rem] overflow-hidden rounded-3xl bg-[var(--brand-maroon-dark)] shadow-2xl sm:min-h-[24rem]">
-            <img src={ctaPhoto.src} alt={ctaPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/85 to-[var(--brand-maroon-dark)]/60" />
-            <div className="relative flex min-h-[20rem] max-w-xl flex-col justify-center p-6 sm:p-10 lg:p-12 text-white space-y-3">
-              <span className="inline-flex w-fit rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)]">
-                Everyday Progress Counts
-              </span>
-              <h2 className="rkps-display text-2xl font-bold tracking-tight text-white sm:text-4xl">
-                Not every achievement comes with a medal
-              </h2>
-              <p className="text-xs sm:text-sm leading-relaxed text-white/90">
-                First attempts, quiet courage, curiosity, and kindness — we celebrate every meaningful step our students take.
-              </p>
-              <div className="flex flex-wrap gap-3 pt-2">
-                <Link href="/#contact" className="rkps-btn-gold text-xs sm:text-sm">
-                  Contact School Office
-                </Link>
-                <Link href="/school-life/events" className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white backdrop-blur-md hover:bg-white/20 transition">
-                  School Events Calendar ↗
-                </Link>
+        <RkpsPageSection tone="inset">
+          <RkpsInView>
+            <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgb(143_1_3_/_0.07)] sm:rounded-[2rem]">
+              <div className="grid lg:grid-cols-12">
+                <div className="relative min-h-[14rem] lg:col-span-5 lg:min-h-[20rem]">
+                  <img src={ctaPhoto.src} alt={ctaPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent lg:bg-gradient-to-r lg:from-black/60 lg:to-transparent" />
+                </div>
+                <div className="flex flex-col justify-center p-6 sm:p-10 lg:col-span-7 lg:p-12">
+                  <span className="rkps-rule" aria-hidden="true" />
+                  <p className="rkps-text-label mt-4 text-xs">Everyday progress</p>
+                  <h2 className="rkps-display mt-2 text-2xl text-heading sm:text-3xl">Not every achievement comes with a medal</h2>
+                  <p className="mt-3 text-sm leading-relaxed text-muted">
+                    First attempts, quiet courage, curiosity, and kindness — we celebrate every meaningful step our students take.
+                  </p>
+                  <div className="mt-8 flex flex-wrap gap-3">
+                    <Link href="/#contact" className="rkps-btn-gold rkps-btn-sm">
+                      Contact school office
+                    </Link>
+                    <Link href="/school-life/events" className="rkps-btn-secondary rkps-btn-sm">
+                      School events calendar
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
-          </section>
+          </RkpsInView>
 
-          {/* Quick links footer */}
-          <section className="pt-6 space-y-4">
+          <div className="mt-14 sm:mt-16">
             <RkpsSectionIntro
-              num="More Resources"
-              title="Explore deeper into school life"
-              description="Discover our full events calendar, verified competitive records, and main campus gateway."
+              num="Explore further"
+              title="More from school life"
+              description="Discover our events calendar, verified competitive records, and main campus gateway."
             />
-            <div className="grid gap-4 sm:grid-cols-2 pt-2">
-              <Link
-                href="/school-life/achievements"
-                className="flex items-center justify-between rounded-2xl border border-border/80 bg-[var(--surface-elevated)] p-4 text-sm font-bold text-heading hover:border-brand hover:text-brand transition shadow-sm"
-              >
-                <span>Explore School Achievements Archive</span>
-                <span>→</span>
-              </Link>
-              <Link
-                href="/"
-                className="flex items-center justify-between rounded-2xl border border-border/80 bg-[var(--surface-elevated)] p-4 text-sm font-bold text-heading hover:border-brand hover:text-brand transition shadow-sm"
-              >
-                <span>Return to School Homepage</span>
-                <span>→</span>
-              </Link>
-            </div>
-          </section>
-        </div>
+            <RkpsDestinationLinks
+              items={[
+                {
+                  href: "/school-life/events",
+                  label: "Calendar",
+                  title: "Events & galas",
+                  description: "Programmes, festivals, and sports across the year.",
+                },
+                {
+                  href: "/school-life/achievements",
+                  label: "Archive",
+                  title: "School achievements",
+                  description: "Verified competition records and milestones.",
+                },
+                {
+                  href: "/",
+                  label: "Home",
+                  title: "Main portal",
+                  description: "Return to the school landing page.",
+                },
+              ]}
+            />
+          </div>
+        </RkpsPageSection>
       </main>
       <RkpsFooter prefooter={ACHIEVERS_FOOTER_LINE} />
     </>

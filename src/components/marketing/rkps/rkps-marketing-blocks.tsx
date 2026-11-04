@@ -142,17 +142,15 @@ export function RkpsZigzagRow({
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
       </figure>
 
-      <div className={`flex h-full flex-col justify-center rounded-2xl border border-border/80 bg-white/90 p-6 sm:p-8 shadow-md backdrop-blur-md ${
+      <div className={`flex h-full flex-col justify-center rounded-2xl border border-border/80 bg-white p-6 sm:p-8 shadow-md ${
         reverse ? "lg:pr-8" : "lg:pl-8"
       }`}>
-        <span className="inline-flex w-fit items-center rounded-full border border-[var(--brand-gold)]/50 bg-[var(--brand-gold)]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-maroon-dark)]">
-          {badge}
-        </span>
-        <h3 className="rkps-display mt-3 text-2xl font-bold tracking-tight sm:text-3xl text-heading">
+        <span className="rkps-text-label-soft text-xs">{badge}</span>
+        <h3 className="rkps-display mt-2 text-2xl leading-snug sm:text-3xl text-heading">
           {title}
         </h3>
         {kicker ? (
-          <p className="mt-1.5 text-sm font-semibold text-brand">
+          <p className="mt-1.5 text-sm font-medium text-[var(--rkps-primary-light)]">
             {kicker}
           </p>
         ) : null}
@@ -401,6 +399,81 @@ export function RkpsQuickJumpNav({
         </div>
       </div>
     </nav>
+  );
+}
+
+/** Theme / category filters — matches gallery & campus programme tabs */
+export function RkpsFilterTabs<T extends string>({
+  label,
+  options,
+  active,
+  onSelect,
+  trailing,
+}: {
+  label: string;
+  options: readonly T[];
+  active: T;
+  onSelect: (value: T) => void;
+  trailing?: ReactNode;
+}) {
+  return (
+    <div className="mt-8 rounded-2xl border border-border/80 bg-white p-3 sm:p-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div
+          role="tablist"
+          aria-label={label}
+          className="flex min-w-0 flex-wrap gap-2"
+        >
+          {options.map((option) => {
+            const selected = active === option;
+            return (
+              <button
+                key={option}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => onSelect(option)}
+                className={`rounded-xl border px-3.5 py-2 text-left text-sm transition sm:px-4 ${
+                  selected
+                    ? "border-brand/35 bg-brand/5 font-medium text-heading"
+                    : "border-border/80 bg-[var(--surface-elevated)] text-muted hover:border-brand/25 hover:text-heading"
+                }`}
+              >
+                {option}
+              </button>
+            );
+          })}
+        </div>
+        {trailing ? <div className="shrink-0 text-xs text-muted">{trailing}</div> : null}
+      </div>
+    </div>
+  );
+}
+
+export function RkpsDestinationLinks({
+  items,
+}: {
+  items: readonly { href: string; label: string; title: string; description: string }[];
+}) {
+  return (
+    <div className="grid gap-4 sm:grid-cols-3">
+      {items.map((item) => (
+        <Link
+          key={item.href}
+          href={item.href}
+          className="group flex flex-col justify-between rounded-2xl border border-border/80 bg-white p-5 shadow-[0_12px_32px_rgb(143_1_3_/_0.05)] transition hover:border-brand/30"
+        >
+          <div>
+            <p className="rkps-text-label-soft text-xs">{item.label}</p>
+            <h3 className="rkps-display mt-2 text-lg text-heading group-hover:text-[var(--rkps-primary-light)]">
+              {item.title}
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-muted">{item.description}</p>
+          </div>
+          <span className="mt-4 text-sm font-medium text-[var(--rkps-primary-light)]">Continue →</span>
+        </Link>
+      ))}
+    </div>
   );
 }
 
