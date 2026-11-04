@@ -7,11 +7,14 @@ export { RkpsHeader, RkpsFooter } from "./rkps-shell";
 export { RkpsCinematicHero, RkpsNewsMarquee, RkpsStoryHero, RkpsInView } from "./rkps-motion-sections";
 export { RkpsMotionBanner } from "./rkps-motion-banner";
 
+export { RkpsAdmissionsSection } from "./rkps-admissions-section";
+export { RkpsCampusStoriesSection, RkpsStoryRail } from "./rkps-campus-stories-section";
 export {
   RkpsSectionIntro,
   RkpsPageSection,
   RkpsPathwayCards,
-  RkpsAdmissionsSection,
+  RkpsAboutSection,
+  RkpsNoticeboardSection,
 } from "./rkps-marketing-blocks";
 export { RkpsContactSection } from "./rkps-contact-section";
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { BRAND } from "@/config/branding";
-import { RKPS_CONTACT, RKPS_FOOTER, RKPS_HEADER_CTA, RKPS_NAV_MORE, RKPS_NAV_PRIMARY } from "@/content/website/rkps-copy";
+import { RKPS_CONTACT, RKPS_HEADER_CTA, RKPS_NAV_MORE, RKPS_NAV_PRIMARY } from "@/content/website/rkps-copy";
 import { RkpsNewsMarquee } from "@/components/marketing/rkps/rkps-motion-sections";
 
 function routeNavIsActive(pathname: string, href: string): boolean {
@@ -23,10 +23,10 @@ function routeNavIsActive(pathname: string, href: string): boolean {
 
 function navLinkClass(active: boolean, className = "") {
   return [
-    "relative whitespace-nowrap rounded-full px-3 py-1.5 text-[0.8125rem] font-semibold transition-all duration-200",
+    "relative whitespace-nowrap px-3 py-1.5 text-sm font-medium transition-colors duration-150",
     active
-      ? "bg-white/20 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.25)] ring-1 ring-white/30"
-      : "text-white/85 hover:bg-white/10 hover:text-white",
+      ? "text-white after:absolute after:inset-x-3 after:bottom-0 after:h-0.5 after:bg-[var(--brand-gold)]"
+      : "text-white/75 hover:text-white",
     className,
   ].join(" ");
 }
@@ -144,7 +144,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
               className="group flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3 lg:flex-none"
               aria-label="R.K. Memorial Public School Home"
             >
-              <div className="relative shrink-0 overflow-hidden rounded-xl bg-white/10 p-1 ring-1 ring-white/20 transition group-hover:scale-105 group-hover:ring-[var(--brand-gold)]">
+              <div className="relative shrink-0 overflow-hidden rounded-lg bg-white/10 p-1">
                 <Image
                   src={BRAND.logoSrc}
                   alt=""
@@ -155,7 +155,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
                 />
               </div>
               <div className="min-w-0 leading-tight">
-                <p className="truncate text-sm font-bold tracking-tight text-white sm:text-base">
+                <p className="truncate text-base font-medium tracking-tight text-white">
                   <span className="sm:hidden">{BRAND.shortName}</span>
                   <span className="hidden sm:inline lg:hidden xl:inline">{BRAND.name}</span>
                   <span className="hidden lg:inline xl:hidden">{BRAND.shortName}</span>
@@ -171,7 +171,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
               className="hidden min-w-0 flex-1 items-center justify-center gap-1 overflow-visible lg:flex xl:gap-1.5"
               aria-label="Primary Navigation"
             >
-              <div className="flex max-w-full items-center gap-1 overflow-x-auto scrollbar-none rounded-full bg-white/5 p-1 border border-white/10">
+              <div className="flex max-w-full items-center gap-1 overflow-x-auto scrollbar-none">
                 {RKPS_NAV_PRIMARY.map((item) => {
                   const active = routeNavIsActive(pathname, item.href);
                   return (
@@ -194,7 +194,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
               <a
                 href={`tel:${RKPS_CONTACT.phone.replace(/\s/g, "")}`}
                 aria-label={`Call office at ${RKPS_CONTACT.phone}`}
-                className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/10 text-[var(--brand-gold)] transition hover:bg-white/20 sm:hidden"
+                className="grid h-9 w-9 place-items-center rounded-[10px] text-white/80 transition-colors hover:text-white sm:hidden"
               >
                 <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
@@ -203,21 +203,16 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
 
               <Link
                 href={RKPS_HEADER_CTA.login.href}
-                className="hidden items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white transition hover:bg-white/20 hover:border-white/30 md:inline-flex"
+                className="hidden text-sm text-white/75 transition-colors hover:text-white md:inline"
               >
-                <svg className="h-3.5 w-3.5 text-[var(--brand-gold)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
                 {RKPS_HEADER_CTA.login.label}
               </Link>
 
               <Link
                 href={RKPS_HEADER_CTA.enquire.href}
-                className="rkps-btn-gold text-xs sm:text-sm px-3.5 py-1.5 sm:px-4 sm:py-2 min-h-[38px] sm:min-h-[42px]"
+                className="rkps-btn-gold rkps-btn-sm"
               >
-                <span>{RKPS_HEADER_CTA.enquire.label}</span>
-                <span className="hidden sm:inline">↗</span>
+                {RKPS_HEADER_CTA.enquire.label}
               </Link>
 
               {/* Mobile menu toggle button */}
@@ -254,8 +249,8 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
               <div className="space-y-4">
                 {/* Main sections */}
                 <div>
-                  <p className="px-3 pb-1.5 text-[0.65rem] font-bold uppercase tracking-wider text-[var(--brand-gold)]">
-                    Main Pages
+                  <p className="px-3 pb-2 text-xs text-white/55">
+                    Main pages
                   </p>
                   <ul className="flex flex-col gap-1">
                     {RKPS_NAV_PRIMARY.map((item) => {
@@ -282,8 +277,8 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
 
                 {/* More destinations */}
                 <div className="border-t border-white/10 pt-3">
-                  <p className="px-3 pb-1.5 text-[0.65rem] font-bold uppercase tracking-wider text-[var(--brand-gold)]">
-                    Explore & Campus Life
+                  <p className="px-3 pb-2 text-xs text-white/55">
+                    Explore and campus life
                   </p>
                   <ul className="flex flex-col gap-1">
                     {RKPS_NAV_MORE.map((item) => (
@@ -328,10 +323,10 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
                   </div>
                   <Link
                     href={RKPS_HEADER_CTA.enquire.href}
-                    className="rkps-btn-gold w-full text-center py-2.5 text-xs"
+                    className="rkps-btn-gold rkps-btn-sm w-full justify-center text-center"
                     onClick={() => setMobileOpen(false)}
                   >
-                    Start Admission Enquiry ↗
+                    Start admission enquiry
                   </Link>
                 </div>
               </div>
@@ -453,175 +448,4 @@ function RkpsMobileBottomBar() {
   );
 }
 
-function FooterLinkColumn({ title, links }: { title: string; links: readonly { label: string; href: string }[] }) {
-  return (
-    <div className="min-w-0">
-      <p className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--brand-gold)]">{title}</p>
-      <ul className="mt-3 space-y-2.5">
-        {links.map((l) => (
-          <li key={l.href}>
-            {l.href.startsWith("http") ? (
-              <a
-                href={l.href}
-                className="group inline-flex max-w-full items-center gap-1.5 text-sm text-white/80 transition hover:text-white"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <span className="truncate">{l.label}</span>
-                <span className="shrink-0 text-[0.65rem] text-white/35 transition group-hover:text-[var(--brand-gold)]">↗</span>
-              </a>
-            ) : (
-              <Link
-                href={l.href}
-                className="inline-block text-sm text-white/80 transition hover:translate-x-0.5 hover:text-white"
-              >
-                {l.label}
-              </Link>
-            )}
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export function RkpsFooter({ prefooter }: { prefooter?: string }) {
-  const telHref = `tel:${RKPS_CONTACT.phone.replace(/\s/g, "")}`;
-  const { discover, families, more, stay } = RKPS_FOOTER.columns;
-
-  return (
-    <footer className="border-t-4 border-[var(--brand-gold)] bg-[var(--brand-maroon-dark)] text-white">
-      {prefooter ? (
-        <div className="border-b border-white/10 bg-[var(--brand-maroon)]">
-          <div className="mx-auto max-w-3xl rkps-page-x py-8 text-center sm:py-10">
-            <span aria-hidden className="mx-auto mb-3 block h-1 w-10 rounded-full bg-[var(--brand-gold)]" />
-            <p className="text-base font-medium italic leading-relaxed text-white/95 sm:text-lg">{prefooter}</p>
-          </div>
-        </div>
-      ) : null}
-
-      <div className="relative mx-auto max-w-7xl rkps-page-x pb-[calc(5rem+env(safe-area-inset-bottom,0px))] pt-10 sm:pt-12 lg:pb-12">
-        {/* Brand band */}
-        <div className="rounded-[1.75rem] border border-white/12 bg-white/[0.05] p-6 sm:rounded-[2rem] sm:p-8">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-            <div className="flex items-start gap-4 sm:gap-5">
-              <div className="shrink-0 rounded-2xl border border-white/15 bg-white/10 p-2 sm:p-2.5">
-                <Image
-                  src={BRAND.crestSrc}
-                  alt=""
-                  width={72}
-                  height={72}
-                  className="h-14 w-14 object-contain sm:h-16 sm:w-16"
-                />
-              </div>
-              <div className="min-w-0 pt-0.5">
-                <p className="text-lg font-bold leading-snug tracking-tight text-white sm:text-xl lg:text-2xl">{BRAND.name}</p>
-                <p className="mt-1 text-sm font-semibold italic text-[var(--brand-gold)]">{BRAND.motto}</p>
-                <p className="mt-3 hidden max-w-md text-sm leading-relaxed text-white/75 sm:block">{RKPS_FOOTER.tagline}</p>
-              </div>
-            </div>
-            <div className="flex flex-col gap-2.5 sm:flex-row sm:flex-wrap lg:max-w-sm lg:flex-col lg:items-stretch">
-              <Link href={RKPS_HEADER_CTA.enquire.href} className="rkps-btn-gold w-full justify-center text-center text-xs sm:w-auto sm:text-sm">
-                {RKPS_HEADER_CTA.enquire.label} ↗
-              </Link>
-              <div className="flex flex-wrap gap-2.5">
-                <Link
-                  href={RKPS_HEADER_CTA.login.href}
-                  className="inline-flex flex-1 items-center justify-center rounded-full border border-white/25 bg-white/10 px-4 py-2.5 text-xs font-semibold text-white backdrop-blur-sm transition hover:bg-white/15 sm:flex-none sm:text-sm"
-                >
-                  {RKPS_HEADER_CTA.login.label}
-                </Link>
-                <a
-                  href={telHref}
-                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/20 px-4 py-2.5 text-xs font-semibold text-white/90 transition hover:border-[var(--brand-gold)]/50 hover:text-[var(--brand-gold)] sm:flex-none sm:text-sm"
-                >
-                  <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} aria-hidden>
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                  </svg>
-                  Call office
-                </a>
-              </div>
-            </div>
-          </div>
-          <p className="mt-5 text-sm leading-relaxed text-white/75 sm:hidden">{RKPS_FOOTER.tagline}</p>
-        </div>
-
-        {/* Links + contact */}
-        <div className="mt-10 grid gap-10 lg:grid-cols-12 lg:gap-12">
-          <div className="lg:col-span-4">
-            <div className="h-full rounded-2xl border border-white/12 bg-[var(--brand-maroon)]/40 p-5 sm:p-6">
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-gold)]">Visit & contact</p>
-              <ul className="mt-4 space-y-3.5 text-sm">
-                <li>
-                  <a href={telHref} className="block font-semibold tabular-nums text-white transition hover:text-[var(--brand-gold)]">
-                    {RKPS_CONTACT.phone}
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={`mailto:${RKPS_CONTACT.email}`}
-                    className="block break-all text-white/85 transition hover:text-[var(--brand-gold)]"
-                  >
-                    {RKPS_CONTACT.email}
-                  </a>
-                </li>
-                <li className="leading-relaxed text-white/75">{RKPS_CONTACT.visit}</li>
-              </ul>
-              <p className="mt-4 border-t border-white/10 pt-4 text-xs leading-relaxed text-white/60">
-                <span className="font-semibold text-white/80">Office hours:</span> {RKPS_CONTACT.hours}
-              </p>
-              <Link
-                href="/#contact"
-                className="mt-5 inline-flex w-full items-center justify-center rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/10 px-4 py-2.5 text-xs font-bold text-[var(--brand-gold)] transition hover:bg-[var(--brand-gold)]/20"
-              >
-                Plan a visit →
-              </Link>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-x-6 gap-y-9 sm:gap-x-8 lg:col-span-8 lg:grid-cols-4 lg:gap-y-8">
-            <FooterLinkColumn title="Discover" links={discover} />
-            <FooterLinkColumn title="For families" links={families} />
-            <FooterLinkColumn title="School life" links={more} />
-            <FooterLinkColumn title="Stay informed" links={stay} />
-          </div>
-        </div>
-
-        <figure className="mt-10 rounded-2xl border border-[var(--brand-gold)]/25 bg-[var(--brand-gold)]/[0.08] px-6 py-7 text-center sm:px-10 sm:py-8">
-          <blockquote className="mx-auto max-w-2xl text-base font-semibold italic leading-relaxed text-[var(--brand-gold)] sm:text-lg">
-            &ldquo;{RKPS_FOOTER.closing}&rdquo;
-          </blockquote>
-        </figure>
-
-        <div className="mt-8 flex flex-col gap-4 border-t border-white/10 pt-8 text-xs text-white/55 sm:flex-row sm:items-center sm:justify-between">
-          <p>
-            © {new Date().getFullYear()} {BRAND.name}. All rights reserved.
-          </p>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-            <Link href="#privacy" className="transition hover:text-white/85">
-              Privacy
-            </Link>
-            <Link href="#accessibility" className="transition hover:text-white/85">
-              Accessibility
-            </Link>
-            <a
-              href="https://www.instagram.com/r.k.m.p.s/"
-              className="transition hover:text-[var(--brand-gold)]"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Instagram ↗
-            </a>
-            <button
-              type="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="font-semibold text-white/80 transition hover:text-[var(--brand-gold)]"
-            >
-              Back to top ↑
-            </button>
-          </div>
-        </div>
-      </div>
-    </footer>
-  );
-}
+export { RkpsFooter } from "@/components/marketing/rkps/rkps-footer";

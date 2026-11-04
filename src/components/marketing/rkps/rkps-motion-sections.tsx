@@ -14,7 +14,6 @@ import {
 import { RKPS_HERO } from "@/content/website/rkps-copy";
 import { LATEST_NEWS } from "@/content/website/public-site";
 import { INSTAGRAM_PHOTOS, instagramPhoto } from "@/content/website/instagram-media";
-import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 
 /* -------------------------------------------------------------------------- */
 /*  Shared constants & helpers                                                 */
@@ -183,11 +182,11 @@ function SectionHeading({
 }) {
   return (
     <div className="max-w-2xl">
-      <span aria-hidden="true" className="block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" />
-      <p className="mt-3 text-xs font-bold uppercase tracking-wider text-brand">{eyebrow}</p>
+      <span className="rkps-rule" aria-hidden="true" />
+      <p className="mt-3 text-xs text-brand">{eyebrow}</p>
       <h2
         id={id}
-        className="rkps-display mt-1 text-2xl font-bold leading-tight tracking-tight text-heading [text-wrap:balance] sm:text-3xl lg:text-4xl"
+        className="rkps-display mt-1 text-[1.75rem] leading-tight text-heading [text-wrap:balance] sm:text-4xl"
       >
         {title}
       </h2>
@@ -392,16 +391,14 @@ export function RkpsStoryHero({
           className="flex flex-1 flex-col justify-end space-y-3 sm:space-y-4 lg:max-w-3xl"
           aria-live={c.playing ? "off" : "polite"}
         >
-          <div className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)] backdrop-blur-md">
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--brand-gold)]" />
-            <span className="truncate">{slide.kicker}</span>
+          <div className="space-y-3">
+            <span className="rkps-rule" aria-hidden="true" />
+            <p className="max-w-xl truncate text-xs text-white/80">{slide.kicker}</p>
           </div>
 
-          <h1 className="rkps-reveal text-3xl font-extrabold leading-[1.1] tracking-tight text-white [text-wrap:balance] sm:text-5xl md:text-6xl">
+          <h1 className="rkps-display max-w-[18ch] text-4xl leading-[1.05] text-white [text-wrap:balance] sm:text-6xl">
             {slide.title}
-            <span className="mt-1 block bg-gradient-to-r from-[var(--brand-gold)] to-[var(--brand-gold)] bg-clip-text text-transparent">
-              {slide.accent}
-            </span>
+            <span className="mt-2 block text-white/80">{slide.accent}</span>
           </h1>
 
           <p className="rkps-reveal max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base lg:text-lg">
@@ -413,14 +410,14 @@ export function RkpsStoryHero({
               href={primary.href}
               className={`rkps-btn-gold inline-flex w-full items-center justify-center text-center text-sm sm:w-auto ${FOCUS_DARK}`}
             >
-              {primary.label} ↗
+              {primary.label}
             </a>
             {secondary ? (
               <a
                 href={secondary.href}
                 target={secondary.external ? "_blank" : undefined}
                 rel={secondary.external ? "noreferrer" : undefined}
-                className={`inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20 active:scale-95 sm:w-auto ${FOCUS_DARK}`}
+                className={`inline-flex min-h-11 items-center text-sm text-white/90 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white ${FOCUS_DARK}`}
               >
                 <span>{secondary.label}</span>
                 {secondary.external ? <span className="text-xs">↗</span> : null}
@@ -461,11 +458,8 @@ export function RkpsNewsMarquee() {
   return (
     <div className="border-t border-white/10 bg-[var(--brand-maroon-dark)] text-white" role="region" aria-label="Latest notices">
       <div className="mx-auto flex max-w-7xl items-center gap-2 rkps-page-x">
-        <div className="flex shrink-0 items-center gap-1.5 rounded-md bg-[var(--brand-gold)] px-2.5 py-1 text-[0.6875rem] font-extrabold uppercase tracking-wider text-[var(--brand-maroon-dark)] shadow-sm">
-          <span
-            className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--brand-maroon-dark)] motion-reduce:animate-none"
-            aria-hidden="true"
-          />
+        <div className="relative z-10 flex shrink-0 items-center gap-2 bg-[var(--brand-maroon-dark)] py-2 pr-4 text-xs text-[var(--brand-gold)]">
+          <span className="rkps-rule w-4" aria-hidden="true" />
           <span>Notice</span>
         </div>
         <div className="rkps-marquee min-w-0 flex-1 overflow-hidden py-2.5 text-xs motion-reduce:overflow-x-auto sm:text-sm">
@@ -544,36 +538,32 @@ export function RkpsCinematicHero() {
           className="flex flex-1 flex-col justify-end space-y-4 lg:max-w-3xl lg:justify-center"
           aria-live={c.playing ? "off" : "polite"}
         >
-          <div className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[var(--brand-gold)]/50 bg-[var(--brand-gold)]/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)] shadow-sm backdrop-blur-md">
-            <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-[var(--brand-gold)] motion-reduce:animate-none" />
-            <span className="truncate">{slide.kicker}</span>
+          <div className="space-y-3">
+            <span className="rkps-rule" aria-hidden="true" />
+            <p className="max-w-xl truncate text-xs text-white/80">{slide.kicker}</p>
           </div>
 
-          <h1 className="rkps-reveal text-[2rem] font-extrabold leading-[1.08] tracking-tight text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.45)] [text-wrap:balance] sm:text-5xl lg:text-7xl">
+          <h1 className="rkps-display max-w-[16ch] text-[2.25rem] leading-[1.05] text-white [text-wrap:balance] sm:text-5xl lg:text-[4.5rem]">
             {slide.title}
-            <span className="mt-1 block bg-gradient-to-r from-[var(--brand-gold)] via-[var(--brand-gold)] to-[var(--brand-gold-muted)] bg-clip-text text-transparent">
-              {slide.accent}
-            </span>
+            <span className="mt-2 block text-white/80">{slide.accent}</span>
           </h1>
 
-          <p className="rkps-reveal max-w-xl text-sm leading-relaxed text-white/95 drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] sm:text-base lg:text-lg">
+          <p className="rkps-reveal max-w-xl text-sm leading-7 text-white/80 sm:text-lg">
             {slide.body}
           </p>
 
-          <div className="rkps-reveal flex flex-col gap-2.5 pt-2 sm:flex-row sm:flex-wrap sm:gap-3.5">
+          <div className="rkps-reveal flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center">
             <Link
               href={RKPS_HERO.primary.href}
-              className={`rkps-btn-gold inline-flex w-full items-center justify-center gap-2 px-6 py-3 text-center text-sm sm:w-auto sm:text-base ${FOCUS_DARK}`}
+              className={`rkps-btn-gold w-full sm:w-auto ${FOCUS_DARK}`}
             >
-              <span>{RKPS_HERO.primary.label}</span>
-              <span aria-hidden="true">↗</span>
+              {RKPS_HERO.primary.label}
             </Link>
             <Link
               href={RKPS_HERO.secondary.href}
-              className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20 active:scale-95 sm:w-auto sm:text-base ${FOCUS_DARK}`}
+              className={`inline-flex min-h-11 items-center text-sm text-white/90 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white hover:decoration-white ${FOCUS_DARK}`}
             >
-              <span>{RKPS_HERO.secondary.label}</span>
-              <span aria-hidden="true">›</span>
+              {RKPS_HERO.secondary.label}
             </Link>
           </div>
         </div>
@@ -586,12 +576,7 @@ export function RkpsCinematicHero() {
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <span className="hidden items-center gap-2 text-xs font-semibold text-white/70 md:flex">
-              <span>Scroll to explore</span>
-              <span aria-hidden="true" className="animate-bounce motion-reduce:animate-none">
-                ↓
-              </span>
-            </span>
+            <span className="hidden text-xs text-white/60 md:inline">Scroll</span>
             {!c.reduced ? <PauseButton tone="dark" paused={c.userPaused} onToggle={c.togglePaused} /> : null}
           </div>
         </div>
@@ -682,7 +667,7 @@ export function RkpsSpotlightCarousel() {
           />
           <Link
             href="#excellence"
-            className={`inline-flex h-11 w-fit shrink-0 items-center gap-2 rounded-full border border-brand/25 bg-white px-5 text-sm font-bold text-brand transition hover:bg-brand hover:text-white active:scale-95 ${FOCUS_LIGHT}`}
+            className={`rkps-btn-secondary rkps-btn-sm shrink-0 ${FOCUS_LIGHT}`}
           >
             <span>View all achievements</span>
             <span aria-hidden="true">→</span>
@@ -827,16 +812,14 @@ export function RkpsHighlightBanner() {
             className="relative mx-auto flex min-h-[22rem] max-w-7xl flex-col justify-end rkps-page-x pb-8 pt-12 text-white sm:min-h-[26rem] sm:pb-10 lg:min-h-[32rem] lg:pb-14 lg:pt-16"
           >
             <div className="max-w-2xl">
-              <span className="inline-flex w-fit max-w-full items-center rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)] backdrop-blur-md">
-                <span className="truncate">{banner.kicker}</span>
-              </span>
-              <h3 className="mt-3 text-2xl font-bold leading-snug tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] [text-wrap:balance] sm:text-3xl md:text-4xl">
+              <span className="rkps-rule" aria-hidden="true" />
+              <p className="mt-3 truncate text-xs text-white/75">{banner.kicker}</p>
+              <h3 className="rkps-display mt-2 text-[1.75rem] leading-snug text-white [text-wrap:balance] sm:text-4xl">
                 {banner.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-white/90 sm:text-base">{banner.body}</p>
-              <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--brand-gold)] transition group-hover:translate-x-1.5 motion-reduce:transition-none">
-                <span>Explore this highlight</span>
-                <span aria-hidden="true">→</span>
+              <p className="mt-2 text-sm leading-6 text-white/80 sm:text-base">{banner.body}</p>
+              <span className="mt-4 inline-flex text-sm text-[var(--brand-gold)]">
+                Explore this highlight
               </span>
             </div>
           </div>
@@ -853,138 +836,6 @@ export function RkpsHighlightBanner() {
             <ArrowButton direction="prev" onClick={c.prev} label="Previous highlight" />
             <ArrowButton direction="next" onClick={c.next} label="Next highlight" />
           </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Campus life stories                                                        */
-/*  Phones/tablets: stacked cards. Desktop: sticky scroll-reveal.              */
-/* -------------------------------------------------------------------------- */
-
-const STORY_FRAMES = [
-  [instagramPhoto("campus-22.jpg"), instagramPhoto("campus-15.jpg"), instagramPhoto("campus-23.jpg")],
-  [instagramPhoto("campus-26.jpg"), instagramPhoto("campus-32.jpg"), instagramPhoto("campus-33.jpg")],
-  [instagramPhoto("campus-17.jpg"), instagramPhoto("campus-24.jpg"), instagramPhoto("campus-31.jpg")],
-  [instagramPhoto("campus-9.jpg"), instagramPhoto("campus-10.jpg"), instagramPhoto("campus-11.jpg")],
-  [instagramPhoto("campus-13.jpg"), instagramPhoto("campus-14.jpg"), instagramPhoto("campus-25.jpg")],
-  [instagramPhoto("campus-35.jpg"), instagramPhoto("campus-36.jpg"), instagramPhoto("campus-37.jpg")],
-] as const;
-
-function StoryFrame({ photos }: { photos: readonly { src: string; alt: string }[] }) {
-  const [lead, ...rest] = photos;
-  if (!lead) return null;
-  return (
-    <div className="grid h-full min-h-0 grid-rows-[minmax(0,1.65fr)_minmax(0,1fr)] gap-2.5 overflow-hidden rounded-2xl shadow-xl">
-      <div className="relative min-h-0 overflow-hidden rounded-xl">
-        <img
-          src={lead.src}
-          alt={lead.alt}
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      </div>
-      <div className="grid min-h-0 grid-cols-2 gap-2.5">
-        {rest.map((photo) => (
-          <div key={photo.src} className="relative min-h-0 overflow-hidden rounded-xl">
-            <img
-              src={photo.src}
-              alt={photo.alt}
-              loading="lazy"
-              decoding="async"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const STORY_COPY = [
-  {
-    title: "Annual Sports Week & Athletics",
-    body: "Inter-house track and field for grades 1–12 on our campus athletic grounds. Houses meet on the ground for sprints, relays, kabaddi, and field events, fostering healthy competition, leadership, and camaraderie.\n\nCricket, badminton, and gymnastics run through the academic year with dedicated sports periods on every student’s timetable.",
-  },
-  {
-    title: "Parent–Teacher Conferences",
-    body: "Collaborative conferences booked smoothly through the portal. Report cards, attendance metrics, and personalized teacher notes are accessible before parents sit down for meaningful dialogues.\n\nEvery meeting celebrates individual growth milestones, addresses learning gaps, and outlines supportive action plans.",
-  },
-  {
-    title: "Science & Robotics Innovation Fair",
-    body: "Student-built robotics projects, environmental sustainability models, and working laboratory experiments on exhibition. Learners explain their hypotheses and engineering decisions in their own confident words.\n\nFrom coding clubs to advanced physics and chemistry labs, hands-on experiential learning is woven into the curriculum.",
-  },
-  {
-    title: "Sports & Physical Well-being",
-    body: "Cricket, athletics, basketball, and yoga encourage active lifestyles. Indoor gaming halls and outdoor grounds share the campus, ensuring students develop physical resilience and sportsmanship.",
-  },
-  {
-    title: "Cultural & Performing Arts",
-    body: "Annual day galas, inter-house dance, music, theater, and debate competitions give every student a stage. Rehearsals cultivate creative self-expression and poise.",
-  },
-  {
-    title: "Clubs & Community Outreach",
-    body: "Eco Club, Robotics League, Literary Society, and social service initiatives empower students to lead impactful community drives and develop responsible citizenship.",
-  },
-] as const;
-
-export function RkpsStoryRail() {
-  const stories = STORY_COPY;
-
-  return (
-    <section
-      className="border-b border-border/80 bg-white py-10 sm:py-14 lg:py-16"
-      aria-labelledby="rkps-stories-title"
-    >
-      <div className="mx-auto max-w-7xl rkps-page-x">
-        <SectionHeading
-          id="rkps-stories-title"
-          eyebrow="Campus life"
-          title="Your child’s day, told in programmes and people"
-        />
-
-        {/* Phones & tablets: plain stacked cards, no sticky scrolling. */}
-        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:hidden">
-          {stories.map((story, index) => {
-            const lead = STORY_FRAMES[index]?.[0];
-            return (
-              <li key={story.title} className="flex">
-                <article className="flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-                  {lead ? (
-                    <img
-                      src={lead.src}
-                      alt={lead.alt}
-                      loading="lazy"
-                      decoding="async"
-                      className="aspect-[16/10] w-full object-cover"
-                    />
-                  ) : null}
-                  <div className="flex flex-1 flex-col gap-2.5 p-5">
-                    <h3 className="text-lg font-bold leading-snug text-heading">{story.title}</h3>
-                    {story.body.split("\n\n").map((paragraph) => (
-                      <p key={paragraph} className="text-sm leading-relaxed text-muted">
-                        {paragraph}
-                      </p>
-                    ))}
-                  </div>
-                </article>
-              </li>
-            );
-          })}
-        </ul>
-
-        {/* Desktop: sticky scroll-reveal. */}
-        <div className="mt-8 hidden lg:block">
-          <StickyScroll
-            content={stories.map((story, index) => ({
-              title: story.title,
-              description: story.body,
-              content: <StoryFrame photos={STORY_FRAMES[index]} />,
-            }))}
-          />
         </div>
       </div>
     </section>

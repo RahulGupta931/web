@@ -50,10 +50,10 @@ export function MarketingHeader() {
           ))}
         </nav>
         <div className="flex shrink-0 items-center gap-2">
-          <Link href="/#admissions" className="rkps-btn-ghost hidden text-sm text-white sm:inline-flex">
+          <Link href="/#admissions" className="rkps-btn-ghost rkps-btn-inverse rkps-btn-sm hidden sm:inline-flex">
             Enquire
           </Link>
-          <Link href="/login" className="rkps-btn-primary text-sm">
+          <Link href="/login" className="rkps-btn-primary rkps-btn-inverse rkps-btn-sm">
             Login
           </Link>
         </div>

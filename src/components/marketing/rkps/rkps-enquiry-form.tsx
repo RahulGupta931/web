@@ -49,7 +49,7 @@ export function RkpsEnquiryForm() {
           <button
             type="button"
             onClick={() => setSent(false)}
-            className="rkps-btn-navy text-xs px-5 py-2"
+            className="rkps-btn-navy rkps-btn-sm px-5"
           >
             Submit Another Query
           </button>
@@ -61,32 +61,20 @@ export function RkpsEnquiryForm() {
   return (
     <form
       id="enquiry"
-      className="scroll-mt-28 flex h-full flex-col justify-between rounded-3xl border border-border/80 bg-white p-6 sm:p-8 lg:p-9 shadow-xl"
+      className="scroll-mt-28 flex h-full min-h-[28rem] flex-col rounded-2xl border border-border/70 bg-white p-5 sm:min-h-[32rem] sm:p-7 lg:p-8"
       onSubmit={onSubmit}
     >
-      <div>
-        <div className="flex items-center justify-between">
-          <span className="inline-flex rounded-full border border-[var(--brand-gold)]/50 bg-[var(--brand-gold)]/15 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-brand">
-            Admission Enquiry 2026–27
-          </span>
-          <span className="text-xs font-semibold text-muted">* Required</span>
-        </div>
-
-        <h3 className="rkps-display mt-3 text-2xl font-bold tracking-tight text-heading sm:text-3xl">
-          Let&apos;s start a conversation
-        </h3>
-        <p className="mt-1 text-xs sm:text-sm leading-relaxed text-muted">
-          Fill in the details below to receive program guides, fee structures, and campus visit slots.
-        </p>
+      <div className="flex flex-1 flex-col">
+        <p className="text-xs text-muted">Fields marked * are required</p>
 
         {error && (
-          <div className="mt-4 rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-semibold text-red-700">
+          <div className="mt-4 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700">
             {error}
           </div>
         )}
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <label className="flex flex-col gap-1.5 text-xs font-bold text-heading sm:col-span-1">
+        <div className="mt-5 grid flex-1 gap-4 sm:grid-cols-2">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-heading sm:col-span-1">
             <span>Parent / Guardian Name *</span>
             <input
               name="parentName"
@@ -96,7 +84,7 @@ export function RkpsEnquiryForm() {
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-bold text-heading sm:col-span-1">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-heading sm:col-span-1">
             <span>Mobile Phone Number *</span>
             <input
               name="mobile"
@@ -107,7 +95,7 @@ export function RkpsEnquiryForm() {
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-bold text-heading sm:col-span-2">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-heading sm:col-span-2">
             <span>Email Address</span>
             <input
               name="email"
@@ -117,7 +105,7 @@ export function RkpsEnquiryForm() {
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-bold text-heading sm:col-span-2">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-heading sm:col-span-2">
             <span>Child&apos;s Full Name *</span>
             <input
               name="childName"
@@ -127,7 +115,7 @@ export function RkpsEnquiryForm() {
             />
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-bold text-heading sm:col-span-2">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-heading sm:col-span-2">
             <span>Class / Grade of Interest *</span>
             <select
               name="classInterest"
@@ -146,7 +134,7 @@ export function RkpsEnquiryForm() {
             </select>
           </label>
 
-          <label className="flex flex-col gap-1.5 text-xs font-bold text-heading sm:col-span-2">
+          <label className="flex flex-col gap-1.5 text-xs font-medium text-heading sm:col-span-2">
             <span>Questions or Specific Requirements</span>
             <textarea
               name="message"
@@ -169,13 +157,13 @@ export function RkpsEnquiryForm() {
         </div>
       </div>
 
-      <div className="pt-6">
+      <div className="mt-6 border-t border-border/60 pt-5">
         <button
           type="submit"
           disabled={submitting}
-          className="rkps-btn-gold w-full text-center text-sm py-3 font-bold"
+          className="rkps-btn-navy w-full text-center text-sm"
         >
-          {submitting ? "Sending Enquiry…" : "Send Admission Enquiry ↗"}
+          {submitting ? "Sending enquiry…" : "Send admission enquiry"}
         </button>
       </div>
     </form>

@@ -35,8 +35,8 @@ export function RkpsPhotoCollage({
 }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-2 lg:items-stretch lg:gap-4">
-      <figure className="group relative overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md sm:col-span-2 lg:col-span-7 lg:row-span-2">
-        <div className="relative h-full min-h-[16rem] sm:min-h-[20rem] lg:min-h-[24rem]">
+      <figure className="group relative min-h-0 overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md sm:col-span-2 lg:col-span-7 lg:row-span-2">
+        <div className="relative h-full min-h-[16rem] sm:min-h-[20rem] lg:min-h-full">
           <img src={main.src} alt={main.alt} className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
         </div>
         {main.caption ? <figcaption className="border-t border-border px-4 py-3 text-xs sm:text-sm text-muted">{main.caption}</figcaption> : null}
@@ -44,9 +44,11 @@ export function RkpsPhotoCollage({
       {thumbs.map((photo, i) => (
         <figure
           key={photo.src}
-          className="group relative overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md lg:col-span-5"
+          className={`group relative min-h-0 overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md lg:col-span-5 ${
+            i === 0 ? "lg:row-start-1" : "lg:row-start-2"
+          }`}
         >
-          <div className={`relative w-full ${i === 0 ? "aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[11rem]" : "aspect-[4/3] lg:aspect-auto lg:min-h-[11rem]"}`}>
+          <div className="relative aspect-[16/10] w-full lg:aspect-auto lg:h-full lg:min-h-[11rem]">
             <img src={photo.src} alt={photo.alt} className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" loading="lazy" />
           </div>
         </figure>
@@ -83,15 +85,15 @@ export function RkpsSectionIntro({
   return (
     <RkpsInView className={`flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between ${className}`}>
       <div className="max-w-2xl space-y-1.5">
-        <span className="block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" aria-hidden="true" />
+        <span className="rkps-rule" aria-hidden="true" />
         {num ? (
-          <p className={`text-xs font-bold uppercase tracking-wider ${dark ? "text-[var(--brand-gold)]" : "text-brand"}`}>
+          <p className={`text-xs ${dark ? "text-white/70" : "text-[#5e554a]"}`}>
             {num}
           </p>
         ) : null}
         <h2
-          className={`rkps-display text-2xl font-bold tracking-tight [text-wrap:balance] sm:text-3xl lg:text-4xl ${
-            dark ? "text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.45)]" : "text-heading"
+          className={`rkps-display text-[1.75rem] leading-tight [text-wrap:balance] sm:text-4xl ${
+            dark ? "text-white" : "text-heading"
           }`}
         >
           {title}
@@ -202,10 +204,10 @@ export function RkpsPathwayCards({
                 ? "lg:col-span-5 lg:row-start-1"
                 : "sm:col-span-2 lg:col-span-5 lg:row-start-2";
             return (
-              <li key={c.num} className={layout} style={{ ["--rkps-i" as string]: i }}>
+              <li key={c.num} className={`${layout} min-h-0`} style={{ ["--rkps-i" as string]: i }}>
                 <Link
                   href={c.href}
-                  className={`group relative isolate flex h-full min-h-[16rem] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition duration-300 hover:-translate-y-1 sm:min-h-[18rem] sm:p-8 ${
+                  className={`group relative isolate flex h-full min-h-[16rem] flex-col justify-between overflow-hidden rounded-2xl border p-6 sm:min-h-[18rem] sm:p-8 ${
                     c.photo
                       ? "border-white/20 text-white shadow-[0_16px_36px_rgba(96,0,0,0.2)] hover:shadow-xl"
                       : featured
@@ -220,14 +222,16 @@ export function RkpsPathwayCards({
                         alt=""
                         aria-hidden
                         loading={i === 0 ? "eager" : "lazy"}
-                        className={`absolute inset-0 -z-20 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] ${
+                        className={`absolute inset-0 -z-20 h-full w-full object-cover ${
                           featured ? "rkps-ken" : ""
                         }`}
                       />
                       <div
-                        className={`absolute inset-0 -z-10 bg-[var(--brand-maroon-dark)] transition duration-300 group-hover:bg-[var(--brand-maroon-dark)]/88 ${
-                          featured ? "opacity-[0.78]" : "opacity-[0.82]"
-                        }`}
+                        className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-t from-black/75 via-black/35 to-black/10"
+                        aria-hidden
+                      />
+                      <div
+                        className="pointer-events-none absolute inset-x-0 top-0 h-20 -z-10 bg-gradient-to-b from-black/40 to-transparent"
                         aria-hidden
                       />
                     </>
@@ -324,7 +328,7 @@ export function RkpsPageSection({
         ? "bg-[var(--surface-muted)]"
         : "bg-[var(--surface-elevated)]";
   return (
-    <section id={id} className={`relative isolate scroll-mt-28 overflow-hidden py-14 sm:py-20 lg:py-24 ${toneClass} ${className}`}>
+    <section id={id} className={`relative isolate scroll-mt-28 overflow-x-clip py-14 sm:py-20 lg:py-24 ${toneClass} ${className}`}>
       <div className="relative mx-auto max-w-7xl rkps-page-x">{children}</div>
     </section>
   );
@@ -376,17 +380,17 @@ export function RkpsQuickJumpNav({
     >
       <div className="mx-auto max-w-7xl rkps-page-x py-3 sm:py-3.5">
         <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
-          <p className="shrink-0 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-brand">On this page</p>
+          <p className="shrink-0 text-xs text-[#5e554a]">On this page</p>
           <div className="relative min-w-0 flex-1">
-            <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-none sm:flex-wrap sm:overflow-visible">
+            <div className="flex gap-x-4 gap-y-2 overflow-x-auto pb-0.5 scrollbar-none sm:flex-wrap sm:overflow-visible">
               {links.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
-                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition sm:px-4 sm:py-2 ${
+                  className={`shrink-0 py-1 text-sm transition-colors ${
                     link.highlight
-                      ? "bg-[var(--brand-maroon-dark)] text-white shadow-sm hover:bg-[var(--brand-maroon)]"
-                      : "border border-border/80 bg-[var(--surface-elevated)] text-heading hover:border-brand/35 hover:text-brand"
+                      ? "text-[var(--brand-maroon)] underline decoration-[var(--brand-gold)] decoration-2 underline-offset-4"
+                      : "text-[#1f1b16] hover:text-[var(--brand-maroon)]"
                   }`}
                 >
                   {link.label}
@@ -437,91 +441,6 @@ export function RkpsFeatureCard({
   return <article className={className}>{inner}</article>;
 }
 
-type JourneyStep = { num: string; title: string; body: string };
-type FaqItem = { q: string; a: string };
-
-export function RkpsAdmissionsSection({
-  id,
-  title,
-  subtitle,
-  lead,
-  steps,
-  disclaimer,
-  faq,
-  form,
-  accentPhoto,
-}: {
-  id: string;
-  title: string;
-  subtitle: string;
-  lead: string;
-  steps: readonly JourneyStep[];
-  disclaimer: string;
-  faq: readonly FaqItem[];
-  form: ReactNode;
-  accentPhoto: Photo;
-}) {
-  return (
-    <RkpsPageSection id={id} tone="paper">
-      <div className="grid min-w-0 grid-cols-1 gap-10 lg:grid-cols-2 lg:items-stretch lg:gap-12">
-        {/* Left Column: Timeline + FAQ */}
-        <div className="flex min-h-0 flex-col gap-6 lg:h-full">
-          <RkpsSectionIntro num="Admissions 2026–27" title={title} description={`${subtitle} ${lead}`} />
-
-          {/* Steps Timeline */}
-          <ol className="relative space-y-6 border-l-2 border-brand/20 pl-6 ml-2">
-            {steps.map((s) => (
-              <li key={s.num} className="relative group">
-                <span className="absolute -left-[2.1rem] top-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-brand bg-white text-xs font-bold text-brand shadow-sm">
-                  {s.num}
-                </span>
-                <h3 className="rkps-display text-base font-bold text-heading sm:text-lg">{s.title}</h3>
-                <p className="mt-1 text-xs sm:text-sm leading-relaxed text-muted">{s.body}</p>
-              </li>
-            ))}
-          </ol>
-
-          {/* Accent Photo Banner */}
-          <figure className="relative min-h-[12rem] overflow-hidden rounded-3xl border border-white/20 shadow-md">
-            <img src={accentPhoto.src} alt={accentPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/60 to-transparent" />
-            <figcaption className="absolute inset-0 flex flex-col justify-end p-5 text-white">
-              <span className="text-[0.65rem] font-bold uppercase tracking-wider text-[var(--brand-gold)]">School Atmosphere</span>
-              <p className="mt-1 text-sm font-bold">Experience the campus community firsthand before enrolling.</p>
-            </figcaption>
-          </figure>
-
-          {/* FAQ Section */}
-          <div id="faq" className="scroll-mt-28">
-            <h3 className="text-lg font-bold text-heading">Frequently Asked Questions</h3>
-            <p className="mt-1 text-xs text-muted">Clear answers for prospective families.</p>
-            <div className="mt-4 space-y-2.5">
-              {faq.map((item) => (
-                <details
-                  key={item.q}
-                  className="group rounded-2xl border border-border/80 bg-[var(--surface-elevated)] p-4 transition open:bg-white open:shadow-sm"
-                >
-                  <summary className="cursor-pointer list-none flex items-center justify-between text-sm font-bold text-heading [&::-webkit-details-marker]:hidden">
-                    <span>{item.q}</span>
-                    <span className="ml-2 text-xs text-brand transition group-open:rotate-180">▼</span>
-                  </summary>
-                  <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted sm:text-sm">{item.a}</p>
-                </details>
-              ))}
-            </div>
-          </div>
-
-          <p className="mt-auto border-t border-border/70 pt-4 text-xs leading-relaxed text-muted">{disclaimer}</p>
-        </div>
-
-        {/* Right Column: Enquiry Form Card */}
-        <div className="flex min-h-0 flex-col lg:h-full">
-          <div className="flex h-full min-h-0 flex-col">{form}</div>
-        </div>
-      </div>
-    </RkpsPageSection>
-  );
-}
 
 type AboutValue = { title: string; body: string };
 
@@ -707,15 +626,15 @@ export function RkpsNoticeboardSection({
         <nav className="flex shrink-0 flex-wrap gap-2" aria-label="Noticeboard shortcuts">
           <Link
             href="/login"
-            className="rkps-btn-navy text-xs"
+            className="rkps-btn-navy rkps-btn-sm"
           >
             Portal Login
           </Link>
           <Link
             href="/school-life/events"
-            className="rounded-full border border-border/80 bg-white px-4 py-2 text-xs font-semibold text-brand hover:border-brand/40 hover:bg-brand/5 transition"
+            className="rkps-btn-secondary rkps-btn-sm"
           >
-            Events Calendar ↗
+            Events calendar
           </Link>
         </nav>
       </div>

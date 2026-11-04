@@ -105,9 +105,9 @@ export function RkpsSchoolLifeSection() {
       <RkpsInView>
         <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgba(96,0,0,0.07)] sm:rounded-[2rem]">
           <div className="grid lg:grid-cols-12 lg:items-stretch">
-            <aside className="flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
-              <span className="block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" aria-hidden="true" />
-              <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-brand">Campus Life & Culture</p>
+            <aside className="order-2 flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
+              <span className="rkps-rule" aria-hidden="true" />
+              <p className="mt-4 text-xs text-[#5e554a]">Campus Life & Culture</p>
               <h2 className="rkps-display mt-2 text-2xl font-bold tracking-tight text-heading [text-wrap:balance] sm:text-3xl">
                 See learners in vibrant action
               </h2>
@@ -116,7 +116,7 @@ export function RkpsSchoolLifeSection() {
               </p>
 
               <div className="mt-8">
-                <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">Daily rhythms</p>
+                <p className="text-xs text-[#7b7266]">Daily rhythms</p>
                 <ul className="mt-3 divide-y divide-border/70 overflow-hidden rounded-2xl border border-border/80 bg-white">
                   {STUDENT_LIFE.map((item) => (
                     <li key={item.title} className="flex gap-3 p-4 sm:p-5">
@@ -138,22 +138,22 @@ export function RkpsSchoolLifeSection() {
               </div>
 
               <div className="mt-8 flex flex-col gap-2.5 sm:flex-row lg:flex-col">
-                <Link href="/school-life/events" className="rkps-btn-navy w-full justify-center text-center text-xs sm:text-sm">
+                <Link href="/school-life/events" className="rkps-btn-navy rkps-btn-sm w-full justify-center text-center sm:text-sm">
                   Explore All Events ↗
                 </Link>
                 <Link
                   href="/school-life/student-achievers"
-                  className="inline-flex w-full items-center justify-center rounded-full border border-border/80 bg-white px-4 py-2.5 text-xs font-semibold text-brand transition hover:border-brand/40 hover:bg-brand/5 sm:text-sm"
+                  className="rkps-btn-secondary rkps-btn-sm w-full justify-center text-center sm:text-sm"
                 >
                   Student Achievers
                 </Link>
               </div>
             </aside>
 
-            <div className="bg-[var(--background)] p-6 sm:p-8 lg:col-span-8 lg:p-8">
+            <div className="order-1 bg-[var(--background)] p-6 sm:p-8 lg:order-2 lg:col-span-8 lg:p-8">
               <div className="mb-5 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
                 <div>
-                  <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">On campus this term</p>
+                  <p className="text-xs text-[#7b7266]">On campus this term</p>
                   <p className="mt-0.5 text-sm font-semibold text-heading">Stories, events, and community wins</p>
                 </div>
                 <span className="hidden shrink-0 rounded-full border border-brand/20 bg-brand/5 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-brand sm:inline-flex">
@@ -161,8 +161,8 @@ export function RkpsSchoolLifeSection() {
                 </span>
               </div>
 
-              <div className="rkps-stagger grid gap-4 sm:gap-5 lg:grid-cols-12 lg:grid-rows-2 lg:gap-5">
-                <div className="lg:col-span-7 lg:row-span-2" style={{ ["--rkps-i" as string]: 0 }}>
+              <div className="rkps-stagger grid gap-4 sm:gap-5 lg:grid-cols-12 lg:grid-rows-2 lg:items-stretch lg:gap-5">
+                <div className="min-h-0 lg:col-span-7 lg:row-span-2" style={{ ["--rkps-i" as string]: 0 }}>
                   <CampusStoryCard
                     featured
                     href="/school-life/student-achievers"
@@ -175,7 +175,7 @@ export function RkpsSchoolLifeSection() {
                     className="h-full"
                   />
                 </div>
-                <div className="lg:col-span-5 lg:row-span-1" style={{ ["--rkps-i" as string]: 1 }}>
+                <div className="min-h-0 lg:col-span-5 lg:row-span-1" style={{ ["--rkps-i" as string]: 1 }}>
                   <CampusStoryCard
                     href="/school-life/events"
                     photo={instagramPhoto("campus-5.jpg")}
@@ -189,16 +189,16 @@ export function RkpsSchoolLifeSection() {
                 </div>
                 <Link
                   href="/#gallery"
-                  className="group relative flex min-h-[14rem] flex-col overflow-hidden rounded-3xl border border-border/80 bg-[var(--brand-maroon-dark)] shadow-md transition hover:-translate-y-0.5 hover:shadow-xl lg:col-span-5 lg:row-span-1 lg:min-h-0"
+                  className="group relative flex min-h-[14rem] flex-col overflow-hidden rounded-3xl border border-border/80 bg-[var(--brand-maroon-dark)] shadow-md transition hover:-translate-y-0.5 hover:shadow-xl lg:col-span-5 lg:row-span-1 lg:h-full lg:min-h-0"
                   style={{ ["--rkps-i" as string]: 2 }}
                 >
-                  <div className="grid h-full min-h-[10rem] flex-1 grid-cols-3 gap-0.5 p-1">
+                  <div className="grid min-h-[5.5rem] min-h-0 flex-1 auto-rows-fr grid-cols-3 gap-1 p-1 sm:min-h-[6.5rem]">
                     {GALLERY_TEASE.map((photo) => (
-                      <div key={photo.src} className="relative overflow-hidden rounded-2xl">
+                      <div key={photo.src} className="relative min-h-[4.5rem] overflow-hidden rounded-2xl sm:min-h-0">
                         <img
                           src={photo.src}
                           alt=""
-                          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                          className="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-105"
                           loading="lazy"
                         />
                       </div>

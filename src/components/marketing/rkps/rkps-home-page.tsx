@@ -26,10 +26,11 @@ import { RkpsParentResourcesSection } from "@/components/marketing/rkps/rkps-par
 import { RkpsParentReviews } from "@/components/marketing/rkps/rkps-parent-reviews";
 import { RkpsFooter, RkpsHeader } from "@/components/marketing/rkps/rkps-shell";
 import { RkpsMotionBanner } from "@/components/marketing/rkps/rkps-motion-banner";
-import { RkpsCinematicHero, RkpsHighlightBanner, RkpsSpotlightCarousel, RkpsStoryRail } from "@/components/marketing/rkps/rkps-motion-sections";
+import { RkpsCinematicHero, RkpsHighlightBanner, RkpsSpotlightCarousel } from "@/components/marketing/rkps/rkps-motion-sections";
+import { RkpsCampusStoriesSection } from "@/components/marketing/rkps/rkps-campus-stories-section";
+import { RkpsAdmissionsSection } from "@/components/marketing/rkps/rkps-admissions-section";
 import {
   RkpsAboutSection,
-  RkpsAdmissionsSection,
   RkpsNoticeboardSection,
   RkpsPathwayCards,
   RkpsQuickJumpNav,
@@ -170,11 +171,11 @@ function CampusSection() {
           </div>
         </div>
 
-        <div className="grid h-[28rem] grid-cols-2 grid-rows-2 gap-3 sm:h-[34rem] lg:col-span-7">
+        <div className="grid min-h-[28rem] grid-cols-2 grid-rows-2 gap-3 sm:min-h-[34rem] sm:h-[34rem] lg:col-span-7">
           {photos.map((photo, i) => (
             <figure
               key={photo.src}
-              className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 shadow-2xl ${
+              className={`group relative min-h-0 overflow-hidden rounded-3xl border border-white/15 bg-white/5 shadow-2xl ${
                 i === 0 ? "row-span-2" : ""
               }`}
             >
@@ -182,9 +183,9 @@ function CampusSection() {
                 src={photo.src}
                 alt={photo.alt ?? ""}
                 loading="lazy"
-                className="h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+                className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/60 to-transparent" />
+              <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" aria-hidden />
               <figcaption className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                 <p className="text-sm font-bold text-[var(--brand-gold)]">{RKPS_DISCOVER.spaces[i]?.title}</p>
                 <p className="mt-1 line-clamp-2 text-xs leading-snug text-white/90">{RKPS_DISCOVER.spaces[i]?.body ?? photo.alt}</p>
@@ -199,31 +200,27 @@ function CampusSection() {
 
 function VisitBanner() {
   return (
-    <section aria-label="Visit RMPS" className="relative overflow-hidden bg-gradient-to-r from-[var(--brand-gold)] via-[var(--brand-gold)] to-[var(--brand-gold-muted)] text-[var(--brand-maroon-dark)] py-12 sm:py-16">
-      <div className="mx-auto flex max-w-7xl flex-col gap-6 rkps-page-x md:flex-row md:items-center md:justify-between">
-        <div className="max-w-2xl space-y-1.5">
-          <span className="inline-flex rounded-full bg-[var(--brand-maroon-dark)]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-maroon-dark)]">
-            Experience Campus Life
-          </span>
-          <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl text-[var(--brand-maroon-dark)]">
+    <section aria-label="Visit RMPS" className="bg-[#f7f4ee] py-16 text-[#1f1b16] sm:py-20">
+      <div className="mx-auto flex max-w-7xl flex-col gap-8 rkps-page-x md:flex-row md:items-end md:justify-between">
+        <div className="max-w-2xl space-y-3">
+          <span className="rkps-rule" aria-hidden="true" />
+          <p className="text-xs text-[#5e554a]">Visit the campus</p>
+          <h2 className="rkps-display text-[1.75rem] leading-tight sm:text-4xl">
             See RMPS for yourself
           </h2>
-          <p className="text-sm leading-relaxed text-[var(--brand-maroon-dark)]/85 sm:text-base">
-            Walk our campus corridors, explore modern laboratory spaces, meet the faculty, and have your admissions questions answered in person.
+          <p className="max-w-xl text-sm leading-6 text-[#5e554a] sm:text-base">
+            Walk the corridors, see the laboratories, meet the faculty, and ask the admissions questions in person.
           </p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href="/#admissions"
-            className="rkps-btn-navy text-xs sm:text-sm shadow-xl"
-          >
-            Start an Enquiry ↗
+        <div className="flex flex-wrap items-center gap-4">
+          <Link href="/#admissions" className="rkps-btn-navy text-sm">
+            Start an enquiry
           </Link>
           <Link
             href="/#contact"
-            className="inline-flex items-center justify-center rounded-full border-2 border-[var(--brand-maroon-dark)]/30 bg-white/30 px-5 py-2.5 text-xs sm:text-sm font-bold text-[var(--brand-maroon-dark)] backdrop-blur-sm transition hover:bg-white/50 active:scale-95"
+            className="text-sm text-[#1f1b16] underline decoration-[rgba(31,27,22,0.25)] underline-offset-4 transition-colors hover:decoration-[#1f1b16]"
           >
-            Plan a Visit ›
+            Plan a visit
           </Link>
         </div>
       </div>
@@ -257,7 +254,7 @@ function InstagramSection() {
               <Icon name="instagram" className="h-6 w-6" />
             </span>
             <h2 className="mt-5 text-2xl font-bold tracking-tight sm:text-3xl">From Our Instagram</h2>
-            <span aria-hidden className="mt-3 block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" />
+            <span aria-hidden className="rkps-rule mt-3" />
             <p className="mt-3 text-sm leading-relaxed text-white/80">
               Watch recent video reels and photo stories from @r.k.m.p.s capturing life in full swing on our campus.
             </p>
@@ -457,7 +454,7 @@ export function RkpsHomePage() {
 
         <RkpsHighlightBanner />
 
-        <RkpsStoryRail />
+        <RkpsCampusStoriesSection />
 
         <Tint tone="rose">
           <RkpsAboutSection vision={RKPS_VISION} values={RKPS_VALUES} motto={BRAND.motto} schoolName={BRAND.name} />

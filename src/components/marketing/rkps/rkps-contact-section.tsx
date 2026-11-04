@@ -41,9 +41,9 @@ export function RkpsContactSection({
       <RkpsInView>
         <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgba(96,0,0,0.07)] sm:rounded-[2rem]">
           <div className="grid lg:grid-cols-12 lg:items-stretch">
-            <aside className="flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
-              <span className="block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" aria-hidden="true" />
-              <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-brand">Contact & Location</p>
+            <aside className="order-2 flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
+              <span className="rkps-rule" aria-hidden="true" />
+              <p className="mt-4 text-xs text-[#5e554a]">Contact & Location</p>
               <h2 className="rkps-display mt-2 text-2xl font-bold tracking-tight text-heading [text-wrap:balance] sm:text-3xl">
                 {title}
               </h2>
@@ -62,12 +62,12 @@ export function RkpsContactSection({
               </ul>
 
               <div className="mt-8 flex flex-col gap-2.5 sm:flex-row lg:flex-col">
-                <Link href="/#admissions" className="rkps-btn-navy w-full justify-center text-center text-xs sm:text-sm">
+                <Link href="/#admissions" className="rkps-btn-navy rkps-btn-sm w-full justify-center text-center sm:text-sm">
                   Start an Enquiry ↗
                 </Link>
                 <a
                   href={telHref}
-                  className="inline-flex w-full items-center justify-center rounded-full border border-border/80 bg-white px-4 py-2.5 text-xs font-semibold text-brand transition hover:border-brand/40 hover:bg-brand/5 sm:text-sm"
+                  className="rkps-btn-secondary rkps-btn-sm w-full justify-center text-center sm:text-sm"
                 >
                   Call the office
                 </a>
@@ -76,7 +76,7 @@ export function RkpsContactSection({
               <p className="mt-6 text-xs leading-relaxed text-muted lg:mt-auto lg:pt-4">{hoursNote}</p>
             </aside>
 
-            <div className="flex flex-col gap-5 bg-[var(--background)] p-6 sm:gap-6 sm:p-8 lg:col-span-8 lg:p-8">
+            <div className="order-1 flex flex-col gap-5 bg-[var(--background)] p-6 sm:gap-6 sm:p-8 lg:order-2 lg:col-span-8 lg:p-8">
               <figure className="relative min-h-[16rem] flex-1 overflow-hidden rounded-3xl border border-border/70 shadow-[0_16px_40px_rgba(0,0,0,0.12)] sm:min-h-[20rem] lg:min-h-[22rem]">
                 <img
                   src={campusPhoto.src}
@@ -113,7 +113,7 @@ export function RkpsContactSection({
                   href={telHref}
                   className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6"
                 >
-                  <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-brand">Call admissions</span>
+                  <span className="text-xs text-[#5e554a]">Call admissions</span>
                   <p className="mt-2 text-xl font-bold tabular-nums text-heading sm:text-2xl">{phone}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted">
                     Admissions assistance, visit scheduling, and fee guidance during school hours.
@@ -125,7 +125,7 @@ export function RkpsContactSection({
                   href={mailHref}
                   className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6"
                 >
-                  <span className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-brand">Email inquiries</span>
+                  <span className="text-xs text-[#5e554a]">Email inquiries</span>
                   <p className="mt-2 break-all text-base font-bold text-heading sm:text-lg">{email}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted">
                     Documentation, transcript queries, or detailed questions for the administrative office.

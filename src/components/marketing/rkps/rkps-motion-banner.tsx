@@ -78,8 +78,6 @@ export function RkpsMotionBanner() {
   }, [paused]);
 
   const slide = MOTION_SLIDES[active];
-  const loopTop = [...TICKER_TOP, ...TICKER_TOP, ...TICKER_TOP];
-  const loopBottom = [...TICKER_BOTTOM, ...TICKER_BOTTOM, ...TICKER_BOTTOM];
 
   return (
     <section
@@ -89,23 +87,12 @@ export function RkpsMotionBanner() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="pointer-events-none absolute -left-40 top-0 h-96 w-96 rounded-full bg-[var(--brand-gold)]/10 blur-3xl" aria-hidden="true" />
-      <div className="pointer-events-none absolute -right-40 bottom-0 h-96 w-96 rounded-full bg-[var(--brand-maroon)]/20 blur-3xl" aria-hidden="true" />
-
       <div className="relative mx-auto max-w-7xl rkps-page-x">
         <RkpsSectionIntro
           dark
-          num="Motion Showcase · Session 2026–27"
-          title="Experience R.K Memorial in Motion"
-          description="A dynamic look into our modern campus, academic milestones, and energetic school spirit."
-          action={
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-300">
-                <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                Live Showcase
-              </span>
-            </div>
-          }
+          num="This year"
+          title="Campus, admissions, and the year ahead"
+          description="Photographs from the school, with the sessions and programmes families ask about."
         />
       </div>
 
@@ -131,32 +118,28 @@ export function RkpsMotionBanner() {
 
           <div className="relative z-20 mx-auto flex min-h-[24rem] max-w-7xl flex-col justify-end rkps-page-x pb-6 pt-8 sm:min-h-[28rem] sm:pb-10 sm:pt-10 lg:min-h-[32rem] lg:pb-14 lg:pt-14">
             <div className="max-w-2xl space-y-3.5">
-              <span
-                className={`inline-flex w-fit items-center gap-2 rounded-full border px-3.5 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-md ${slide.badgeColor}`}
-              >
-                <span className={`h-2 w-2 rounded-full ${slide.dotColor} animate-pulse`} />
-                <span>{slide.tag}</span>
-              </span>
+              <div className="space-y-3">
+                <span className="rkps-rule" aria-hidden="true" />
+                <p className="text-xs text-white/80">{slide.tag}</p>
+              </div>
 
-              <h3 className="rkps-display text-2xl font-black leading-tight tracking-tight !text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.55)] sm:text-4xl lg:text-5xl">
+              <h3 className="rkps-display text-[1.75rem] leading-tight text-white sm:text-4xl lg:text-5xl">
                 {slide.title}
               </h3>
 
-              <p className="text-sm font-bold text-[var(--brand-gold)] sm:text-base">{slide.accent}</p>
+              <p className="text-sm text-white/75 sm:text-base">{slide.accent}</p>
 
               <p className="max-w-xl text-xs leading-relaxed text-white/85 sm:text-sm">{slide.description}</p>
 
               <div className="flex flex-wrap gap-3 pt-2">
-                <Link href={slide.primaryCta.href} className="rkps-btn-gold text-xs font-bold shadow-lg sm:text-sm">
-                  <span>{slide.primaryCta.label}</span>
-                  <span>↗</span>
+                <Link href={slide.primaryCta.href} className="rkps-btn-gold text-sm">
+                  {slide.primaryCta.label}
                 </Link>
                 <Link
                   href={slide.secondaryCta.href}
-                  className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs font-semibold text-white backdrop-blur-md transition hover:bg-white/20 active:scale-95 sm:text-sm"
+                  className="inline-flex min-h-11 items-center text-sm text-white/90 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white"
                 >
-                  <span>{slide.secondaryCta.label}</span>
-                  <span>›</span>
+                  {slide.secondaryCta.label}
                 </Link>
               </div>
             </div>
@@ -200,10 +183,9 @@ export function RkpsMotionBanner() {
                   }`}
                 />
                 <div className="flex items-center justify-between">
-                  <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-[var(--brand-gold)]">
+                  <span className="font-mono text-xs tabular-nums text-white/50">
                     0{idx + 1}
                   </span>
-                  {isCurrent ? <span className="text-xs text-[var(--brand-gold)]">● Active</span> : null}
                 </div>
                 <p className="mt-1 truncate text-xs font-bold text-white sm:text-sm">{item.tag}</p>
                 <p
@@ -219,34 +201,12 @@ export function RkpsMotionBanner() {
         </div>
       </div>
 
-      <div className="relative mx-auto mt-10 max-w-7xl space-y-2.5 rkps-page-x">
-        <div className="overflow-hidden border-y border-white/10 bg-white/5 py-2.5 backdrop-blur-sm">
-          <div className="flex w-max gap-4 animate-[rkps-marquee_35s_linear_infinite] hover:[animation-play-state:paused]">
-            {loopTop.map((item, i) => (
-              <div
-                key={`top-${i}`}
-                className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold text-white/90"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-gold)]" aria-hidden="true" />
-                <span>{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div className="overflow-hidden border-y border-white/10 bg-white/5 py-2.5 backdrop-blur-sm">
-          <div className="flex w-max gap-4 animate-[rkps-marquee_40s_linear_infinite_reverse] hover:[animation-play-state:paused]">
-            {loopBottom.map((item, i) => (
-              <div
-                key={`bottom-${i}`}
-                className="flex items-center gap-2 whitespace-nowrap rounded-full border border-white/10 bg-white/5 px-4 py-1 text-xs font-semibold text-[var(--brand-gold)]"
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-white/60" aria-hidden="true" />
-                <span>{item.text}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="relative mx-auto mt-12 grid max-w-7xl gap-x-10 gap-y-2 rkps-page-x sm:grid-cols-2">
+        {[...TICKER_TOP, ...TICKER_BOTTOM].map((item) => (
+          <p key={item.text} className="border-t border-white/10 py-3 text-sm text-white/75">
+            {item.text}
+          </p>
+        ))}
       </div>
     </section>
   );

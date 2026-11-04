@@ -18,11 +18,11 @@ export function RkpsLearningJourneySection() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <RkpsSectionIntro num="Academic Curriculum" title={title} description={subtitle} />
         <div className="flex shrink-0 flex-wrap gap-2.5">
-          <Link href="/#contact" className="rkps-btn-navy text-xs sm:text-sm">
-            {cta} ↗
+          <Link href="/#contact" className="rkps-btn-navy rkps-btn-sm">
+            {cta}
           </Link>
-          <Link href="/#admissions" className="rkps-btn-gold text-xs sm:text-sm">
-            Admission Enquiry
+          <Link href="/#admissions" className="rkps-btn-gold rkps-btn-sm">
+            Admission enquiry
           </Link>
         </div>
       </div>
