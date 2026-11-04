@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import type { Achievement, AchievementCategory } from "@/content/website/public-site";
 import { AchievementsGrid } from "@/components/marketing/achievement-section";
 import { RkpsPageSection, RkpsSectionIntro } from "@/components/marketing/rkps/rkps-marketing-blocks";
@@ -9,6 +9,30 @@ import {
   achievementYears,
   filterAchievements,
 } from "@/lib/achievements-display";
+
+function FilterPill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`rkps-pill-tab shrink-0 ${
+        active
+          ? "bg-[var(--brand-maroon-dark)] text-white shadow-md ring-1 ring-[var(--brand-gold)]/40"
+          : "border border-border/80 bg-white text-heading hover:border-brand/40 hover:text-brand"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
 
 export function AchievementsArchiveSection({ items, id = "archive" }: { items: Achievement[]; id?: string }) {
   const [category, setCategory] = useState<AchievementCategory | "All">("All");
@@ -19,49 +43,51 @@ export function AchievementsArchiveSection({ items, id = "archive" }: { items: A
   return (
     <RkpsPageSection id={id} tone="paper">
       <RkpsSectionIntro
-        num="04 · Archive"
-        title="Full achievement archive"
-        description="Browse verified highlights by category and year. Details are updated when the school publishes them."
+        num="04 · Comprehensive Archive"
+        title="Full school achievement archive"
+        description="Browse through verified student and team milestones categorized by discipline and academic session."
         action={
-          <p className="text-sm font-semibold tabular-nums text-brand">
-            {filtered.length} {filtered.length === 1 ? "entry" : "entries"}
-          </p>
+          <span className="rounded-full bg-brand/10 px-3.5 py-1 text-xs font-bold text-brand">
+            {filtered.length} {filtered.length === 1 ? "entry" : "entries"} found
+          </span>
         }
       />
 
-      <div className="mt-8 flex flex-col gap-4 rounded-[1.5rem] border border-border/80 bg-[linear-gradient(135deg,rgba(255,255,255,0.92),rgba(232,240,255,0.96))] p-4 shadow-[0_20px_42px_rgba(11,61,120,0.08)] sm:flex-row sm:flex-wrap sm:items-end sm:gap-6 sm:p-5">
-        <label className="min-w-[10rem] flex-1 text-sm">
-          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Category</span>
-          <select
-            className="input-field rkps-ease mt-2 w-full rounded-xl border border-border/80 bg-white/90 px-3.5 py-2.5 text-sm text-heading shadow-sm"
-            value={category}
-            onChange={(e) => setCategory(e.target.value as AchievementCategory | "All")}
-          >
-            <option value="All">All categories</option>
-            {ACHIEVEMENT_CATEGORIES.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
+      {/* Filter Toolbar Card */}
+      <div className="mt-8 rounded-3xl border border-border/80 bg-[var(--surface-elevated)] p-4 sm:p-6 shadow-sm space-y-4">
+        {/* Category Filters */}
+        <div className="space-y-1.5">
+          <p className="text-xs font-bold uppercase tracking-wider text-muted">Discipline / Category</p>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-1 px-1" role="group" aria-label="Filter by category">
+            <FilterPill active={category === "All"} onClick={() => setCategory("All")}>
+              <span>✨</span>
+              <span>All Disciplines</span>
+            </FilterPill>
+            {ACHIEVEMENT_CATEGORIES.map((item) => (
+              <FilterPill key={item} active={category === item} onClick={() => setCategory(item)}>
+                <span>{item}</span>
+              </FilterPill>
             ))}
-          </select>
-        </label>
-        <label className="min-w-[8rem] text-sm">
-          <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">Year</span>
-          <select
-            className="input-field rkps-ease mt-2 w-full rounded-xl border border-border/80 bg-white/90 px-3.5 py-2.5 text-sm text-heading shadow-sm"
-            value={year === "All" ? "All" : String(year)}
-            onChange={(e) => setYear(e.target.value === "All" ? "All" : Number(e.target.value))}
-          >
-            <option value="All">All years</option>
-            {years.map((y) => (
-              <option key={y} value={y}>
-                {y}
-              </option>
+          </div>
+        </div>
+
+        {/* Academic Year Filters */}
+        <div className="space-y-1.5 border-t border-border/60 pt-3">
+          <p className="text-xs font-bold uppercase tracking-wider text-muted">Academic Session</p>
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none -mx-1 px-1" role="group" aria-label="Filter by year">
+            <FilterPill active={year === "All"} onClick={() => setYear("All")}>
+              <span>All Years</span>
+            </FilterPill>
+            {years.map((item) => (
+              <FilterPill key={item} active={year === item} onClick={() => setYear(item)}>
+                <span>Session {item}</span>
+              </FilterPill>
             ))}
-          </select>
-        </label>
+          </div>
+        </div>
       </div>
 
+      {/* Grid of Results */}
       <div className="mt-8">
         <AchievementsGrid items={filtered} asymmetric />
       </div>

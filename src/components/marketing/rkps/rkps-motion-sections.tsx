@@ -1,11 +1,34 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FocusEvent as ReactFocusEvent,
+  type PointerEvent as ReactPointerEvent,
+  type ReactNode,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
 import { RKPS_HERO } from "@/content/website/rkps-copy";
 import { LATEST_NEWS } from "@/content/website/public-site";
 import { INSTAGRAM_PHOTOS, instagramPhoto } from "@/content/website/instagram-media";
 import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
+
+/* -------------------------------------------------------------------------- */
+/*  Shared constants & helpers                                                 */
+/* -------------------------------------------------------------------------- */
+
+// Change this one value when a new admission session opens.
+const SESSION = "2026–27";
+
+const pad = (n: number) => String(n).padStart(2, "0");
+
+const FOCUS_DARK =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--brand-maroon-dark)]";
+const FOCUS_LIGHT =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2";
 
 const SLIDES = [
   {
@@ -17,40 +40,40 @@ const SLIDES = [
   },
   {
     photo: instagramPhoto("campus-7.jpg"),
-    kicker: "School life",
+    kicker: "School Life & Celebrations",
     title: "A place to belong.",
     accent: "Celebrations that stay with you.",
-    body: "Festivals, sport and everyday kindness sit beside the classroom.",
+    body: "Festivals, sport and everyday kindness sit beside rigorous academic learning.",
   },
   {
     photo: instagramPhoto("campus-4.jpg"),
-    kicker: "Admissions",
+    kicker: `Admissions ${SESSION} Open`,
     title: "Your next chapter",
-    accent: "starts with a hello.",
-    body: "Visit the campus and talk to the office about the class you are exploring.",
+    accent: "starts with a warm hello.",
+    body: "Visit our campus and talk to the admissions team about the learning journey you are exploring.",
   },
 ] as const;
 
 const SPOTLIGHTS = [
   {
     figure: "25+",
-    title: "Years of excellence",
-    body: "A school that has grown with its families, from the first classrooms to a full campus.",
+    title: "Years of Excellence",
+    body: "A trusted school that has nurtured generations of curious learners, from foundational years to senior secondary.",
   },
   {
     figure: "1,200+",
-    title: "Students on campus",
-    body: "Learners from the early years through senior secondary, each with a place to be known.",
+    title: "Students on Campus",
+    body: "Learners from early childhood through grade 12, each known by name, supported in their unique growth.",
   },
   {
     figure: "80+",
-    title: "Faculty",
-    body: "Teachers who make room for questions, practice and the confidence to try again.",
+    title: "Dedicated Faculty",
+    body: "Experienced educators who foster curiosity, academic rigor, and the courage to think independently.",
   },
   {
     figure: "98%",
-    title: "Board pass rate",
-    body: "Consistent board performance, with the office confirming the latest published results.",
+    title: "Board Pass Rate",
+    body: "Consistent high-standard board performance with distinguished distinctions across science, commerce and humanities.",
   },
 ] as const;
 
@@ -63,15 +86,220 @@ const HIGHLIGHTS = [
   instagramPhoto("campus-6.jpg"),
 ] as const;
 
-function useAutoAdvance(length: number, ms: number) {
+/* -------------------------------------------------------------------------- */
+/*  Carousel hook: autoplay + swipe + pause (hover / keyboard focus / button)  */
+/* -------------------------------------------------------------------------- */
+
+function useCarousel(length: number, ms: number) {
   const [index, setIndex] = useState(0);
+  const [userPaused, setUserPaused] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const [focused, setFocused] = useState(false);
+  const [reduced, setReduced] = useState(false);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
+
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = window.setInterval(() => setIndex((current) => (current + 1) % length), ms);
-    return () => window.clearInterval(id);
-  }, [length, ms]);
-  return [index, setIndex] as const;
+    const query = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduced(query.matches);
+    sync();
+    query.addEventListener("change", sync);
+    return () => query.removeEventListener("change", sync);
+  }, []);
+
+  const playing = length > 1 && !reduced && !userPaused && !hovering && !focused;
+
+  // A timeout (not an interval) so a manual slide change restarts the countdown.
+  useEffect(() => {
+    if (!playing) return;
+    const id = window.setTimeout(() => setIndex((current) => (current + 1) % length), ms);
+    return () => window.clearTimeout(id);
+  }, [playing, index, length, ms]);
+
+  const go = useCallback(
+    (target: number) => setIndex(((target % length) + length) % length),
+    [length],
+  );
+  const next = useCallback(() => setIndex((current) => (current + 1) % length), [length]);
+  const prev = useCallback(() => setIndex((current) => (current - 1 + length) % length), [length]);
+
+  const handlers = {
+    onTouchStart: (e: ReactTouchEvent<HTMLElement>) => {
+      const t = e.touches[0];
+      touchStart.current = t ? { x: t.clientX, y: t.clientY } : null;
+    },
+    onTouchEnd: (e: ReactTouchEvent<HTMLElement>) => {
+      const start = touchStart.current;
+      const t = e.changedTouches[0];
+      touchStart.current = null;
+      if (!start || !t) return;
+      const dx = t.clientX - start.x;
+      const dy = t.clientY - start.y;
+      // Only treat clearly horizontal swipes as navigation so vertical scroll still works.
+      if (Math.abs(dx) < 48 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      if (dx < 0) next();
+      else prev();
+    },
+    onPointerEnter: (e: ReactPointerEvent<HTMLElement>) => {
+      if (e.pointerType === "mouse") setHovering(true);
+    },
+    onPointerLeave: () => setHovering(false),
+    onFocus: (e: ReactFocusEvent<HTMLElement>) => {
+      try {
+        setFocused(e.target.matches(":focus-visible"));
+      } catch {
+        setFocused(true);
+      }
+    },
+    onBlur: () => setFocused(false),
+  };
+
+  return {
+    index,
+    go,
+    next,
+    prev,
+    playing,
+    reduced,
+    userPaused,
+    togglePaused: () => setUserPaused((value) => !value),
+    handlers,
+  };
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Small shared UI pieces                                                     */
+/* -------------------------------------------------------------------------- */
+
+function SectionHeading({
+  id,
+  eyebrow,
+  title,
+  intro,
+}: {
+  id?: string;
+  eyebrow: string;
+  title: string;
+  intro?: string;
+}) {
+  return (
+    <div className="max-w-2xl">
+      <span aria-hidden="true" className="block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" />
+      <p className="mt-3 text-xs font-bold uppercase tracking-wider text-brand">{eyebrow}</p>
+      <h2
+        id={id}
+        className="rkps-display mt-1 text-2xl font-bold leading-tight tracking-tight text-heading [text-wrap:balance] sm:text-3xl lg:text-4xl"
+      >
+        {title}
+      </h2>
+      {intro ? (
+        <p className="mt-3 max-w-[60ch] text-sm leading-relaxed text-muted sm:text-base">{intro}</p>
+      ) : null}
+    </div>
+  );
+}
+
+function ArrowButton({
+  direction,
+  onClick,
+  label,
+}: {
+  direction: "prev" | "next";
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      className={`grid h-11 w-11 place-items-center rounded-full border border-border bg-white text-heading shadow-sm transition hover:border-brand hover:text-brand active:scale-95 ${FOCUS_LIGHT}`}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        className="h-5 w-5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        <path d={direction === "prev" ? "M15 6l-6 6 6 6" : "M9 6l6 6-6 6"} />
+      </svg>
+    </button>
+  );
+}
+
+function PauseButton({
+  paused,
+  onToggle,
+  tone,
+}: {
+  paused: boolean;
+  onToggle: () => void;
+  tone: "dark" | "light";
+}) {
+  const palette =
+    tone === "dark"
+      ? `border-white/30 bg-white/10 text-white backdrop-blur-md hover:bg-white/20 ${FOCUS_DARK}`
+      : `border-border bg-white text-heading shadow-sm hover:border-brand hover:text-brand ${FOCUS_LIGHT}`;
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={paused ? "Play slideshow" : "Pause slideshow"}
+      className={`grid h-10 w-10 place-items-center rounded-full border transition active:scale-95 ${palette}`}
+    >
+      <svg viewBox="0 0 24 24" className="h-4 w-4" fill="currentColor" aria-hidden="true">
+        {paused ? (
+          <path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5Z" />
+        ) : (
+          <>
+            <rect x="6" y="5" width="4" height="14" rx="1" />
+            <rect x="14" y="5" width="4" height="14" rx="1" />
+          </>
+        )}
+      </svg>
+    </button>
+  );
+}
+
+function SlideDots({
+  labels,
+  index,
+  onSelect,
+}: {
+  labels: readonly string[];
+  index: number;
+  onSelect: (i: number) => void;
+}) {
+  return (
+    <div className="flex items-center">
+      {labels.map((label, i) => (
+        <button
+          key={`${label}-${i}`}
+          type="button"
+          aria-label={`Show slide ${i + 1}: ${label}`}
+          aria-current={i === index ? "true" : undefined}
+          onClick={() => onSelect(i)}
+          className={`grid h-10 min-w-[1.5rem] place-items-center rounded-full ${FOCUS_DARK}`}
+        >
+          <span
+            className={`block h-2 rounded-full transition-all duration-300 motion-reduce:transition-none ${
+              i === index
+                ? "w-7 bg-[var(--brand-gold)] shadow-[0_0_12px_rgba(244,200,106,0.6)]"
+                : "w-2 bg-white/45"
+            }`}
+          />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Scroll reveal                                                              */
+/* -------------------------------------------------------------------------- */
 
 export function RkpsInView({ children, className = "" }: { children: ReactNode; className?: string }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -90,18 +318,22 @@ export function RkpsInView({ children, className = "" }: { children: ReactNode; 
         setShown(true);
         observer.disconnect();
       },
-      { threshold: 0.18, rootMargin: "0px 0px -8% 0px" },
+      { threshold: 0.15, rootMargin: "0px 0px -5% 0px" },
     );
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div ref={ref} className={`${shown ? "rkps-reveal" : "motion-safe:opacity-0"} ${className}`}>
+    <div ref={ref} className={`${shown ? "rkps-reveal-inview" : ""} ${className}`}>
       {children}
     </div>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Story hero (used on inner pages)                                           */
+/* -------------------------------------------------------------------------- */
 
 type StorySlide = {
   photo: { src: string; alt: string };
@@ -120,49 +352,92 @@ export function RkpsStoryHero({
   primary: { href: string; label: string };
   secondary?: { href: string; label: string; external?: boolean };
 }) {
-  const [index, setIndex] = useAutoAdvance(slides.length, 6000);
-  const slide = slides[index] ?? slides[0];
+  const c = useCarousel(slides.length, 6000);
+  const slide = slides[c.index] ?? slides[0];
   if (!slide) return null;
 
   return (
-    <section className="relative isolate min-h-[28rem] overflow-hidden bg-[var(--brand-maroon-dark)] text-white sm:min-h-[32rem]" aria-roledescription="carousel" aria-label={slide.title}>
+    <section
+      className="relative isolate min-h-[28rem] overflow-hidden bg-[var(--brand-maroon-dark)] text-white sm:min-h-[32rem] lg:min-h-[36rem]"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={slide.title}
+      {...c.handlers}
+    >
       {slides.map((item, i) => (
-        <div key={item.photo.src} className={`absolute inset-0 transition-opacity duration-700 ${i === index ? "opacity-100" : "pointer-events-none opacity-0"}`} aria-hidden={i !== index}>
-          <img src={item.photo.src} alt={i === index ? item.photo.alt : ""} className={`h-full w-full object-cover ${i === index ? "rkps-ken" : ""}`} />
-          <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/72" />
+        <div
+          key={item.photo.src}
+          className={`absolute inset-0 transition-opacity duration-1000 motion-reduce:transition-none ${
+            i === c.index ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+          aria-hidden={i !== c.index}
+        >
+          <img
+            src={item.photo.src}
+            alt={i === c.index ? item.photo.alt : ""}
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            className={`h-full w-full object-cover ${i === c.index ? "rkps-ken" : ""}`}
+          />
         </div>
       ))}
-      <div className="relative z-10 mx-auto flex min-h-[28rem] max-w-7xl flex-col justify-end px-3 pb-10 pt-12 sm:min-h-[32rem] sm:px-4 sm:pb-16 sm:pt-14">
-        <div key={slide.photo.src} className="max-w-3xl">
-          <p className="rkps-reveal text-xs font-bold uppercase tracking-[0.16em] text-[var(--brand-gold)] sm:text-sm">{slide.kicker}</p>
-          <h1 className="rkps-reveal mt-2 text-3xl font-bold leading-[1.05] tracking-tight sm:mt-3 sm:text-5xl md:text-6xl">
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/30 to-black/10 lg:bg-gradient-to-r lg:from-black/70 lg:via-black/35 lg:to-transparent"
+        aria-hidden
+      />
+
+      <div className="relative z-10 mx-auto flex min-h-[28rem] max-w-7xl flex-col rkps-page-x pb-4 pt-14 sm:min-h-[32rem] sm:pt-20 lg:min-h-[36rem]">
+        <div
+          key={slide.photo.src}
+          className="flex flex-1 flex-col justify-end space-y-3 sm:space-y-4 lg:max-w-3xl"
+          aria-live={c.playing ? "off" : "polite"}
+        >
+          <div className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)] backdrop-blur-md">
+            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--brand-gold)]" />
+            <span className="truncate">{slide.kicker}</span>
+          </div>
+
+          <h1 className="rkps-reveal text-3xl font-extrabold leading-[1.1] tracking-tight text-white [text-wrap:balance] sm:text-5xl md:text-6xl">
             {slide.title}
-            <span className="mt-1 block text-[var(--brand-gold)]">{slide.accent}</span>
+            <span className="mt-1 block bg-gradient-to-r from-[var(--brand-gold)] to-[var(--brand-gold)] bg-clip-text text-transparent">
+              {slide.accent}
+            </span>
           </h1>
-          <p className="rkps-reveal mt-4 max-w-xl text-sm leading-relaxed text-white/85 sm:text-base">{slide.body}</p>
-          <div className="rkps-reveal mt-6 flex flex-col gap-2.5 sm:mt-7 sm:flex-row sm:flex-wrap sm:gap-3">
-            <a href={primary.href} className="rkps-ease rkps-press inline-flex justify-center rounded-full bg-[var(--brand-gold)] px-5 py-2.5 text-sm font-bold text-[var(--brand-maroon-dark)] hover:brightness-105 sm:px-6 sm:py-3">
-              {primary.label}
+
+          <p className="rkps-reveal max-w-2xl text-sm leading-relaxed text-white/90 sm:text-base lg:text-lg">
+            {slide.body}
+          </p>
+
+          <div className="rkps-reveal flex flex-col gap-2.5 pt-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3.5">
+            <a
+              href={primary.href}
+              className={`rkps-btn-gold inline-flex w-full items-center justify-center text-center text-sm sm:w-auto ${FOCUS_DARK}`}
+            >
+              {primary.label} ↗
             </a>
             {secondary ? (
-              <a href={secondary.href} target={secondary.external ? "_blank" : undefined} rel={secondary.external ? "noreferrer" : undefined} className="rkps-ease rkps-press inline-flex justify-center rounded-full border border-white/40 px-5 py-2.5 text-sm font-bold text-white hover:bg-white/10 sm:px-6 sm:py-3">
-                {secondary.label}
+              <a
+                href={secondary.href}
+                target={secondary.external ? "_blank" : undefined}
+                rel={secondary.external ? "noreferrer" : undefined}
+                className={`inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20 active:scale-95 sm:w-auto ${FOCUS_DARK}`}
+              >
+                <span>{secondary.label}</span>
+                {secondary.external ? <span className="text-xs">↗</span> : null}
               </a>
             ) : null}
           </div>
         </div>
+
         {slides.length > 1 ? (
-          <div className="mt-8 flex items-center gap-3">
-            {slides.map((item, i) => (
-              <button
-                key={item.photo.src}
-                type="button"
-                aria-label={`Show slide ${i + 1}`}
-                aria-current={i === index ? "true" : undefined}
-                onClick={() => setIndex(i)}
-                className={`h-2.5 rounded-full transition-all ${i === index ? "w-8 bg-[var(--brand-gold)]" : "w-2.5 bg-white/50 hover:bg-white"}`}
-              />
-            ))}
+          <div className="mt-6 flex items-center justify-between gap-3 border-t border-white/15 pt-2">
+            <div className="flex items-center gap-2">
+              <SlideDots labels={slides.map((s) => s.title)} index={c.index} onSelect={c.go} />
+              <span className="text-xs font-semibold tabular-nums text-white/65">
+                {pad(c.index + 1)} / {pad(slides.length)}
+              </span>
+            </div>
+            {!c.reduced ? <PauseButton tone="dark" paused={c.userPaused} onToggle={c.togglePaused} /> : null}
           </div>
         ) : null}
       </div>
@@ -170,80 +445,164 @@ export function RkpsStoryHero({
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Notice marquee                                                             */
+/* -------------------------------------------------------------------------- */
+
 export function RkpsNewsMarquee() {
   const items = [
-    { href: "/#admissions", label: "Admissions enquiries are open. Talk to the school office." },
+    { href: "/#admissions", label: `Admissions Open for Session ${SESSION} (Pre-Primary to Grade 12)` },
     ...LATEST_NEWS.map((item) => ({ href: "/#noticeboard", label: item.title })),
-    { href: "/school-life/events", label: "See festivals, sports and school programmes." },
+    { href: "/school-life/events", label: "Explore upcoming sports, arts, and cultural celebrations" },
+    { href: "/school-life/student-achievers", label: "Celebrating remarkable growth & student accomplishments" },
   ];
   const loop = [...items, ...items];
 
   return (
-    <div className="rkps-marquee overflow-hidden bg-[var(--brand-maroon-dark)] text-white">
-      <div className="rkps-marquee-track">
-        {loop.map((item, i) => (
-          <Link
-            key={`${item.label}-${i}`}
-            href={item.href}
-            className="inline-flex items-center gap-4 px-6 py-2.5 text-sm font-semibold tracking-wide hover:text-[var(--brand-gold)]"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-gold)]" aria-hidden />
-            {item.label}
-          </Link>
-        ))}
+    <div className="border-t border-white/10 bg-[var(--brand-maroon-dark)] text-white" role="region" aria-label="Latest notices">
+      <div className="mx-auto flex max-w-7xl items-center gap-2 rkps-page-x">
+        <div className="flex shrink-0 items-center gap-1.5 rounded-md bg-[var(--brand-gold)] px-2.5 py-1 text-[0.6875rem] font-extrabold uppercase tracking-wider text-[var(--brand-maroon-dark)] shadow-sm">
+          <span
+            className="h-1.5 w-1.5 animate-pulse rounded-full bg-[var(--brand-maroon-dark)] motion-reduce:animate-none"
+            aria-hidden="true"
+          />
+          <span>Notice</span>
+        </div>
+        <div className="rkps-marquee min-w-0 flex-1 overflow-hidden py-2.5 text-xs motion-reduce:overflow-x-auto sm:text-sm">
+          <div className="rkps-marquee-track hover:[animation-play-state:paused] focus-within:[animation-play-state:paused] motion-reduce:![animation:none]">
+            {loop.map((item, i) => {
+              const isClone = i >= items.length;
+              return (
+                <Link
+                  key={`${item.label}-${i}`}
+                  href={item.href}
+                  aria-hidden={isClone || undefined}
+                  tabIndex={isClone ? -1 : undefined}
+                  className={`inline-flex shrink-0 items-center gap-3 whitespace-nowrap px-5 py-0.5 font-medium text-white/90 transition hover:text-[var(--brand-gold)] focus-visible:text-[var(--brand-gold)] focus-visible:outline-none ${
+                    isClone ? "motion-reduce:hidden" : ""
+                  }`}
+                >
+                  <span className="h-1 w-1 rounded-full bg-[var(--brand-gold)]" aria-hidden="true" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Home hero                                                                  */
+/* -------------------------------------------------------------------------- */
+
 export function RkpsCinematicHero() {
-  const [index, setIndex] = useAutoAdvance(SLIDES.length, 6500);
-  const slide = SLIDES[index];
+  const c = useCarousel(SLIDES.length, 6500);
+  const slide = SLIDES[c.index];
 
   return (
-    <section className="relative isolate min-h-[28rem] overflow-hidden bg-[linear-gradient(135deg,#081f3b_0%,#0d2c52_44%,#0b1d35_100%)] text-white sm:min-h-[34rem] lg:min-h-[42rem]" aria-roledescription="carousel" aria-label="School highlights">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,200,106,0.18),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(28,92,174,0.32),transparent_28%)]" aria-hidden />
+    <section
+      className="relative isolate min-h-[32rem] overflow-hidden bg-[var(--brand-maroon-dark)] text-white sm:min-h-[38rem] lg:min-h-[calc(100dvh-4.5rem)]"
+      role="region"
+      aria-roledescription="carousel"
+      aria-label="R.K. Memorial highlights"
+      {...c.handlers}
+    >
       {SLIDES.map((item, i) => (
-        <div key={item.title} className={`absolute inset-0 transition-opacity duration-700 ${i === index ? "opacity-100" : "pointer-events-none opacity-0"}`} aria-hidden={i !== index}>
-          <img src={item.photo.src} alt={i === index ? item.photo.alt : ""} className={`h-full w-full object-cover ${i === index ? "rkps-ken" : ""}`} />
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(8,31,59,0.8)_0%,rgba(8,31,59,0.5)_35%,rgba(8,31,59,0.24)_100%)]" />
+        <div
+          key={item.title}
+          className={`absolute inset-0 overflow-hidden transition-opacity duration-1000 motion-reduce:transition-none ${
+            i === c.index ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+          aria-hidden={i !== c.index}
+        >
+          <img
+            src={item.photo.src}
+            alt={i === c.index ? item.photo.alt : ""}
+            loading={i === 0 ? "eager" : "lazy"}
+            decoding="async"
+            className={`h-full w-full origin-center object-cover ${i === c.index ? "rkps-ken" : ""}`}
+          />
         </div>
       ))}
 
-      <div className="relative z-10 mx-auto flex min-h-[28rem] max-w-7xl flex-col justify-end px-3 pb-12 pt-14 sm:min-h-[34rem] sm:px-4 sm:pb-16 sm:pt-16 lg:min-h-[42rem] lg:justify-center lg:pb-16">
-        <div key={slide.title} className="max-w-3xl">
-          <p className="rkps-reveal text-xs font-bold uppercase tracking-[0.16em] text-[var(--brand-gold)] sm:text-sm">{slide.kicker}</p>
-          <h1 className="rkps-reveal mt-2 text-3xl font-bold leading-[1.05] tracking-tight sm:mt-3 sm:text-5xl lg:text-7xl">
+      {/* Scrims: neutral (not maroon) so campus photos stay true; darken only where copy sits */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10 lg:bg-gradient-to-r lg:from-black/70 lg:via-black/30 lg:to-transparent"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent sm:h-36"
+        aria-hidden
+      />
+
+      <div className="relative z-10 mx-auto flex min-h-[32rem] max-w-7xl flex-col rkps-page-x pb-4 pt-16 sm:min-h-[38rem] sm:pt-20 lg:min-h-[calc(100dvh-4.5rem)] lg:pb-6">
+        <div
+          key={slide.title}
+          className="flex flex-1 flex-col justify-end space-y-4 lg:max-w-3xl lg:justify-center"
+          aria-live={c.playing ? "off" : "polite"}
+        >
+          <div className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border border-[var(--brand-gold)]/50 bg-[var(--brand-gold)]/15 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)] shadow-sm backdrop-blur-md">
+            <span className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-[var(--brand-gold)] motion-reduce:animate-none" />
+            <span className="truncate">{slide.kicker}</span>
+          </div>
+
+          <h1 className="rkps-reveal text-[2rem] font-extrabold leading-[1.08] tracking-tight text-white drop-shadow-[0_2px_16px_rgba(0,0,0,0.45)] [text-wrap:balance] sm:text-5xl lg:text-7xl">
             {slide.title}
-            <span className="mt-1 block text-[var(--brand-gold)]">{slide.accent}</span>
+            <span className="mt-1 block bg-gradient-to-r from-[var(--brand-gold)] via-[var(--brand-gold)] to-[var(--brand-gold-muted)] bg-clip-text text-transparent">
+              {slide.accent}
+            </span>
           </h1>
-          <p className="rkps-reveal mt-4 max-w-xl text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-base lg:text-lg">{slide.body}</p>
-          <div className="rkps-reveal mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-3">
-            <Link href={RKPS_HERO.primary.href} className="rkps-ease rkps-press inline-flex justify-center rounded-full bg-[linear-gradient(135deg,#f5cf7d_0%,#e9b847_100%)] px-5 py-2.5 text-sm font-bold text-[var(--brand-maroon-dark)] shadow-[0_16px_34px_rgba(233,184,71,0.35)] hover:brightness-105 sm:px-6 sm:py-3">
-              {RKPS_HERO.primary.label}
+
+          <p className="rkps-reveal max-w-xl text-sm leading-relaxed text-white/95 drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)] sm:text-base lg:text-lg">
+            {slide.body}
+          </p>
+
+          <div className="rkps-reveal flex flex-col gap-2.5 pt-2 sm:flex-row sm:flex-wrap sm:gap-3.5">
+            <Link
+              href={RKPS_HERO.primary.href}
+              className={`rkps-btn-gold inline-flex w-full items-center justify-center gap-2 px-6 py-3 text-center text-sm sm:w-auto sm:text-base ${FOCUS_DARK}`}
+            >
+              <span>{RKPS_HERO.primary.label}</span>
+              <span aria-hidden="true">↗</span>
             </Link>
-            <Link href={RKPS_HERO.secondary.href} className="rkps-ease rkps-press inline-flex justify-center rounded-full border border-white/40 bg-white/5 px-5 py-2.5 text-sm font-bold text-white backdrop-blur-sm hover:bg-white/10 sm:px-6 sm:py-3">
-              {RKPS_HERO.secondary.label}
+            <Link
+              href={RKPS_HERO.secondary.href}
+              className={`inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-full border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/20 active:scale-95 sm:w-auto sm:text-base ${FOCUS_DARK}`}
+            >
+              <span>{RKPS_HERO.secondary.label}</span>
+              <span aria-hidden="true">›</span>
             </Link>
           </div>
         </div>
 
-        <div className="mt-8 flex items-center gap-3 sm:mt-10">
-          {SLIDES.map((item, i) => (
-            <button
-              key={item.title}
-              type="button"
-              aria-label={`Show slide ${i + 1}: ${item.title}`}
-              aria-current={i === index ? "true" : undefined}
-              onClick={() => setIndex(i)}
-              className={`h-2.5 rounded-full transition-all ${i === index ? "w-8 bg-[var(--brand-gold)] shadow-[0_0_14px_rgba(244,200,106,0.75)]" : "w-2.5 bg-white/50 hover:bg-white"}`}
-            />
-          ))}
+        <div className="mt-8 flex items-center justify-between gap-3 border-t border-white/15 pt-2">
+          <div className="flex items-center gap-2">
+            <SlideDots labels={SLIDES.map((s) => s.title)} index={c.index} onSelect={c.go} />
+            <span className="text-xs font-semibold tabular-nums text-white/65">
+              {pad(c.index + 1)} / {pad(SLIDES.length)}
+            </span>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="hidden items-center gap-2 text-xs font-semibold text-white/70 md:flex">
+              <span>Scroll to explore</span>
+              <span aria-hidden="true" className="animate-bounce motion-reduce:animate-none">
+                ↓
+              </span>
+            </span>
+            {!c.reduced ? <PauseButton tone="dark" paused={c.userPaused} onToggle={c.togglePaused} /> : null}
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Count-up number                                                            */
+/* -------------------------------------------------------------------------- */
 
 function parseStat(value: string) {
   const match = value.match(/^(\D*)([\d,]+)(.*)$/);
@@ -279,7 +638,7 @@ export function RkpsCountValue({ value }: { value: string }) {
         };
         frame = requestAnimationFrame(tick);
       },
-      { threshold: 0.4 },
+      { threshold: 0.3 },
     );
     observer.observe(node);
     return () => {
@@ -291,197 +650,219 @@ export function RkpsCountValue({ value }: { value: string }) {
   const formatted = target >= 1000 ? shown.toLocaleString("en-IN") : String(shown);
   return (
     <span ref={setNode}>
-      {prefix}
-      {formatted}
-      {suffix}
+      {/* Screen readers get the final value, not every animation frame. */}
+      <span aria-hidden="true">
+        {prefix}
+        {formatted}
+        {suffix}
+      </span>
+      <span className="sr-only">{value}</span>
     </span>
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/*  School in numbers                                                          */
+/*  All four stats are visible at once: 2×2 on phones, one row on desktop.     */
+/* -------------------------------------------------------------------------- */
+
 export function RkpsSpotlightCarousel() {
-  const [index, setIndex] = useState(0);
-  const item = SPOTLIGHTS[index];
-  const previous = () => setIndex((current) => (current - 1 + SPOTLIGHTS.length) % SPOTLIGHTS.length);
-  const next = () => setIndex((current) => (current + 1) % SPOTLIGHTS.length);
-
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = window.setInterval(() => setIndex((current) => (current + 1) % SPOTLIGHTS.length), 4500);
-    return () => window.clearInterval(id);
-  }, []);
-
   return (
-    <section className="bg-white" aria-roledescription="carousel" aria-label="School in numbers">
-      <div className="mx-auto max-w-7xl px-3 py-8 sm:px-4 sm:py-12 md:py-14 lg:grid lg:grid-cols-12 lg:items-center lg:gap-8 lg:py-16">
-        <Link
-          href="#excellence"
-          className="mx-auto grid h-24 w-24 shrink-0 place-items-center rounded-full bg-[var(--brand-gold)] px-3 text-center text-[0.625rem] font-bold leading-snug text-[var(--brand-maroon-dark)] shadow-lg transition hover:scale-105 sm:h-28 sm:w-28 sm:text-xs lg:col-span-3 lg:mx-0 lg:h-36 lg:w-36 lg:px-4 lg:text-sm"
-        >
-          Explore achievements
-        </Link>
-
-        <div key={`${item.title}-${item.figure}`} className="mt-5 text-center lg:col-span-5 lg:mt-0 lg:text-left">
-          <p className="rkps-reveal text-4xl font-black leading-none tracking-tighter text-brand tabular-nums sm:text-5xl lg:hidden">
-            {item.figure}
-          </p>
-          <h2 className="rkps-reveal mt-3 text-xl font-bold tracking-tight text-heading sm:mt-4 sm:text-2xl md:text-3xl lg:mt-0">
-            {item.title}
-          </h2>
-          <p className="rkps-reveal mx-auto mt-3 max-w-md text-sm leading-relaxed text-muted sm:text-base lg:mx-0">{item.body}</p>
-          <div className="mt-5 flex flex-wrap items-center justify-center gap-3 sm:mt-6 lg:justify-start">
-            <button
-              type="button"
-              onClick={previous}
-              aria-label="Previous highlight"
-              className="grid h-10 w-10 place-items-center rounded-full border border-border text-base text-heading transition hover:border-brand hover:text-brand sm:h-11 sm:w-11 sm:text-lg"
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              onClick={next}
-              aria-label="Next highlight"
-              className="grid h-10 w-10 place-items-center rounded-full border border-border text-base text-heading transition hover:border-brand hover:text-brand sm:h-11 sm:w-11 sm:text-lg"
-            >
-              →
-            </button>
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-              {index + 1} / {SPOTLIGHTS.length}
-            </p>
-          </div>
+    <section
+      className="border-y border-border/80 bg-[#f1f6fd] py-10 sm:py-14 lg:py-16"
+      aria-labelledby="rkps-spotlight-title"
+    >
+      <div className="mx-auto max-w-7xl rkps-page-x">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+          <SectionHeading
+            id="rkps-spotlight-title"
+            eyebrow="School in numbers"
+            title="Every metric reflects a student’s journey"
+            intro="Beyond numbers and figures, each milestone represents curious questions, faculty support, and family encouragement."
+          />
+          <Link
+            href="#excellence"
+            className={`inline-flex h-11 w-fit shrink-0 items-center gap-2 rounded-full border border-brand/25 bg-white px-5 text-sm font-bold text-brand transition hover:bg-brand hover:text-white active:scale-95 ${FOCUS_LIGHT}`}
+          >
+            <span>View all achievements</span>
+            <span aria-hidden="true">→</span>
+          </Link>
         </div>
 
-        <p
-          key={item.figure}
-          className="rkps-reveal hidden text-7xl font-black leading-none tracking-tighter text-heading md:text-8xl lg:col-span-4 lg:block lg:text-9xl"
-        >
-          {item.figure}
-        </p>
+        <ul className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+          {SPOTLIGHTS.map((item) => (
+            <li
+              key={item.title}
+              className="flex flex-col rounded-2xl bg-gradient-to-br from-[var(--brand-maroon-dark)] to-[var(--brand-maroon)] p-4 text-white shadow-[0_12px_28px_rgba(96,0,0,0.16)] sm:p-6"
+            >
+              <p className="text-3xl font-extrabold tracking-tight text-[var(--brand-gold)] tabular-nums sm:text-5xl">
+                <RkpsCountValue value={item.figure} />
+              </p>
+              <h3 className="mt-2 text-sm font-bold leading-snug text-white sm:mt-3 sm:text-lg">{item.title}</h3>
+              <p className="mt-1.5 text-xs leading-relaxed text-white/75 sm:text-sm">{item.body}</p>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Photo reel                                                                 */
+/* -------------------------------------------------------------------------- */
 
 export function RkpsHighlightsReel() {
   const loop = [...HIGHLIGHTS, ...HIGHLIGHTS];
   return (
-    <section className="w-full overflow-hidden bg-[#fdf6e8] py-12 sm:py-16" aria-label="Campus highlights">
-      <div className="w-full px-3 sm:px-4 lg:px-5">
-        <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand">Highlights</p>
-        <h2 className="mt-2 text-3xl font-bold tracking-tight text-heading sm:text-4xl lg:text-5xl">United in spirit. Alive on campus.</h2>
-        <span aria-hidden className="mt-4 block h-1.5 w-16 rounded-full bg-[var(--brand-gold)]" />
+    <section
+      className="w-full overflow-hidden bg-[#fdf6e8] py-10 sm:py-14 lg:py-16"
+      aria-labelledby="rkps-reel-title"
+    >
+      <div className="mx-auto max-w-7xl rkps-page-x">
+        <SectionHeading id="rkps-reel-title" eyebrow="Campus gallery" title="Moments from around campus" />
       </div>
-      <div className="rkps-marquee mt-8 w-full">
-        <div className="rkps-marquee-track gap-4 px-4">
-          {loop.map((photo, i) => (
-            <figure key={`${photo.src}-${i}`} className="relative h-52 w-80 shrink-0 overflow-hidden rounded-2xl sm:h-64 sm:w-[28rem]">
-              <img src={photo.src} alt={photo.alt} className="h-full w-full object-cover" />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-black/75 p-4 text-sm font-semibold text-white">
-                {photo.alt}
-              </figcaption>
-            </figure>
-          ))}
+      <div className="rkps-marquee mt-6 w-full motion-reduce:overflow-x-auto sm:mt-8">
+        <div className="rkps-marquee-track gap-4 px-4 hover:[animation-play-state:paused] motion-reduce:![animation:none]">
+          {loop.map((photo, i) => {
+            const isClone = i >= HIGHLIGHTS.length;
+            return (
+              <figure
+                key={`${photo.src}-${i}`}
+                aria-hidden={isClone || undefined}
+                className={`relative h-52 w-[78vw] max-w-[22rem] shrink-0 overflow-hidden rounded-2xl shadow-md sm:h-64 sm:w-[28rem] sm:max-w-none ${
+                  isClone ? "motion-reduce:hidden" : ""
+                }`}
+              >
+                <img
+                  src={photo.src}
+                  alt={isClone ? "" : photo.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
+                <figcaption className="absolute inset-x-0 bottom-0 line-clamp-2 bg-gradient-to-t from-black/85 via-black/50 to-transparent p-4 pt-8 text-xs font-semibold text-white">
+                  {photo.alt}
+                </figcaption>
+              </figure>
+            );
+          })}
         </div>
       </div>
     </section>
   );
 }
 
+/* -------------------------------------------------------------------------- */
+/*  Highlight banner                                                           */
+/* -------------------------------------------------------------------------- */
+
 const BANNERS = [
   {
     photo: instagramPhoto("campus-28.jpg"),
-    kicker: "School life",
-    title: "See learners in action",
-    body: "Festivals, sports and classrooms from the official school feed.",
+    kicker: "School Life & Co-Curricular",
+    title: "See learners in vibrant action",
+    body: "Festivals, sports tournaments, and everyday classroom inquiry from the official school feed.",
     href: "/school-life/events",
   },
   {
     photo: instagramPhoto("campus-19.jpg"),
-    kicker: "Academics",
+    kicker: "Academic Rigor",
     title: "A world to learn. A future to shape.",
-    body: "From early years to senior secondary, with room for questions and practice.",
+    body: "From foundational early childhood education to senior secondary boards, with room for questions and critical thinking.",
     href: "/#academics",
   },
   {
     photo: instagramPhoto("campus-7.jpg"),
-    kicker: "Admissions",
+    kicker: `Admissions Open ${SESSION}`,
     title: "Your next chapter starts here",
-    body: "Visit the campus and talk to the office about the class you are exploring.",
+    body: "Experience our state-of-the-art campus, speak with our faculty, and discover the right class for your child.",
     href: "/#admissions",
   },
 ] as const;
 
-/** Wide sliding banner, the same pattern as LPU’s Highlights block. */
 export function RkpsHighlightBanner() {
-  const [index, setIndex] = useAutoAdvance(BANNERS.length, 5500);
-  const banner = BANNERS[index];
-  const previous = () => setIndex((current) => (current - 1 + BANNERS.length) % BANNERS.length);
-  const next = () => setIndex((current) => (current + 1) % BANNERS.length);
+  const c = useCarousel(BANNERS.length, 5500);
+  const banner = BANNERS[c.index];
 
   return (
-    <section className="w-full bg-[#fdf6e8] py-10 sm:py-16" aria-roledescription="carousel" aria-label="Highlights">
-      <div className="flex w-full flex-col gap-4 px-3 sm:gap-6 sm:px-4 lg:flex-row lg:items-end lg:justify-between lg:px-5">
-        <div className="min-w-0 flex-1">
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand">Highlights</p>
-          <h2 className="mt-2 text-2xl font-bold leading-snug tracking-tight text-heading sm:text-3xl md:text-4xl lg:text-5xl">
-            United in spirit. Alive on campus.
-          </h2>
-          <span aria-hidden className="mt-3 block h-1.5 w-12 rounded-full bg-[var(--brand-gold)] sm:mt-4 sm:w-16" />
-        </div>
-        <div className="hidden shrink-0 gap-3 lg:flex">
-          <button type="button" onClick={previous} aria-label="Previous highlight" className="grid h-12 w-12 place-items-center rounded-full border border-border bg-white text-xl text-heading hover:border-brand">
-            ←
-          </button>
-          <button type="button" onClick={next} aria-label="Next highlight" className="grid h-12 w-12 place-items-center rounded-full border border-border bg-white text-xl text-heading hover:border-brand">
-            →
-          </button>
-        </div>
+    <section
+      className="w-full bg-[var(--surface-elevated)] py-10 sm:py-14 lg:py-16"
+      role="region"
+      aria-roledescription="carousel"
+      aria-labelledby="rkps-banner-title"
+      {...c.handlers}
+    >
+      <div className="mx-auto max-w-7xl rkps-page-x">
+        <SectionHeading id="rkps-banner-title" eyebrow="Highlights" title="United in spirit. Alive on campus." />
       </div>
-      <div className="relative mt-6 w-full px-3 sm:mt-8 sm:px-4 lg:px-5">
+
+      <div className="mt-6 w-full sm:mt-8">
         <Link
           href={banner.href}
-          className="relative block min-h-[18rem] w-full overflow-hidden rounded-2xl sm:min-h-[24rem] lg:min-h-[min(42vh,28rem)] lg:rounded-none xl:min-h-[32rem]"
+          className={`group relative block min-h-[22rem] w-full overflow-hidden sm:min-h-[26rem] lg:min-h-[32rem] ${FOCUS_LIGHT}`}
         >
           {BANNERS.map((item, i) => (
             <img
               key={item.title}
               src={item.photo.src}
-              alt={i === index ? item.photo.alt : ""}
-              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${i === index ? "opacity-100" : "opacity-0"} ${i === index ? "rkps-ken" : ""}`}
+              alt={i === c.index ? item.photo.alt : ""}
+              loading={i === 0 ? "eager" : "lazy"}
+              decoding="async"
+              className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 motion-reduce:transition-none ${
+                i === c.index ? "rkps-ken opacity-100" : "opacity-0"
+              }`}
             />
           ))}
-          <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/82 sm:bg-[var(--brand-maroon-dark)]/70" />
-          <div key={banner.title} className="relative flex min-h-[18rem] max-w-xl flex-col justify-end px-4 py-7 text-white sm:min-h-[24rem] sm:px-6 sm:py-10 lg:min-h-[min(42vh,28rem)] lg:px-10 xl:min-h-[32rem] xl:px-14">
-            <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--brand-gold)]">{banner.kicker}</p>
-            <h3 className="mt-2 text-2xl font-bold leading-snug tracking-tight sm:text-3xl md:text-4xl">{banner.title}</h3>
-            <p className="mt-3 text-sm leading-relaxed text-white/90 sm:text-base">{banner.body}</p>
+          <div
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-black/10 lg:bg-gradient-to-r lg:from-black/70 lg:via-black/30 lg:to-transparent"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-black/50 to-transparent sm:h-36"
+            aria-hidden
+          />
+          <div
+            key={banner.title}
+            className="relative mx-auto flex min-h-[22rem] max-w-7xl flex-col justify-end rkps-page-x pb-8 pt-12 text-white sm:min-h-[26rem] sm:pb-10 lg:min-h-[32rem] lg:pb-14 lg:pt-16"
+          >
+            <div className="max-w-2xl">
+              <span className="inline-flex w-fit max-w-full items-center rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)] backdrop-blur-md">
+                <span className="truncate">{banner.kicker}</span>
+              </span>
+              <h3 className="mt-3 text-2xl font-bold leading-snug tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] [text-wrap:balance] sm:text-3xl md:text-4xl">
+                {banner.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-white/90 sm:text-base">{banner.body}</p>
+              <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--brand-gold)] transition group-hover:translate-x-1.5 motion-reduce:transition-none">
+                <span>Explore this highlight</span>
+                <span aria-hidden="true">→</span>
+              </span>
+            </div>
           </div>
         </Link>
-        <div className="mt-4 flex items-center justify-center gap-3 lg:hidden">
-          <button
-            type="button"
-            onClick={previous}
-            aria-label="Previous highlight"
-            className="grid h-11 w-11 place-items-center rounded-full border border-border bg-white text-lg text-heading hover:border-brand"
-          >
-            ←
-          </button>
-          <p className="min-w-[3rem] text-center text-xs font-semibold uppercase tracking-[0.14em] text-muted">
-            {index + 1} / {BANNERS.length}
-          </p>
-          <button
-            type="button"
-            onClick={next}
-            aria-label="Next highlight"
-            className="grid h-11 w-11 place-items-center rounded-full border border-border bg-white text-lg text-heading hover:border-brand"
-          >
-            →
-          </button>
+
+        <div className="mx-auto mt-4 flex max-w-7xl items-center justify-between gap-3 rkps-page-x">
+          <div className="flex items-center gap-3">
+            {!c.reduced ? <PauseButton tone="light" paused={c.userPaused} onToggle={c.togglePaused} /> : null}
+            <p className="text-xs font-bold uppercase tracking-wider text-muted tabular-nums">
+              {pad(c.index + 1)} / {pad(BANNERS.length)}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <ArrowButton direction="prev" onClick={c.prev} label="Previous highlight" />
+            <ArrowButton direction="next" onClick={c.next} label="Next highlight" />
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+/* -------------------------------------------------------------------------- */
+/*  Campus life stories                                                        */
+/*  Phones/tablets: stacked cards. Desktop: sticky scroll-reveal.              */
+/* -------------------------------------------------------------------------- */
 
 const STORY_FRAMES = [
   [instagramPhoto("campus-22.jpg"), instagramPhoto("campus-15.jpg"), instagramPhoto("campus-23.jpg")],
@@ -494,52 +875,59 @@ const STORY_FRAMES = [
 
 function StoryFrame({ photos }: { photos: readonly { src: string; alt: string }[] }) {
   const [lead, ...rest] = photos;
+  if (!lead) return null;
   return (
-    <>
-      <div className="relative h-full w-full lg:hidden">
-        <img src={lead.src} alt={lead.alt} className="absolute inset-0 h-full w-full object-cover" />
+    <div className="grid h-full min-h-0 grid-rows-[minmax(0,1.65fr)_minmax(0,1fr)] gap-2.5 overflow-hidden rounded-2xl shadow-xl">
+      <div className="relative min-h-0 overflow-hidden rounded-xl">
+        <img
+          src={lead.src}
+          alt={lead.alt}
+          loading="lazy"
+          decoding="async"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
       </div>
-      <div className="hidden h-full min-h-0 grid-rows-[minmax(0,1.65fr)_minmax(0,1fr)] gap-2 overflow-hidden lg:grid">
-        <div className="relative min-h-0 overflow-hidden">
-          <img src={lead.src} alt={lead.alt} className="absolute inset-0 h-full w-full object-cover" />
-        </div>
-        <div className="grid min-h-0 grid-cols-2 gap-2">
-          {rest.map((photo) => (
-            <div key={photo.src} className="relative min-h-0 overflow-hidden">
-              <img src={photo.src} alt={photo.alt} className="absolute inset-0 h-full w-full object-cover" />
-            </div>
-          ))}
-        </div>
+      <div className="grid min-h-0 grid-cols-2 gap-2.5">
+        {rest.map((photo) => (
+          <div key={photo.src} className="relative min-h-0 overflow-hidden rounded-xl">
+            <img
+              src={photo.src}
+              alt={photo.alt}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          </div>
+        ))}
       </div>
-    </>
+    </div>
   );
 }
 
-/** Sticky story scroll: the photo stays put while each programme comes into view. */
 const STORY_COPY = [
   {
-    title: "Annual sports week begins",
-    body: "Inter-house track and field for classes 6–12 is on the school calendar. Houses meet on the ground for sprints, relays and field events, and families can read the full schedule before the first whistle.\n\nCricket, athletics and kabaddi run through the year beside that week. Annual sports day brings every class onto the field, with practice kept on the timetable rather than squeezed in after it.",
+    title: "Annual Sports Week & Athletics",
+    body: "Inter-house track and field for grades 1–12 on our campus athletic grounds. Houses meet on the ground for sprints, relays, kabaddi, and field events, fostering healthy competition, leadership, and camaraderie.\n\nCricket, badminton, and gymnastics run through the academic year with dedicated sports periods on every student’s timetable.",
   },
   {
-    title: "Parent–teacher meeting (Term 2)",
-    body: "Meeting slots are booked through the school office. Once report cards are published, they sit in the student portal so a family can read attendance, marks and remarks before they sit down with the teacher.\n\nThe meeting is for the term just lived and the one ahead: classwork, a missed day, and what to watch next. When a question needs more than the slot, the class teacher and the office follow it up.",
+    title: "Parent–Teacher Conferences",
+    body: "Collaborative conferences booked smoothly through the portal. Report cards, attendance metrics, and personalized teacher notes are accessible before parents sit down for meaningful dialogues.\n\nEvery meeting celebrates individual growth milestones, addresses learning gaps, and outlines supportive action plans.",
   },
   {
-    title: "Science exhibition winners",
-    body: "Senior projects on sustainability and robotics are in the achievements gallery. Students walk visitors from the first sketch to the model on the table, in their own words.\n\nThose projects start in the science and computer labs and in the robotics club. Exhibition day is when the rest of the school gets to move through the work, one table at a time.",
+    title: "Science & Robotics Innovation Fair",
+    body: "Student-built robotics projects, environmental sustainability models, and working laboratory experiments on exhibition. Learners explain their hypotheses and engineering decisions in their own confident words.\n\nFrom coding clubs to advanced physics and chemistry labs, hands-on experiential learning is woven into the curriculum.",
   },
   {
-    title: "Sports & fitness",
-    body: "Cricket, athletics, kabaddi and annual sports day give every house a season on the ground. The sports ground and the indoor games share the campus with the classrooms, so a games period does not mean leaving school.\n\nTeams practise in house groups. Sports day is the shared finish: classes line the field, and the calendar lists every event.",
+    title: "Sports & Physical Well-being",
+    body: "Cricket, athletics, basketball, and yoga encourage active lifestyles. Indoor gaming halls and outdoor grounds share the campus, ensuring students develop physical resilience and sportsmanship.",
   },
   {
-    title: "Cultural programs",
-    body: "Annual day, inter-house competitions, music and dance fill the second half of the year. A class that spends the morning in lessons can spend the afternoon on a stage.\n\nRehearsals are part of the week, not a single show. Families are invited when the programme is ready, and the date goes on the noticeboard.",
+    title: "Cultural & Performing Arts",
+    body: "Annual day galas, inter-house dance, music, theater, and debate competitions give every student a stage. Rehearsals cultivate creative self-expression and poise.",
   },
   {
-    title: "Clubs & service",
-    body: "Eco club, robotics, debate and community outreach meet through the week. In the middle school, clubs sit with the house system. Seniors carry the same habits into exhibition projects and outreach.\n\nA club is a smaller room inside a large school. Students stay with a debate, a garden or a robot long enough for the work to show.",
+    title: "Clubs & Community Outreach",
+    body: "Eco Club, Robotics League, Literary Society, and social service initiatives empower students to lead impactful community drives and develop responsible citizenship.",
   },
 ] as const;
 
@@ -547,13 +935,49 @@ export function RkpsStoryRail() {
   const stories = STORY_COPY;
 
   return (
-    <section className="bg-white py-12 sm:py-16" aria-label="School stories">
-      <div className="mx-auto max-w-7xl px-3 sm:px-4 lg:px-5">
-        <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand">Campus stories</p>
-        <h2 className="mt-2 max-w-3xl text-2xl font-bold leading-snug tracking-tight text-heading sm:text-3xl md:text-4xl">
-          Your child’s day, told in programmes and people
-        </h2>
-        <div className="mt-8">
+    <section
+      className="border-b border-border/80 bg-white py-10 sm:py-14 lg:py-16"
+      aria-labelledby="rkps-stories-title"
+    >
+      <div className="mx-auto max-w-7xl rkps-page-x">
+        <SectionHeading
+          id="rkps-stories-title"
+          eyebrow="Campus life"
+          title="Your child’s day, told in programmes and people"
+        />
+
+        {/* Phones & tablets: plain stacked cards, no sticky scrolling. */}
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:hidden">
+          {stories.map((story, index) => {
+            const lead = STORY_FRAMES[index]?.[0];
+            return (
+              <li key={story.title} className="flex">
+                <article className="flex w-full flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+                  {lead ? (
+                    <img
+                      src={lead.src}
+                      alt={lead.alt}
+                      loading="lazy"
+                      decoding="async"
+                      className="aspect-[16/10] w-full object-cover"
+                    />
+                  ) : null}
+                  <div className="flex flex-1 flex-col gap-2.5 p-5">
+                    <h3 className="text-lg font-bold leading-snug text-heading">{story.title}</h3>
+                    {story.body.split("\n\n").map((paragraph) => (
+                      <p key={paragraph} className="text-sm leading-relaxed text-muted">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                </article>
+              </li>
+            );
+          })}
+        </ul>
+
+        {/* Desktop: sticky scroll-reveal. */}
+        <div className="mt-8 hidden lg:block">
           <StickyScroll
             content={stories.map((story, index) => ({
               title: story.title,

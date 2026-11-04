@@ -25,47 +25,27 @@ export function AchievementsPageExperience() {
     <div className="min-h-screen bg-background">
       <MarketingHeader />
       <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
+        <span aria-hidden className="mb-3 block h-1 w-10 rounded-full bg-[var(--brand-gold)]" />
         <p className="text-xs font-semibold uppercase tracking-[0.2em] text-brand">Student & faculty highlights</p>
-        <h1 className="mt-2 page-title">Achievements</h1>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-heading sm:text-3xl">Achievements</h1>
         <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">
           Celebrating academic, sports, arts, and community success at {BRAND.name}. Names appear with school consent;
           photos may be added in a future update.
         </p>
 
-        <div className="mt-8 flex flex-wrap gap-3">
-          <label className="text-sm">
-            <span className="text-muted">Category</span>
-            <select
-              className="input-field mt-1 min-w-[10rem]"
-              value={category}
-              onChange={(e) => setCategory(e.target.value as AchievementCategory | "All")}
-            >
-              <option value="All">All categories</option>
-              {ACHIEVEMENT_CATEGORIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </label>
-          <label className="text-sm">
-            <span className="text-muted">Year</span>
-            <select
-              className="input-field mt-1 min-w-[8rem]"
-              value={year === "All" ? "All" : String(year)}
-              onChange={(e) => {
-                const v = e.target.value;
-                setYear(v === "All" ? "All" : Number(v));
-              }}
-            >
-              <option value="All">All years</option>
-              {years.map((y) => (
-                <option key={y} value={y}>
-                  {y}
-                </option>
-              ))}
-            </select>
-          </label>
+        <div className="mt-8 space-y-3">
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => setCategory("All")} className={`rounded-full px-4 py-1.5 text-xs font-bold ${category === "All" ? "bg-brand text-white" : "border border-border bg-surface text-brand"}`}>All</button>
+            {ACHIEVEMENT_CATEGORIES.map((item) => (
+              <button key={item} type="button" onClick={() => setCategory(item)} className={`rounded-full px-4 py-1.5 text-xs font-bold ${category === item ? "bg-brand text-white" : "border border-border bg-surface text-brand"}`}>{item}</button>
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <button type="button" onClick={() => setYear("All")} className={`rounded-full px-4 py-1.5 text-xs font-bold ${year === "All" ? "bg-brand text-white" : "border border-border bg-surface text-brand"}`}>All years</button>
+            {years.map((item) => (
+              <button key={item} type="button" onClick={() => setYear(item)} className={`rounded-full px-4 py-1.5 text-xs font-bold ${year === item ? "bg-brand text-white" : "border border-border bg-surface text-brand"}`}>{item}</button>
+            ))}
+          </div>
         </div>
 
         <div className="mt-10">

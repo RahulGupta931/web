@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import { BRAND } from "@/config/branding";
 import { useAuth } from "./auth-provider";
 import { MobileBottomNav } from "./mobile-bottom-nav";
@@ -11,6 +11,7 @@ import type { NavIconName } from "./nav-icons";
 import { PanelNavLink } from "./panel-nav-link";
 import { PanelTopbar } from "./panel-topbar";
 import { formatPortalRole, isNavItemActive, userInitialsFromEmail } from "@/lib/nav-utils";
+import { logResponsiveDebug } from "@/lib/responsive-debug-log";
 
 export type NavItem = {
   href: string;
@@ -41,8 +42,26 @@ export function PanelLayout({
 
   const initials = userInitialsFromEmail(user?.email);
 
+  useEffect(() => {
+    const lg = window.matchMedia("(min-width: 1024px)").matches;
+    // #region agent log
+    logResponsiveDebug({
+      location: "panel-layout.tsx:render",
+      message: "panel-layout-chrome",
+      hypothesisId: "B",
+      data: {
+        pathname,
+        lg,
+        sidebarCss: "hidden lg:flex",
+        bottomNavCss: "lg:hidden",
+        mainPadding: "pb-[4.75rem] lg:pb-0",
+      },
+    });
+    // #endregion
+  }, [pathname]);
+
   return (
-    <div className="min-h-screen bg-background text-foreground lg:pl-64">
+    <div className="min-h-screen overflow-x-clip bg-background text-foreground lg:pl-64">
       <aside
         className="panel-sidebar hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:h-screen lg:w-64 lg:flex-col lg:border-r lg:border-black/20"
         aria-label="School portal navigation"

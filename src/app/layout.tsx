@@ -4,6 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "@/components/auth-provider";
 import { PanelContextProvider } from "@/components/panel-context";
 import { NavigationLoadingProvider } from "@/components/navigation-loading-provider";
+import { ResponsiveDebugProbe } from "@/components/responsive-debug-probe";
 import { BRAND } from "@/config/branding";
 
 const geistSans = Geist({
@@ -35,7 +36,10 @@ export default function RootLayout({
       >
         <AuthProvider>
           <PanelContextProvider>
-            <NavigationLoadingProvider>{children}</NavigationLoadingProvider>
+            <NavigationLoadingProvider>
+              <ResponsiveDebugProbe />
+              {children}
+            </NavigationLoadingProvider>
           </PanelContextProvider>
         </AuthProvider>
       </body>

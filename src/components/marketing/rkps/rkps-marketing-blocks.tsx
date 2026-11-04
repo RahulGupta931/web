@@ -7,9 +7,9 @@ type Photo = { src: string; alt: string };
 
 export function RkpsHeroShell({ children }: { children: ReactNode }) {
   return (
-    <section className="rkps-hero-atmosphere border-b border-border/80 bg-[linear-gradient(180deg,#edf5ff_0%,#f8fbff_44%,#edf4ff_100%)]">
+    <section className="rkps-hero-atmosphere border-b border-border/80 bg-[var(--surface-muted)]">
       <div className="bg-transparent">
-        <div className="mx-auto max-w-7xl px-3 pb-8 pt-6 sm:px-4 sm:pb-10 sm:pt-8">{children}</div>
+        <div className="mx-auto max-w-7xl rkps-page-x pb-8 pt-6 sm:pb-10 sm:pt-8">{children}</div>
       </div>
     </section>
   );
@@ -17,8 +17,9 @@ export function RkpsHeroShell({ children }: { children: ReactNode }) {
 
 export function RkpsEyebrow({ children }: { children: ReactNode }) {
   return (
-    <p className="inline-flex max-w-full rounded-full border border-border bg-surface px-3 py-1 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-brand shadow-sm">
-      {children}
+    <p className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand/20 bg-white/90 px-3.5 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-brand shadow-sm">
+      <span className="h-1.5 w-1.5 rounded-full bg-[var(--brand-gold)]" />
+      <span>{children}</span>
     </p>
   );
 }
@@ -34,28 +35,28 @@ export function RkpsPhotoCollage({
 }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-2 lg:items-stretch lg:gap-4">
-      <figure className="rkps-ease rkps-feature-surface overflow-hidden rounded-2xl border border-border/80 bg-surface sm:col-span-2 lg:col-span-7 lg:row-span-2">
-        <div className="relative h-full min-h-[14rem] sm:min-h-[16rem] lg:min-h-[22rem]">
-          <img src={main.src} alt={main.alt} className="absolute inset-0 h-full w-full object-cover" />
+      <figure className="group relative overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md sm:col-span-2 lg:col-span-7 lg:row-span-2">
+        <div className="relative h-full min-h-[16rem] sm:min-h-[20rem] lg:min-h-[24rem]">
+          <img src={main.src} alt={main.alt} className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" />
         </div>
-        {main.caption ? <figcaption className="border-t border-border px-4 py-3 text-sm text-muted">{main.caption}</figcaption> : null}
+        {main.caption ? <figcaption className="border-t border-border px-4 py-3 text-xs sm:text-sm text-muted">{main.caption}</figcaption> : null}
       </figure>
       {thumbs.map((photo, i) => (
         <figure
           key={photo.src}
-          className="rkps-ease rkps-feature-surface overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-sm lg:col-span-5"
+          className="group relative overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md lg:col-span-5"
         >
-          <div className={`relative w-full ${i === 0 ? "aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[10.5rem]" : "aspect-[4/3] lg:aspect-auto lg:min-h-[10.5rem]"}`}>
-            <img src={photo.src} alt={photo.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+          <div className={`relative w-full ${i === 0 ? "aspect-[16/10] lg:aspect-auto lg:h-full lg:min-h-[11rem]" : "aspect-[4/3] lg:aspect-auto lg:min-h-[11rem]"}`}>
+            <img src={photo.src} alt={photo.alt} className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105" loading="lazy" />
           </div>
         </figure>
       ))}
-      <div className="col-span-full flex flex-col gap-2 rounded-xl border border-dashed border-border/90 bg-surface/70 px-4 py-3 text-xs text-muted backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between lg:col-span-12">
+      <div className="col-span-full flex flex-col gap-2 rounded-xl border border-dashed border-border/90 bg-surface/80 px-4 py-3 text-xs text-muted backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between lg:col-span-12">
         {footer ?? (
           <>
-            <span>Photos from our official Instagram</span>
-            <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className="shrink-0 font-semibold text-brand hover:underline">
-              @r.k.m.p.s
+            <span>Photos from our official campus community</span>
+            <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className="shrink-0 font-bold text-brand hover:underline">
+              @r.k.m.p.s ↗
             </a>
           </>
         )}
@@ -69,23 +70,39 @@ export function RkpsSectionIntro({
   title,
   description,
   action,
+  dark = false,
   className = "",
 }: {
   num?: string;
   title: string;
   description?: string;
   action?: ReactNode;
+  dark?: boolean;
   className?: string;
 }) {
   return (
     <RkpsInView className={`flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between ${className}`}>
-      <div className="max-w-2xl">
-        <span className="mb-3 block h-1 w-10 rounded-full bg-[var(--brand-gold)]" aria-hidden />
-        {num ? <p className="rkps-section-num">{num}</p> : null}
-        <h2 className="rkps-display mt-1 text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>
-        {description ? <p className="mt-2 max-w-[65ch] text-sm leading-relaxed text-muted">{description}</p> : null}
+      <div className="max-w-2xl space-y-1.5">
+        <span className="block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" aria-hidden="true" />
+        {num ? (
+          <p className={`text-xs font-bold uppercase tracking-wider ${dark ? "text-[var(--brand-gold)]" : "text-brand"}`}>
+            {num}
+          </p>
+        ) : null}
+        <h2
+          className={`rkps-display text-2xl font-bold tracking-tight [text-wrap:balance] sm:text-3xl lg:text-4xl ${
+            dark ? "text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.45)]" : "text-heading"
+          }`}
+        >
+          {title}
+        </h2>
+        {description ? (
+          <p className={`max-w-[65ch] text-sm leading-relaxed sm:text-base ${dark ? "text-white/80" : "text-muted"}`}>
+            {description}
+          </p>
+        ) : null}
       </div>
-      {action}
+      {action ? <div className="shrink-0 pt-1 lg:pt-0">{action}</div> : null}
     </RkpsInView>
   );
 }
@@ -109,85 +126,173 @@ export function RkpsZigzagRow({
 }) {
   return (
     <article
-      className={`grid items-center gap-5 lg:grid-cols-2 lg:gap-8 ${reverse ? "[&>figure]:lg:order-2 [&>div]:lg:order-1" : ""}`}
+      className={`grid items-stretch gap-5 sm:gap-6 lg:grid-cols-2 lg:gap-8 ${
+        reverse ? "[&>figure]:lg:order-2 [&>div]:lg:order-1" : ""
+      }`}
     >
-      <figure className="rkps-ease overflow-hidden rounded-[1.6rem] border border-border/80 bg-surface shadow-[var(--shadow-card)] ring-1 ring-[rgba(18,51,94,0.06)]">
+      <figure className="group relative h-full min-h-[16rem] sm:min-h-[20rem] overflow-hidden rounded-2xl border border-border/80 bg-surface shadow-md">
         <img
           src={photo.src}
           alt={photo.alt}
-          className="aspect-[16/10] w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.025]"
+          className="h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
           loading="lazy"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
       </figure>
-      <div className={`rounded-[1.45rem] border border-border/80 bg-[rgba(255,255,255,0.72)] p-5 shadow-[0_18px_36px_rgba(13,35,65,0.08)] backdrop-blur-sm sm:p-6 ${reverse ? "lg:pr-5" : "lg:pl-5"}`}>
-        <span className="inline-flex items-center rounded-full border border-[var(--brand-maroon)]/15 bg-[color-mix(in_srgb,var(--brand-gold)_18%,white)] px-2.5 py-0.5 text-[0.625rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-maroon-dark)]">
+
+      <div className={`flex h-full flex-col justify-center rounded-2xl border border-border/80 bg-white/90 p-6 sm:p-8 shadow-md backdrop-blur-md ${
+        reverse ? "lg:pr-8" : "lg:pl-8"
+      }`}>
+        <span className="inline-flex w-fit items-center rounded-full border border-[var(--brand-gold)]/50 bg-[var(--brand-gold)]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-maroon-dark)]">
           {badge}
         </span>
-        <h3 className="rkps-display mt-4 text-2xl font-semibold leading-snug sm:text-[1.65rem]">{title}</h3>
-        {kicker ? <p className="mt-2 text-sm font-semibold text-[var(--brand-maroon-light)]">{kicker}</p> : null}
-        <p className="mt-4 text-sm leading-relaxed text-muted">{body}</p>
-        {footnote ? <div className="mt-4 text-sm text-muted">{footnote}</div> : null}
+        <h3 className="rkps-display mt-3 text-2xl font-bold tracking-tight sm:text-3xl text-heading">
+          {title}
+        </h3>
+        {kicker ? (
+          <p className="mt-1.5 text-sm font-semibold text-brand">
+            {kicker}
+          </p>
+        ) : null}
+        <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+          {body}
+        </p>
+        {footnote ? (
+          <div className="mt-5 border-t border-border/70 pt-3 text-xs text-muted">
+            {footnote}
+          </div>
+        ) : null}
       </div>
     </article>
   );
 }
 
 export function RkpsPathwayCards({
+  id = "explore-rmps",
   heading,
   sub,
   items,
   notesTitle,
   notes,
 }: {
+  id?: string;
   heading: string;
   sub?: string;
-  items: readonly { num: string; title: string; body?: string; cta: string; href: string }[];
+  items: readonly {
+    num: string;
+    title: string;
+    body?: string;
+    cta: string;
+    href: string;
+    photo?: { src: string; alt: string };
+  }[];
   notesTitle?: string;
   notes?: readonly { title: string; body: string }[];
 }) {
   return (
-    <div className="border-t border-border bg-surface">
-      <div className="mx-auto max-w-7xl px-3 py-10 sm:px-4 sm:py-14">
-        <RkpsSectionIntro num="Where to next" title={heading} description={sub} />
-        <ul className="rkps-stagger mt-8 grid gap-4 md:grid-cols-3">
+    <div id={id} className="scroll-mt-28 border-t border-border bg-white">
+      <div className="mx-auto max-w-7xl rkps-page-x py-14 sm:py-20 lg:py-24">
+        <RkpsSectionIntro num="Where To Next" title={heading} description={sub} />
+        <ul className="rkps-stagger mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-2 lg:items-stretch">
           {items.map((c, i) => {
             const featured = i === 0;
+            const layout = featured
+              ? "sm:col-span-2 lg:col-span-7 lg:row-span-2"
+              : i === 1
+                ? "lg:col-span-5 lg:row-start-1"
+                : "sm:col-span-2 lg:col-span-5 lg:row-start-2";
             return (
-              <li key={c.num} style={{ ["--rkps-i" as string]: i }}>
+              <li key={c.num} className={layout} style={{ ["--rkps-i" as string]: i }}>
                 <Link
                   href={c.href}
-                  className={`rkps-ease rkps-press group flex h-full flex-col rounded-[1.25rem] border p-5 shadow-[var(--rkps-shadow-diffuse,var(--shadow-card))] hover:-translate-y-0.5 sm:p-6 ${
-                    featured
-                      ? "border-brand/30 bg-brand text-white hover:shadow-[var(--shadow-card-hover)]"
-                      : "border-border/80 bg-[var(--background)] hover:border-brand/25 hover:shadow-[var(--shadow-card-hover)]"
-                  }`}
+                  className={`group relative isolate flex h-full min-h-[16rem] flex-col justify-between overflow-hidden rounded-3xl border p-6 transition duration-300 hover:-translate-y-1 sm:min-h-[18rem] sm:p-8 ${
+                    c.photo
+                      ? "border-white/20 text-white shadow-[0_16px_36px_rgba(96,0,0,0.2)] hover:shadow-xl"
+                      : featured
+                        ? "border-[var(--brand-gold)]/50 bg-[var(--brand-maroon-dark)] text-white shadow-[0_16px_36px_rgba(96,0,0,0.22)]"
+                        : "border-border/80 bg-[var(--surface-elevated)] text-heading shadow-sm hover:border-brand/30 hover:shadow-md"
+                  } ${featured && c.photo ? "lg:min-h-[22rem]" : ""}`}
                 >
-                  <span
-                    className={`flex h-9 w-9 items-center justify-center rounded-lg text-xs font-bold ${
-                      featured ? "bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)]" : "bg-brand/10 text-brand"
+                  {c.photo ? (
+                    <>
+                      <img
+                        src={c.photo.src}
+                        alt=""
+                        aria-hidden
+                        loading={i === 0 ? "eager" : "lazy"}
+                        className={`absolute inset-0 -z-20 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] ${
+                          featured ? "rkps-ken" : ""
+                        }`}
+                      />
+                      <div
+                        className={`absolute inset-0 -z-10 bg-[var(--brand-maroon-dark)] transition duration-300 group-hover:bg-[var(--brand-maroon-dark)]/88 ${
+                          featured ? "opacity-[0.78]" : "opacity-[0.82]"
+                        }`}
+                        aria-hidden
+                      />
+                    </>
+                  ) : null}
+                  <div className="relative z-10 flex flex-1 flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`flex h-10 w-10 items-center justify-center rounded-2xl text-xs font-extrabold ${
+                          c.photo || featured
+                            ? "bg-[var(--brand-gold)] text-[var(--brand-on-gold)]"
+                            : "bg-brand/10 text-brand"
+                        }`}
+                      >
+                        {c.num}
+                      </span>
+                      <span
+                        className={`text-sm font-bold transition group-hover:translate-x-1 ${
+                          c.photo || featured ? "text-[var(--brand-gold)]" : "text-brand"
+                        }`}
+                      >
+                        →
+                      </span>
+                    </div>
+                    <h3
+                      className={`rkps-display mt-4 font-bold tracking-tight [text-wrap:balance] ${
+                        c.photo || featured
+                          ? "text-xl text-white drop-shadow-[0_2px_14px_rgba(0,0,0,0.45)] sm:text-2xl lg:text-3xl"
+                          : "text-xl text-heading group-hover:text-brand sm:text-2xl"
+                      } ${featured && c.photo ? "lg:text-4xl" : ""}`}
+                    >
+                      {c.title}
+                    </h3>
+                    {c.body ? (
+                      <p
+                        className={`mt-2 text-sm leading-relaxed ${
+                          c.photo || featured ? "text-white/88" : "text-muted"
+                        }`}
+                      >
+                        {c.body}
+                      </p>
+                    ) : null}
+                  </div>
+                  <p
+                    className={`mt-6 text-xs font-bold uppercase tracking-wider ${
+                      c.photo || featured ? "text-[var(--brand-gold)]" : "text-brand"
                     }`}
                   >
-                    {c.num}
-                  </span>
-                  <h3 className={`rkps-display mt-4 text-lg font-semibold ${featured ? "text-white" : "text-heading group-hover:text-brand"}`}>
-                    {c.title}
-                  </h3>
-                  {c.body ? (
-                    <p className={`mt-2 flex-1 text-sm leading-relaxed ${featured ? "text-white/90" : "text-muted"}`}>{c.body}</p>
-                  ) : null}
-                  <p className={`mt-5 text-sm font-semibold ${featured ? "text-[var(--brand-gold)]" : "text-brand"}`}>{c.cta} ↗</p>
+                    {c.cta} ↗
+                  </p>
+                  </div>
                 </Link>
               </li>
             );
           })}
         </ul>
+
         {notes && notes.length > 0 ? (
-          <div className="mt-8 border-t border-border/80 pt-8">
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-brand">{notesTitle ?? "At a glance"}</p>
-            <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-12 rounded-3xl border border-border/80 bg-[var(--surface-muted)] p-6 sm:p-8 lg:p-10">
+            <p className="text-xs font-bold uppercase tracking-wider text-brand">{notesTitle ?? "Why Families Choose RMPS"}</p>
+            <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {notes.map((note) => (
-                <li key={note.title} className="rounded-xl border border-border/80 bg-[var(--background)] px-4 py-3">
-                  <p className="text-sm font-semibold text-heading">{note.title}</p>
+                <li key={note.title} className="rounded-2xl border border-white/80 bg-white/90 p-5 shadow-sm">
+                  <span className="text-base text-brand font-bold">✓</span>
+                  <p className="mt-2 text-sm font-bold text-heading">{note.title}</p>
                   <p className="mt-1 text-xs leading-relaxed text-muted">{note.body}</p>
                 </li>
               ))}
@@ -214,19 +319,18 @@ export function RkpsPageSection({
 }) {
   const toneClass =
     tone === "paper"
-      ? "border-y border-border/80 bg-[linear-gradient(180deg,rgba(255,255,255,0.72),rgba(237,244,255,0.92))]"
+      ? "border-y border-border/80 bg-white"
       : tone === "inset"
-        ? "bg-[linear-gradient(180deg,#edf5ff_0%,#f8fbff_100%)]"
-        : "bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)]";
+        ? "bg-[var(--surface-muted)]"
+        : "bg-[var(--surface-elevated)]";
   return (
-    <section id={id} className={`relative isolate scroll-mt-28 overflow-hidden py-12 sm:py-16 ${toneClass} ${className}`}>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(244,200,106,0.09),transparent_25%),radial-gradient(circle_at_bottom_right,rgba(11,61,120,0.08),transparent_28%)]" aria-hidden />
-      <div className="relative mx-auto max-w-7xl px-3 sm:px-4 lg:px-5">{children}</div>
+    <section id={id} className={`relative isolate scroll-mt-28 overflow-hidden py-14 sm:py-20 lg:py-24 ${toneClass} ${className}`}>
+      <div className="relative mx-auto max-w-7xl rkps-page-x">{children}</div>
     </section>
   );
 }
 
-/** Left intro pins while the right column scrolls; releases when the section ends. */
+/** Sticky split layout helper */
 export function RkpsStickySplitLayout({
   aside,
   main,
@@ -236,7 +340,6 @@ export function RkpsStickySplitLayout({
   aside: ReactNode;
   main: ReactNode;
   decoration?: ReactNode;
-  /** Extra classes on the sticky aside inner wrapper (e.g. viewport vertical centering). */
   asideWrapperClassName?: string;
 }) {
   return (
@@ -260,43 +363,40 @@ export function RkpsSectionGlow({ children }: { children: ReactNode }) {
   );
 }
 
-export function RkpsQuickJumpNav({ links }: { links: readonly { href: string; label: string }[] }) {
+/** Sticky in-page section shortcuts */
+export function RkpsQuickJumpNav({
+  links,
+}: {
+  links: readonly { href: string; label: string; highlight?: boolean }[];
+}) {
   return (
     <nav
-      className="sticky top-[4.25rem] z-30 hidden border-b border-border bg-surface/95 backdrop-blur-md lg:top-[4.5rem] lg:block"
+      className="sticky top-16 z-30 border-b border-border/70 bg-white/95 backdrop-blur-md shadow-[0_4px_20px_rgba(96,0,0,0.06)] sm:top-[4.5rem]"
       aria-label="Jump to section"
     >
-      <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-3 py-2.5 scrollbar-none sm:px-4 lg:px-5">
-        {links.map((link) => (
-          <a
-            key={link.href}
-            href={link.href}
-            className="shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold text-muted transition hover:bg-brand/10 hover:text-brand"
-          >
-            {link.label}
-          </a>
-        ))}
+      <div className="mx-auto max-w-7xl rkps-page-x py-3 sm:py-3.5">
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
+          <p className="shrink-0 text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-brand">On this page</p>
+          <div className="relative min-w-0 flex-1">
+            <div className="flex gap-2 overflow-x-auto pb-0.5 scrollbar-none sm:flex-wrap sm:overflow-visible">
+              {links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold transition sm:px-4 sm:py-2 ${
+                    link.highlight
+                      ? "bg-[var(--brand-maroon-dark)] text-white shadow-sm hover:bg-[var(--brand-maroon)]"
+                      : "border border-border/80 bg-[var(--surface-elevated)] text-heading hover:border-brand/35 hover:text-brand"
+                  }`}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
-  );
-}
-
-export function RkpsStatStrip({ stats }: { stats: readonly { label: string; value: string }[] }) {
-  return (
-    <dl className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-border bg-border sm:grid-cols-12">
-      {stats.map((stat, i) => (
-        <div
-          key={stat.label}
-          className={`bg-surface/90 px-4 py-4 text-left ${
-            i === 0 ? "sm:col-span-7" : i === 1 ? "sm:col-span-5" : i === 2 ? "sm:col-span-5" : "sm:col-span-7"
-          }`}
-        >
-          <dt className="sr-only">{stat.label}</dt>
-          <dd className="text-2xl font-bold tracking-tight text-brand tabular-nums">{stat.value}</dd>
-          <p className="mt-1 text-[0.625rem] font-semibold uppercase tracking-wide text-muted">{stat.label}</p>
-        </div>
-      ))}
-    </dl>
   );
 }
 
@@ -315,132 +415,26 @@ export function RkpsFeatureCard({
 }) {
   const inner = (
     <>
-      {tag ? <p className="rkps-tag">{tag}</p> : null}
-      <h3 className="rkps-display mt-3 text-lg font-semibold text-heading">{title}</h3>
-      <p className="mt-3 flex-1 text-sm leading-relaxed text-muted">{body}</p>
-      {cta ? <p className="rkps-btn-ghost mt-4 text-sm">{cta} ↗</p> : null}
+      {tag ? (
+        <span className="inline-flex w-fit items-center rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/15 px-3 py-0.5 text-[0.6875rem] font-bold uppercase tracking-wider text-brand">
+          {tag}
+        </span>
+      ) : null}
+      <h3 className="rkps-display mt-3 text-xl font-bold tracking-tight text-heading sm:text-2xl">{title}</h3>
+      <p className="mt-2.5 flex-1 text-sm leading-relaxed text-muted sm:text-base">{body}</p>
+      {cta ? <p className="mt-5 text-sm font-bold text-brand">{cta} ↗</p> : null}
     </>
   );
   const className =
-    "rkps-ease rkps-press rkps-feature-surface flex h-full flex-col rounded-[1.25rem] border border-border/80 bg-surface p-6 shadow-[var(--shadow-card)] hover:-translate-y-0.5 hover:border-brand/25 hover:shadow-[var(--shadow-card-hover)]";
+    "group flex h-full flex-col rounded-3xl border border-border/80 bg-white p-6 sm:p-8 shadow-sm transition hover:-translate-y-1 hover:border-brand/30 hover:shadow-md";
   if (href) {
     return (
-      <Link href={href} className={`group ${className}`}>
+      <Link href={href} className={className}>
         {inner}
       </Link>
     );
   }
   return <article className={className}>{inner}</article>;
-}
-
-export function RkpsContactSection({
-  id,
-  title,
-  subtitle,
-  lead,
-  detail,
-  visitBlurb,
-  visit,
-  phone,
-  email,
-  hours,
-  hoursNote,
-  reachOut,
-  campusPhoto,
-}: {
-  id: string;
-  title: string;
-  subtitle: string;
-  lead: string;
-  detail: string;
-  visitBlurb: string;
-  visit: string;
-  phone: string;
-  email: string;
-  hours: string;
-  hoursNote: string;
-  reachOut: readonly { title: string; body: string }[];
-  campusPhoto: Photo;
-}) {
-  const telHref = `tel:${phone.replace(/\s/g, "")}`;
-  const mailHref = `mailto:${email}`;
-
-  return (
-    <RkpsPageSection id={id} tone="paper">
-      <RkpsSectionIntro num="Contact" title={title} description={`${subtitle} ${lead}`} />
-      <p className="mt-4 max-w-none text-base leading-relaxed text-muted">{detail}</p>
-
-      <div className="mt-8 grid items-stretch gap-6 lg:grid-cols-12 lg:gap-8">
-        <figure className="relative min-h-[20rem] overflow-hidden rounded-[1.6rem] border border-white/10 shadow-[0_30px_55px_rgba(11,61,120,0.12)] sm:min-h-[24rem] lg:col-span-8 lg:min-h-[32rem]">
-          <img src={campusPhoto.src} alt={campusPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,31,59,0.2)_0%,rgba(8,31,59,0.62)_100%)]" aria-hidden />
-          <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8 lg:p-10">
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-gold)]">Visit the campus</p>
-            <p className="mt-3 max-w-2xl text-base leading-relaxed text-white/92 sm:text-lg">{visitBlurb}</p>
-            <p className="mt-4 text-sm font-semibold leading-relaxed text-white sm:text-base">{visit}</p>
-            <p className="mt-3 text-sm text-white/85">{hours}</p>
-            <p className="mt-2 text-sm leading-relaxed text-white/75">{hoursNote}</p>
-          </figcaption>
-        </figure>
-
-        <div className="flex flex-col gap-4 lg:col-span-4 lg:min-h-[32rem]">
-          <a
-            href={telHref}
-            className="rkps-ease rkps-press group flex flex-1 flex-col rounded-[1.4rem] border border-border/80 bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_38px_rgba(11,61,120,0.08)] backdrop-blur-sm hover:-translate-y-0.5 hover:border-brand/30"
-          >
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-brand">Call the office</p>
-            <p className="mt-3 text-xl font-semibold text-heading sm:text-2xl">{phone}</p>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-muted sm:text-base">
-              Admissions, campus visits, fee structure questions and day-to-day matters. If no one answers, leave a message and the office will call back during school hours.
-            </p>
-            <span className="mt-4 inline-flex text-sm font-semibold text-brand">Call now ↗</span>
-          </a>
-          <a
-            href={mailHref}
-            className="rkps-ease rkps-press group flex flex-1 flex-col rounded-[1.4rem] border border-border/80 bg-[rgba(255,255,255,0.82)] p-6 shadow-[0_18px_38px_rgba(11,61,120,0.08)] backdrop-blur-sm hover:-translate-y-0.5 hover:border-brand/30"
-          >
-            <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-brand">Write to us</p>
-            <p className="mt-3 break-all text-lg font-semibold text-heading sm:break-normal sm:text-xl">{email}</p>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-muted sm:text-base">
-              Email works well for documents, visit requests and questions that need a written reply. Include your phone number if you would like a call.
-            </p>
-            <span className="mt-4 inline-flex text-sm font-semibold text-brand">Send email ↗</span>
-          </a>
-          <div className="flex flex-col gap-4 rounded-[1.4rem] border border-brand/25 bg-[linear-gradient(135deg,#081f3b_0%,#0d2f5d_100%)] p-6 text-white shadow-[0_24px_44px_rgba(8,31,59,0.2)] sm:flex-row sm:items-center sm:justify-between">
-            <div className="max-w-sm">
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-gold)]">Plan a visit</p>
-              <p className="mt-2 text-sm leading-relaxed text-white/90 sm:text-base">
-                Prefer a form? Tell us your child&apos;s class, your questions and when you might visit — the admissions team will follow up.
-              </p>
-            </div>
-            <Link
-              href="/#enquiry"
-              className="rkps-ease rkps-press inline-flex shrink-0 justify-center rounded-lg bg-[var(--brand-gold)] px-5 py-2.5 text-sm font-bold text-[var(--brand-maroon-dark)] hover:brightness-105"
-            >
-              Send an enquiry
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      <ul className="mt-8 grid gap-4 sm:grid-cols-3">
-        {reachOut.map((item) => (
-          <li key={item.title} className="rounded-[1.25rem] border border-border/80 bg-[rgba(255,255,255,0.82)] p-5 shadow-[0_18px_35px_rgba(11,61,120,0.06)] backdrop-blur-sm sm:p-6">
-            <p className="text-sm font-bold text-heading">{item.title}</p>
-            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">{item.body}</p>
-          </li>
-        ))}
-      </ul>
-
-      <p className="mt-6 text-sm text-muted">
-        Day-to-day moments are on{" "}
-        <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className="font-semibold text-brand hover:underline">
-          @r.k.m.p.s
-        </a>
-        . For official dates and documents, always confirm with the school office.
-      </p>
-    </RkpsPageSection>
-  );
 }
 
 type JourneyStep = { num: string; title: string; body: string };
@@ -469,79 +463,61 @@ export function RkpsAdmissionsSection({
 }) {
   return (
     <RkpsPageSection id={id} tone="paper">
-      <RkpsSectionIntro num="Admissions" title={title} description={`${subtitle} ${lead}`} />
-      <nav className="mt-6 flex flex-wrap gap-2" aria-label="Admissions shortcuts">
-        <a
-          href="#enquiry"
-          className="rkps-ease rounded-full bg-[linear-gradient(135deg,#0b3d78,#1a5bb4)] px-4 py-1.5 text-xs font-bold text-white shadow-[0_12px_22px_rgba(11,61,120,0.18)] hover:brightness-105"
-        >
-          Start enquiry
-        </a>
-        <a
-          href="#faq"
-          className="rkps-ease rounded-full border border-border/80 bg-[rgba(255,255,255,0.7)] px-4 py-1.5 text-xs font-semibold text-brand hover:border-brand/30 hover:bg-brand/5"
-        >
-          FAQ
-        </a>
-        <Link
-          href="/#contact"
-          className="rkps-ease rounded-full border border-dashed border-border px-4 py-1.5 text-xs font-semibold text-heading hover:border-brand/30 hover:text-brand"
-        >
-          Plan a visit ↗
-        </Link>
-      </nav>
+      <div className="grid min-w-0 grid-cols-1 gap-10 lg:grid-cols-2 lg:items-stretch lg:gap-12">
+        {/* Left Column: Timeline + FAQ */}
+        <div className="flex min-h-0 flex-col gap-6 lg:h-full">
+          <RkpsSectionIntro num="Admissions 2026–27" title={title} description={`${subtitle} ${lead}`} />
 
-      <div className="mt-8 grid items-start gap-8 lg:grid-cols-12 lg:gap-10">
-        <div className="lg:col-span-5">
-          <ol className="rkps-stagger relative space-y-0">
-            {steps.map((s, i) => (
-              <li
-                key={s.num}
-                className={`relative pb-10 pl-14 last:pb-0 ${i === 1 ? "lg:pl-16" : i === 2 ? "lg:pl-12" : ""}`}
-                style={{ ["--rkps-i" as string]: i }}
-              >
-                {i < steps.length - 1 ? (
-                  <span className="absolute left-[1.0625rem] top-10 h-[calc(100%-1.5rem)] w-px bg-border" aria-hidden />
-                ) : null}
-                <span className="absolute left-0 top-0 flex h-9 w-9 items-center justify-center rounded-full border-2 border-brand/30 bg-[rgba(255,255,255,0.8)] text-[0.6875rem] font-bold text-brand shadow-sm">
+          {/* Steps Timeline */}
+          <ol className="relative space-y-6 border-l-2 border-brand/20 pl-6 ml-2">
+            {steps.map((s) => (
+              <li key={s.num} className="relative group">
+                <span className="absolute -left-[2.1rem] top-0 flex h-8 w-8 items-center justify-center rounded-full border-2 border-brand bg-white text-xs font-bold text-brand shadow-sm">
                   {s.num}
                 </span>
-                <p className="rkps-display text-base font-semibold text-heading">{s.title}</p>
-                <p className="mt-2 text-sm leading-relaxed text-muted">{s.body}</p>
+                <h3 className="rkps-display text-base font-bold text-heading sm:text-lg">{s.title}</h3>
+                <p className="mt-1 text-xs sm:text-sm leading-relaxed text-muted">{s.body}</p>
               </li>
             ))}
           </ol>
 
-          <figure className="rkps-ease mt-10 overflow-hidden rounded-[1.5rem] border border-white/10 shadow-[0_24px_44px_rgba(11,61,120,0.12)]">
-            <div className="relative aspect-[16/9] min-h-[9rem]">
-              <img src={accentPhoto.src} alt={accentPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,31,59,0.2)_0%,rgba(8,31,59,0.7)_100%)]" aria-hidden />
-              <figcaption className="absolute inset-0 flex flex-col justify-end p-5 text-white sm:p-6">
-                <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-[var(--brand-gold)]">School life</p>
-                <p className="mt-1 text-sm font-semibold leading-snug">See the campus before you decide.</p>
-              </figcaption>
-            </div>
+          {/* Accent Photo Banner */}
+          <figure className="relative min-h-[12rem] overflow-hidden rounded-3xl border border-white/20 shadow-md">
+            <img src={accentPhoto.src} alt={accentPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/60 to-transparent" />
+            <figcaption className="absolute inset-0 flex flex-col justify-end p-5 text-white">
+              <span className="text-[0.65rem] font-bold uppercase tracking-wider text-[var(--brand-gold)]">School Atmosphere</span>
+              <p className="mt-1 text-sm font-bold">Experience the campus community firsthand before enrolling.</p>
+            </figcaption>
           </figure>
 
-          <p className="mt-6 text-xs leading-relaxed text-muted">{disclaimer}</p>
-
-          <div id="faq" className="scroll-mt-28 mt-10">
-            <h3 className="text-base font-semibold text-heading">Here to help</h3>
-            <p className="mt-1 text-sm text-muted">Big decisions. Little questions.</p>
-            <div className="mt-4 overflow-hidden rounded-[1.25rem] border border-border/80 bg-[rgba(255,255,255,0.82)] divide-y divide-border">
+          {/* FAQ Section */}
+          <div id="faq" className="scroll-mt-28">
+            <h3 className="text-lg font-bold text-heading">Frequently Asked Questions</h3>
+            <p className="mt-1 text-xs text-muted">Clear answers for prospective families.</p>
+            <div className="mt-4 space-y-2.5">
               {faq.map((item) => (
-                <details key={item.q} className="group rkps-ease">
-                  <summary className="cursor-pointer list-none px-4 py-3.5 text-sm font-semibold text-heading transition hover:bg-[rgba(11,61,120,0.03)] [&::-webkit-details-marker]:hidden">
-                    {item.q}
+                <details
+                  key={item.q}
+                  className="group rounded-2xl border border-border/80 bg-[var(--surface-elevated)] p-4 transition open:bg-white open:shadow-sm"
+                >
+                  <summary className="cursor-pointer list-none flex items-center justify-between text-sm font-bold text-heading [&::-webkit-details-marker]:hidden">
+                    <span>{item.q}</span>
+                    <span className="ml-2 text-xs text-brand transition group-open:rotate-180">▼</span>
                   </summary>
-                  <p className="border-t border-border px-4 pb-4 pt-2 text-sm leading-relaxed text-muted">{item.a}</p>
+                  <p className="mt-3 border-t border-border/60 pt-3 text-xs leading-relaxed text-muted sm:text-sm">{item.a}</p>
                 </details>
               ))}
             </div>
           </div>
+
+          <p className="mt-auto border-t border-border/70 pt-4 text-xs leading-relaxed text-muted">{disclaimer}</p>
         </div>
 
-        <div className="rkps-split-aside lg:col-span-7">{form}</div>
+        {/* Right Column: Enquiry Form Card */}
+        <div className="flex min-h-0 flex-col lg:h-full">
+          <div className="flex h-full min-h-0 flex-col">{form}</div>
+        </div>
       </div>
     </RkpsPageSection>
   );
@@ -570,88 +546,65 @@ export function RkpsAboutSection({
 }) {
   return (
     <>
-      <section id={vision.id} className="scroll-mt-28 relative isolate overflow-hidden">
+      <section id={vision.id} className="scroll-mt-28 relative isolate overflow-hidden bg-[var(--brand-maroon-dark)] text-white">
         <div
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 z-0 bg-cover bg-center opacity-30"
           style={{ backgroundImage: "url('/marketing/vision-chalkboard-banner.png')" }}
           aria-hidden
         />
-        <div
-          className="absolute inset-0 z-[1] bg-black/55 lg:bg-black/45"
-          aria-hidden
-        />
-        <div className="relative z-[2] mx-auto max-w-7xl px-3 py-12 sm:px-4 sm:py-14">
-          <div className="rkps-stagger grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-14">
-            <div className="lg:col-span-7" style={{ ["--rkps-i" as string]: 0 }}>
-              <p className="text-[0.6875rem] font-bold uppercase tracking-[0.14em] text-[var(--brand-gold)]">About</p>
-              <p className="mt-4 text-lg font-semibold tracking-tight text-white sm:text-xl">{vision.kicker}</p>
-              <h2 className="mt-3 text-3xl font-bold leading-none tracking-tighter text-white sm:text-4xl lg:text-[2.5rem]">
+        <div className="absolute inset-0 z-[1] bg-gradient-to-r from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/90 to-[var(--brand-maroon-dark)]/70" aria-hidden />
+
+        <div className="relative z-[2] mx-auto max-w-7xl rkps-page-x py-16 sm:py-20 lg:py-24">
+          <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-14">
+            <div className="lg:col-span-7 space-y-4">
+              <span className="inline-flex rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)]">
+                Our Vision & Foundation
+              </span>
+              <p className="text-sm font-semibold text-[var(--brand-gold)] sm:text-base">{vision.kicker}</p>
+              <h2 className="rkps-display text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
                 {vision.title}
               </h2>
-              <p className="mt-3 text-xl font-bold tracking-tight text-[var(--brand-gold)] sm:text-2xl">{vision.subtitle}</p>
-              <p className="mt-6 max-w-[65ch] text-base leading-relaxed text-white/92">{vision.body}</p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <p className="text-lg font-bold text-white/95 sm:text-xl">{vision.subtitle}</p>
+              <p className="max-w-[65ch] text-sm leading-relaxed text-white/85 sm:text-base">{vision.body}</p>
+
+              <div className="flex flex-wrap gap-3 pt-2">
                 <Link
                   href={vision.href}
-                  className="rkps-ease rkps-press inline-flex items-center rounded-lg bg-[var(--brand-gold)] px-6 py-2.5 text-sm font-bold text-[var(--brand-maroon-dark)] shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] hover:brightness-105"
+                  className="rkps-btn-gold text-xs sm:text-sm"
                 >
                   {vision.cta} ↗
                 </Link>
                 <Link
                   href="/#academics"
-                  className="rkps-ease inline-flex items-center rounded-lg border border-white/25 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/15"
+                  className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white backdrop-blur-md hover:bg-white/20 transition"
                 >
-                  Learning journey
+                  Learning Journey ›
                 </Link>
               </div>
-              <nav className="mt-8 flex flex-wrap gap-2" aria-label="About shortcuts">
-                <a
-                  href={`#${values.id}`}
-                  className="rkps-ease rounded-full border border-white/20 bg-white/10 px-3.5 py-1.5 text-xs font-semibold text-white backdrop-blur-sm hover:bg-white/15"
-                >
-                  Our values
-                </a>
-                <Link
-                  href="/school-life/student-achievers"
-                  className="rkps-ease rounded-full border border-dashed border-white/25 px-3.5 py-1.5 text-xs font-semibold text-white/90 hover:border-white/40 hover:text-white"
-                >
-                  School life ↗
-                </Link>
-                <Link
-                  href="/#gallery"
-                  className="rkps-ease rounded-full border border-dashed border-white/25 px-3.5 py-1.5 text-xs font-semibold text-white/90 hover:border-white/40 hover:text-white"
-                >
-                  Campus gallery ↗
-                </Link>
-              </nav>
             </div>
 
-            <aside
-              className="lg:col-span-5 lg:pb-2"
-              style={{ ["--rkps-i" as string]: 1 }}
-              aria-label="School at a glance"
-            >
-              <div className="rkps-ease rounded-[1.25rem] border border-white/15 bg-white/10 p-6 shadow-[0_24px_48px_-20px_rgba(0,0,0,0.45)] backdrop-blur-md sm:p-8">
-                <p className="text-sm font-semibold italic text-[var(--brand-gold)]">{motto}</p>
-                <p className="mt-2 text-lg font-bold tracking-tight text-white">{schoolName}</p>
-                <ul className="mt-6 space-y-4 border-t border-white/15 pt-6 text-sm text-white/88">
-                  <li className="flex gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)]/20 text-[0.625rem] font-bold text-[var(--brand-gold)]">
+            <aside className="lg:col-span-5" aria-label="School at a glance">
+              <div className="rounded-3xl border border-white/20 bg-white/10 p-6 sm:p-8 backdrop-blur-lg shadow-2xl space-y-4">
+                <p className="text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)]">{motto}</p>
+                <p className="text-xl font-bold text-white">{schoolName}</p>
+                <ul className="space-y-3.5 border-t border-white/15 pt-4 text-xs sm:text-sm text-white/90">
+                  <li className="flex items-start gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)] text-[0.6875rem] font-black text-[var(--brand-maroon-dark)]">
                       01
                     </span>
-                    <span>Curious learners who ask thoughtful questions every day.</span>
+                    <span>Curious learners nurtured through thoughtful questions and hands-on inquiry every day.</span>
                   </li>
-                  <li className="flex gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)]/20 text-[0.625rem] font-bold text-[var(--brand-gold)]">
+                  <li className="flex items-start gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)] text-[0.6875rem] font-black text-[var(--brand-maroon-dark)]">
                       02
                     </span>
-                    <span>Warm corridors where character and kindness matter.</span>
+                    <span>An inclusive environment where character, empathy, and integrity take center stage.</span>
                   </li>
-                  <li className="flex gap-3">
-                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)]/20 text-[0.625rem] font-bold text-[var(--brand-gold)]">
+                  <li className="flex items-start gap-3">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-[var(--brand-gold)] text-[0.6875rem] font-black text-[var(--brand-maroon-dark)]">
                       03
                     </span>
-                    <span>A community that celebrates effort — not comparison.</span>
+                    <span>A dedicated educator team celebrating individual effort and meaningful progress.</span>
                   </li>
                 </ul>
               </div>
@@ -660,49 +613,60 @@ export function RkpsAboutSection({
         </div>
       </section>
 
+      {/* Values Section */}
       <RkpsPageSection id={values.id} tone="paper">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <RkpsSectionIntro
-            num="Our values"
+            num="Core Principles"
             title="Small moments. Meaningful beginnings."
-            description="What guides every classroom, corridor and conversation at RMPS."
+            description="What guides every classroom, corridor, and conversation at RMPS."
           />
-          <div className="flex shrink-0 flex-wrap gap-3">
-            <Link href="/#academics" className="btn-primary rkps-ease rkps-press px-6 py-2.5">
-              Explore academics
+          <div className="flex shrink-0 flex-wrap gap-2.5">
+            <Link href="/#academics" className="rkps-btn-navy text-xs sm:text-sm">
+              Explore Academics
             </Link>
-            <Link href="/#admissions" className="btn-secondary rkps-ease rkps-press px-6 py-2.5">
-              Admission enquiry
+            <Link href="/#admissions" className="rkps-btn-gold text-xs sm:text-sm">
+              Admission Enquiry
             </Link>
           </div>
         </div>
-        <p className="mt-5 max-w-xl border-l-2 border-[var(--brand-gold)] pl-4 text-sm font-semibold italic leading-snug text-brand">
-          {values.kicker}
-        </p>
-        <ol className="rkps-stagger mt-8 grid gap-4 md:grid-cols-3">
+
+        <ol className="mt-8 grid gap-5 md:grid-cols-3">
           {values.items.map((v, i) => {
             const isFeatured = i === values.items.length - 1;
             return (
-              <li key={v.title} style={{ ["--rkps-i" as string]: i }}>
+              <li key={v.title}>
                 <article
-                  className={`flex h-full flex-col rounded-[1.25rem] border p-5 sm:p-6 ${
+                  className={`flex h-full flex-col justify-between rounded-3xl border p-6 sm:p-8 transition duration-300 hover:-translate-y-1 ${
                     isFeatured
-                      ? "border-brand/30 bg-brand text-white"
-                      : "border-border/80 bg-surface"
+                      ? "border-[var(--brand-gold)]/40 bg-gradient-to-br from-[var(--brand-maroon-dark)] to-[var(--brand-maroon)] text-white shadow-xl"
+                      : "border-border/80 bg-[var(--surface-elevated)] text-heading shadow-sm hover:border-brand/30"
                   }`}
                 >
-                  <span
-                    className={`flex h-10 w-10 items-center justify-center rounded-xl text-sm font-bold ${
-                      isFeatured ? "bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)]" : "bg-brand/10 text-brand"
-                    }`}
-                  >
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <p className={`mt-4 text-[0.6875rem] font-bold uppercase tracking-[0.12em] ${isFeatured ? "text-[var(--brand-gold)]" : "text-brand"}`}>
-                    {i === 0 ? "Curiosity" : i === 1 ? "Character" : "Every child"}
-                  </p>
-                  <h3 className={`rkps-display mt-2 text-xl font-semibold ${isFeatured ? "text-white" : "text-heading"}`}>{v.title}</h3>
-                  <p className={`mt-3 flex-1 text-sm leading-relaxed ${isFeatured ? "text-white/90" : "text-muted"}`}>{v.body}</p>
+                  <div>
+                    <span
+                      className={`flex h-10 w-10 items-center justify-center rounded-2xl text-xs font-black ${
+                        isFeatured ? "bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)]" : "bg-brand/10 text-brand"
+                      }`}
+                    >
+                      0{i + 1}
+                    </span>
+                    <p className={`mt-4 text-xs font-bold uppercase tracking-wider ${
+                      isFeatured ? "text-[var(--brand-gold)]" : "text-brand"
+                    }`}>
+                      {i === 0 ? "Inquiry" : i === 1 ? "Character" : "Growth"}
+                    </p>
+                    <h3 className={`rkps-display mt-1 text-xl font-bold tracking-tight ${
+                      isFeatured ? "text-white" : "text-heading"
+                    }`}>
+                      {v.title}
+                    </h3>
+                    <p className={`mt-2.5 text-sm leading-relaxed ${
+                      isFeatured ? "text-white/85" : "text-muted"
+                    }`}>
+                      {v.body}
+                    </p>
+                  </div>
                 </article>
               </li>
             );
@@ -739,62 +703,73 @@ export function RkpsNoticeboardSection({
   return (
     <RkpsPageSection id={id} tone="paper">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <RkpsSectionIntro num="Noticeboard" title={title} description={subtitle} />
+        <RkpsSectionIntro num="Official Noticeboard" title={title} description={subtitle} />
         <nav className="flex shrink-0 flex-wrap gap-2" aria-label="Noticeboard shortcuts">
           <Link
             href="/login"
-            className="rkps-ease rkps-press rounded-full bg-brand px-4 py-1.5 text-xs font-bold text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)] hover:brightness-105"
+            className="rkps-btn-navy text-xs"
           >
-            Portal login
+            Portal Login
           </Link>
           <Link
             href="/school-life/events"
-            className="rkps-ease rounded-full border border-border/80 bg-surface px-4 py-1.5 text-xs font-semibold text-brand hover:border-brand/30 hover:bg-brand/5"
+            className="rounded-full border border-border/80 bg-white px-4 py-2 text-xs font-semibold text-brand hover:border-brand/40 hover:bg-brand/5 transition"
           >
-            Events ↗
-          </Link>
-          <Link
-            href="/#contact"
-            className="rkps-ease rounded-full border border-dashed border-border px-4 py-1.5 text-xs font-semibold text-heading hover:border-brand/30 hover:text-brand"
-          >
-            Call the office ↗
+            Events Calendar ↗
           </Link>
         </nav>
       </div>
-      <p className="mt-4 max-w-3xl text-xs leading-relaxed text-muted">{emptyNote}</p>
-      <div className="rkps-stagger mt-6 grid gap-4 lg:grid-cols-12 lg:items-start">
-          {featured ? (
-            <article
-              className="rkps-ease rkps-feature-surface rounded-[1.25rem] border border-brand/20 bg-surface p-6 shadow-[var(--rkps-shadow-diffuse,var(--shadow-card))] lg:col-span-7 lg:p-8"
-              style={{ ["--rkps-i" as string]: 0 }}
-            >
-              <p className="text-[0.6875rem] font-bold uppercase tracking-wide text-brand">Latest update</p>
-              <time dateTime={featured.date} className="mt-3 block text-xs tabular-nums text-muted">
+
+      <div className="mt-8 grid gap-6 lg:grid-cols-12 lg:items-start">
+        {featured ? (
+          <article className="rounded-3xl border border-brand/20 bg-gradient-to-br from-white to-[#f4f8fe] p-6 sm:p-8 shadow-md lg:col-span-7 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-red-100 px-3 py-1 text-xs font-bold uppercase tracking-wider text-red-700">
+                <span className="h-1.5 w-1.5 rounded-full bg-red-600 animate-ping" />
+                Latest Circular
+              </span>
+              <time dateTime={featured.date} className="text-xs font-semibold text-muted">
                 {formatNoticeDate(featured.date)}
               </time>
-              <h3 className="rkps-display mt-2 text-xl font-semibold leading-snug text-heading sm:text-2xl">{featured.title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-muted">{featured.excerpt}</p>
-            </article>
-          ) : null}
-
-          <ul
-            className={`grid gap-3 ${featured ? "lg:col-span-5 lg:col-start-8 lg:row-start-1" : "lg:col-span-12"}`}
-          >
-            {rest.map((n, i) => (
-              <li
-                key={n.id}
-                className="rkps-ease rounded-[1.25rem] border border-border/80 bg-surface/90 px-5 py-4 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/25 hover:shadow-[var(--shadow-card)]"
-                style={{ ["--rkps-i" as string]: i + 1 }}
+            </div>
+            <h3 className="rkps-display text-xl font-bold tracking-tight text-heading sm:text-2xl">
+              {featured.title}
+            </h3>
+            <p className="text-sm leading-relaxed text-muted sm:text-base">
+              {featured.excerpt}
+            </p>
+            <div className="pt-2">
+              <Link
+                href="/login"
+                className="inline-flex items-center gap-1 text-xs font-bold text-brand hover:underline"
               >
-                <time dateTime={n.date} className="text-xs tabular-nums text-muted">
+                <span>Read Full Document in Portal</span>
+                <span>→</span>
+              </Link>
+            </div>
+          </article>
+        ) : null}
+
+        <ul className={`space-y-3 ${featured ? "lg:col-span-5" : "lg:col-span-12"}`}>
+          {rest.map((n) => (
+            <li
+              key={n.id}
+              className="rounded-2xl border border-border/80 bg-white p-4 sm:p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/30 hover:shadow"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-[0.6875rem] font-bold uppercase tracking-wider text-brand">Announcement</span>
+                <time dateTime={n.date} className="text-xs text-muted">
                   {formatNoticeDate(n.date)}
                 </time>
-                <p className="mt-1 font-semibold text-heading">{n.title}</p>
-                <p className="mt-1 line-clamp-2 text-sm leading-relaxed text-muted">{n.excerpt}</p>
-              </li>
-            ))}
-          </ul>
+              </div>
+              <p className="mt-1 font-bold text-heading text-sm sm:text-base">{n.title}</p>
+              <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-muted">{n.excerpt}</p>
+            </li>
+          ))}
+        </ul>
       </div>
+
+      <p className="mt-6 text-xs text-muted leading-relaxed">{emptyNote}</p>
     </RkpsPageSection>
   );
 }

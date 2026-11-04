@@ -62,8 +62,7 @@ export function LoginScreen() {
               </div>
             ))}
           </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-neutral-950/55 via-neutral-900/45 to-neutral-950/65" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,rgba(255,255,255,0.06),transparent_55%)]" />
+          <div className="absolute inset-0 bg-neutral-950/55" />
         </div>
 
         <header className="relative z-10 flex items-center justify-between lg:absolute lg:inset-x-0 lg:top-0 lg:px-10 lg:pt-8">

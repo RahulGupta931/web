@@ -13,56 +13,45 @@ import {
   RKPS_VALUES,
   RKPS_VISION,
 } from "@/content/website/rkps-copy";
-import { FACILITIES, LATEST_NEWS, SCHOOL_STATS, STUDENT_LIFE, WHY_US } from "@/content/website/public-site";
+import { FACILITIES, LATEST_NEWS, WHY_US } from "@/content/website/public-site";
 import { INSTAGRAM_PHOTOS, INSTAGRAM_PROFILE, INSTAGRAM_REELS, instagramPhoto } from "@/content/website/instagram-media";
 import { BRAND } from "@/config/branding";
 import { RkpsEnquiryForm } from "@/components/marketing/rkps/rkps-enquiry-form";
 import { RkpsGallerySection } from "@/components/marketing/rkps/rkps-gallery-section";
 import { RkpsLearningJourneySection } from "@/components/marketing/rkps/rkps-learning-journey-section";
 import { RkpsRecognitionSection } from "@/components/marketing/rkps/rkps-recognition-section";
+import { RkpsContactSection } from "@/components/marketing/rkps/rkps-contact-section";
+import { RkpsSchoolLifeSection } from "@/components/marketing/rkps/rkps-school-life-section";
 import { RkpsParentResourcesSection } from "@/components/marketing/rkps/rkps-parent-resources-section";
 import { RkpsParentReviews } from "@/components/marketing/rkps/rkps-parent-reviews";
-import { RkpsTopStudentsSection } from "@/components/marketing/rkps/rkps-top-students-section";
 import { RkpsFooter, RkpsHeader } from "@/components/marketing/rkps/rkps-shell";
-import { RkpsCinematicHero, RkpsCountValue, RkpsHighlightBanner, RkpsSpotlightCarousel, RkpsStoryRail } from "@/components/marketing/rkps/rkps-motion-sections";
+import { RkpsMotionBanner } from "@/components/marketing/rkps/rkps-motion-banner";
+import { RkpsCinematicHero, RkpsHighlightBanner, RkpsSpotlightCarousel, RkpsStoryRail } from "@/components/marketing/rkps/rkps-motion-sections";
 import {
   RkpsAboutSection,
   RkpsAdmissionsSection,
-  RkpsContactSection,
   RkpsNoticeboardSection,
   RkpsPathwayCards,
   RkpsQuickJumpNav,
+  RkpsSectionIntro,
 } from "@/components/marketing/rkps/rkps-marketing-blocks";
-
-/* -------------------------------------------------------------------------- */
-/*  Design tokens                                                             */
-/*  Page rhythm: dark maroon (hero) → warm tint ↔ rose tint → dark (campus)   */
-/*  → gold (visit banner) → tints → dark (portal). White is reserved for      */
-/*  cards and panels so it reads as a surface, not as the page itself.        */
-/*  Tints are mixed from the brand tokens, so they follow any palette change. */
-/* -------------------------------------------------------------------------- */
+import { RkpsHeroBridge } from "@/components/marketing/rkps/rkps-hero-bridge";
 
 type Tone = "warm" | "rose" | "dark";
 
 const TONE_CLASS: Record<Tone, string> = {
-  warm: "bg-[linear-gradient(180deg,#edf5ff_0%,#f8fbff_100%)] text-heading",
-  rose: "bg-[linear-gradient(180deg,#f8fbff_0%,#edf4ff_100%)] text-heading",
-  dark: "bg-[linear-gradient(180deg,#081f3b_0%,#0d2c52_100%)] text-white",
+  warm: "bg-[var(--surface-muted)] text-heading",
+  rose: "bg-[var(--surface-elevated)] text-heading",
+  dark: "bg-[var(--brand-maroon-dark)] text-white",
 };
-
-const FOCUS_GOLD = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-gold)]";
-const FOCUS_MAROON = "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--brand-maroon-dark)]";
-const BTN_BASE = "rkps-ease rkps-press inline-flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold";
-
-const BTN_GOLD = `${BTN_BASE} ${FOCUS_GOLD} bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)] hover:brightness-105`;
-const BTN_MAROON = `${BTN_BASE} ${FOCUS_MAROON} bg-[var(--brand-maroon-dark)] text-white hover:brightness-125`;
-const BTN_OUTLINE_MAROON = `${BTN_BASE} ${FOCUS_MAROON} border-2 border-[var(--brand-maroon-dark)]/40 text-[var(--brand-maroon-dark)] hover:bg-[var(--brand-maroon-dark)]/10`;
 
 type Photo = { src: string; alt?: string };
 
-/* -------------------------------------------------------------------------- */
-/*  Icons (inline, no extra dependency)                                       */
-/* -------------------------------------------------------------------------- */
+const EXPLORE_PATHWAY_PHOTOS: Photo[] = [
+  instagramPhoto("campus-4.jpg"),
+  instagramPhoto("campus-28.jpg"),
+  instagramPhoto("campus-7.jpg"),
+];
 
 type IconName = "arrow" | "check" | "instagram" | "cap" | "lock" | "attendance" | "clock" | "exam" | "bell";
 
@@ -137,212 +126,68 @@ function Icon({ name, className = "h-5 w-5" }: { name: IconName; className?: str
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Layout helpers                                                            */
-/* -------------------------------------------------------------------------- */
-
-/** Full-width coloured band with a consistent content container. */
 function Band({ id, tone, children }: { id?: string; tone: Tone; children: ReactNode }) {
   return (
-    <section id={id} className={`scroll-mt-24 ${TONE_CLASS[tone]}`}>
-      <div className="mx-auto max-w-7xl px-3 py-12 sm:px-4 sm:py-16 lg:py-20">{children}</div>
+    <section id={id} className={`scroll-mt-28 ${TONE_CLASS[tone]}`}>
+      <div className="mx-auto max-w-7xl rkps-page-x py-14 sm:py-20 lg:py-24">{children}</div>
     </section>
   );
 }
 
-/**
- * Tints the page behind an existing block. It shows wherever the block does not
- * paint its own background — see the note about rkps-marketing-blocks.
- */
 function Tint({ tone, children }: { tone: Exclude<Tone, "dark">; children: ReactNode }) {
   return <div className={TONE_CLASS[tone]}>{children}</div>;
 }
-
-function SectionHead({
-  title,
-  description,
-  action,
-  dark = false,
-}: {
-  title: string;
-  description?: string;
-  action?: ReactNode;
-  dark?: boolean;
-}) {
-  return (
-    <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-      <div className="max-w-2xl">
-        <h2 className={`text-2xl font-bold leading-tight tracking-tight sm:text-3xl md:text-4xl ${dark ? "text-white" : "text-heading"}`}>
-          {title}
-        </h2>
-        <span aria-hidden className="mt-4 block h-1 w-12 rounded-full bg-[var(--brand-gold)]" />
-        {description ? (
-          <p className={`mt-4 max-w-[60ch] text-base leading-relaxed ${dark ? "text-white/75" : "text-muted"}`}>{description}</p>
-        ) : null}
-      </div>
-      {action}
-    </header>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Hero + stats                                                              */
-/* -------------------------------------------------------------------------- */
-
-/** One continuous panel that overlaps the hero, instead of a row of separate cards. */
-function StatsPanel() {
-  return (
-    <section aria-label="School at a glance" className="relative z-10 -mt-6 px-3 sm:-mt-8 sm:px-4">
-      <dl className="mx-auto grid max-w-7xl grid-cols-2 gap-3 rounded-[1.5rem] bg-white/60 p-2 shadow-[0_20px_44px_rgba(11,61,120,0.12)] backdrop-blur-sm lg:grid-cols-4">
-        {SCHOOL_STATS.map((stat) => (
-          <div key={stat.label} className="rounded-[1rem] border border-[rgba(11,61,120,0.08)] bg-[linear-gradient(180deg,#ffffff_0%,#f5f9ff_100%)] px-3 py-4 shadow-[0_12px_22px_rgba(11,61,120,0.04)] transition hover:-translate-y-0.5 hover:shadow-[0_16px_26px_rgba(11,61,120,0.08)] sm:px-6 sm:py-6 md:px-8 md:py-7">
-            <dt className="text-2xl font-bold tracking-tight text-brand tabular-nums sm:text-3xl md:text-4xl">
-              <RkpsCountValue value={stat.value} />
-            </dt>
-            <dd className="mt-1 text-xs font-medium leading-snug text-muted sm:text-sm">{stat.label}</dd>
-          </div>
-        ))}
-      </dl>
-    </section>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  School life                                                               */
-/* -------------------------------------------------------------------------- */
-
-function FeatureCard({
-  href,
-  photo,
-  badge,
-  title,
-  kicker,
-  body,
-  cta,
-  className = "",
-}: {
-  href: string;
-  photo: Photo;
-  badge: string;
-  title: string;
-  kicker: string;
-  body: string;
-  cta: string;
-  className?: string;
-}) {
-  return (
-    <Link
-      href={href}
-      className={`group relative isolate flex min-h-[24rem] flex-col justify-between overflow-hidden rounded-2xl p-6 text-white sm:min-h-[28rem] sm:p-8 ${FOCUS_MAROON} ${className}`}
-    >
-      <img
-        src={photo.src}
-        alt={photo.alt ?? ""}
-        loading="lazy"
-        className="absolute inset-0 -z-10 h-full w-full object-cover duration-700 motion-safe:transition-transform motion-safe:group-hover:scale-105"
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10 bg-[var(--brand-maroon-dark)]/70"
-      />
-      <span className="self-start rounded-full bg-[var(--brand-gold)] px-3 py-1 text-xs font-bold text-[var(--brand-maroon-dark)]">{badge}</span>
-      <div>
-        <h3 className="text-2xl font-bold leading-tight tracking-tight sm:text-[1.75rem]">{title}</h3>
-        <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/85">
-          <span className="font-semibold text-[var(--brand-gold)]">{kicker}.</span> {body}
-        </p>
-        <span className="mt-4 inline-flex items-center gap-2 text-sm font-bold text-[var(--brand-gold)]">
-          {cta}
-          <Icon name="arrow" className="h-4 w-4 duration-200 motion-safe:transition-transform motion-safe:group-hover:translate-x-1" />
-        </span>
-      </div>
-    </Link>
-  );
-}
-
-function SchoolLifeSection() {
-  return (
-    <Band id="school-life" tone="warm">
-      <SectionHead
-        title="See learners in action"
-        description="Stories and celebrations from @r.k.m.p.s. Confirm details with the school office."
-      />
-      <div className="mt-10 grid gap-5 lg:grid-cols-12">
-        <FeatureCard
-          className="lg:col-span-7"
-          href="/school-life/student-achievers"
-          photo={instagramPhoto("campus-28.jpg")}
-          badge="Student achievers"
-          title="Every learner, their own kind of remarkable"
-          kicker="Recognition without rankings"
-          body="Explore growth in academics, sport, creativity and service. Galleries and stories are added after school confirmation."
-          cta="Visit student achievers"
-        />
-        <FeatureCard
-          className="lg:col-span-5"
-          href="/school-life/events"
-          photo={instagramPhoto("campus-5.jpg")}
-          badge="Events & calendar"
-          title="Programmes, festivals and celebrations"
-          kicker="Together in different ways"
-          body="Browse highlights from learning days, sports and cultural events. This site mirrors Instagram, not a live calendar."
-          cta="Browse events"
-        />
-      </div>
-      <ul className="mt-5 grid gap-5 rounded-[1.5rem] border border-brand/10 bg-[linear-gradient(180deg,#ffffff_0%,#f3f8ff_100%)] p-5 shadow-[0_22px_45px_rgba(11,61,120,0.08)] sm:grid-cols-3 sm:p-8">
-        {STUDENT_LIFE.map((item) => (
-          <li key={item.title} className="rounded-[1.1rem] border border-[rgba(11,61,120,0.08)] bg-white/80 p-4 shadow-[0_10px_22px_rgba(11,61,120,0.04)]">
-            <div className="flex items-center gap-3">
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[var(--brand-gold)]/20 text-[var(--brand-maroon-dark)]">
-                <span className="h-2.5 w-2.5 rounded-full bg-[var(--brand-gold)]" aria-hidden />
-              </span>
-              <p className="text-base font-semibold text-heading">{item.title}</p>
-            </div>
-            <p className="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
-          </li>
-        ))}
-      </ul>
-    </Band>
-  );
-}
-
-/* -------------------------------------------------------------------------- */
-/*  Campus                                                                    */
-/* -------------------------------------------------------------------------- */
 
 function CampusSection() {
   const photos: Photo[] = INSTAGRAM_PHOTOS.slice(1, 4);
 
   return (
     <Band id={RKPS_DISCOVER.id} tone="dark">
-      <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
-        <div className="lg:col-span-5">
-          <SectionHead dark title={RKPS_DISCOVER.title} description={`${RKPS_DISCOVER.subtitle} ${RKPS_DISCOVER.lead}`} />
-          <ul className="mt-8 grid gap-x-8 sm:grid-cols-2">
+      <div className="grid gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
+        <div className="lg:col-span-5 space-y-4">
+          <RkpsSectionIntro
+            dark
+            num="World-Class Infrastructure"
+            title={RKPS_DISCOVER.title}
+            description={`${RKPS_DISCOVER.subtitle} ${RKPS_DISCOVER.lead}`}
+          />
+          <ul className="grid gap-x-6 gap-y-2 sm:grid-cols-2 pt-2">
             {FACILITIES.map((item) => (
-              <li key={item} className="flex items-center gap-3 border-t border-white/15 py-3 text-sm font-medium text-white/90">
-                <Icon name="check" className="h-4 w-4 shrink-0 text-[var(--brand-gold)]" />
-                {item}
+              <li key={item} className="flex items-center gap-2.5 border-t border-white/10 py-2.5 text-xs sm:text-sm font-medium text-white/90">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-[var(--brand-gold)]/20 text-[var(--brand-gold)] shrink-0">
+                  <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <polyline points="20 6 9 17 4 12" />
+                  </svg>
+                </span>
+                <span>{item}</span>
               </li>
             ))}
           </ul>
-          <Link href="/#contact" className={`${BTN_GOLD} mt-8`}>
-            {RKPS_DISCOVER.cta}
-          </Link>
+          <div className="pt-2">
+            <Link href="/#contact" className="rkps-btn-gold text-xs sm:text-sm">
+              {RKPS_DISCOVER.cta} ↗
+            </Link>
+          </div>
         </div>
 
-        <div className="rkps-stagger grid h-[32rem] grid-cols-2 grid-rows-2 gap-3 sm:h-[36rem] lg:col-span-7">
+        <div className="grid h-[28rem] grid-cols-2 grid-rows-2 gap-3 sm:h-[34rem] lg:col-span-7">
           {photos.map((photo, i) => (
             <figure
               key={photo.src}
-              className={`group relative overflow-hidden rounded-[1.5rem] border border-white/10 bg-white/5 shadow-[0_20px_40px_rgba(0,0,0,0.18)] ${i === 0 ? "row-span-2" : ""}`}
-              style={{ ["--rkps-i" as string]: i }}
+              className={`group relative overflow-hidden rounded-3xl border border-white/15 bg-white/5 shadow-2xl ${
+                i === 0 ? "row-span-2" : ""
+              }`}
             >
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(8,31,59,0.04),rgba(8,31,59,0.56))] opacity-80 transition duration-500 group-hover:opacity-100" aria-hidden />
-              <img src={photo.src} alt={photo.alt ?? ""} loading="lazy" className="h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]" />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent_0%,rgba(8,31,59,0.9)_100%)] p-4 pt-14">
+              <img
+                src={photo.src}
+                alt={photo.alt ?? ""}
+                loading="lazy"
+                className="h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/60 to-transparent" />
+              <figcaption className="absolute inset-x-0 bottom-0 p-4 sm:p-5">
                 <p className="text-sm font-bold text-[var(--brand-gold)]">{RKPS_DISCOVER.spaces[i]?.title}</p>
-                <p className="mt-0.5 line-clamp-2 text-sm leading-snug text-white/90">{RKPS_DISCOVER.spaces[i]?.body ?? photo.alt}</p>
+                <p className="mt-1 line-clamp-2 text-xs leading-snug text-white/90">{RKPS_DISCOVER.spaces[i]?.body ?? photo.alt}</p>
               </figcaption>
             </figure>
           ))}
@@ -352,27 +197,33 @@ function CampusSection() {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Visit banner                                                              */
-/* -------------------------------------------------------------------------- */
-
 function VisitBanner() {
   return (
-    <section aria-label="Visit RMPS" className="relative overflow-hidden bg-[linear-gradient(135deg,#f3c867_0%,#e7b94a_40%,#d9a741_100%)] text-[var(--brand-maroon-dark)]">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.45),transparent_26%)]" aria-hidden />
-      <div className="relative mx-auto flex max-w-7xl flex-col gap-6 px-3 py-10 sm:px-4 sm:py-12 md:flex-row md:items-center md:justify-between">
-        <div className="max-w-2xl">
-          <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">See RMPS for yourself</h2>
-          <p className="mt-2 text-base leading-relaxed text-[var(--brand-maroon-dark)]/80">
-            Walk the campus, meet the team and ask your questions. Send an enquiry or get in touch with the school office.
+    <section aria-label="Visit RMPS" className="relative overflow-hidden bg-gradient-to-r from-[var(--brand-gold)] via-[var(--brand-gold)] to-[var(--brand-gold-muted)] text-[var(--brand-maroon-dark)] py-12 sm:py-16">
+      <div className="mx-auto flex max-w-7xl flex-col gap-6 rkps-page-x md:flex-row md:items-center md:justify-between">
+        <div className="max-w-2xl space-y-1.5">
+          <span className="inline-flex rounded-full bg-[var(--brand-maroon-dark)]/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-maroon-dark)]">
+            Experience Campus Life
+          </span>
+          <h2 className="text-2xl font-black tracking-tight sm:text-3xl md:text-4xl text-[var(--brand-maroon-dark)]">
+            See RMPS for yourself
+          </h2>
+          <p className="text-sm leading-relaxed text-[var(--brand-maroon-dark)]/85 sm:text-base">
+            Walk our campus corridors, explore modern laboratory spaces, meet the faculty, and have your admissions questions answered in person.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
-          <Link href="/#admissions" className={`${BTN_MAROON} shadow-[0_14px_30px_rgba(8,31,59,0.25)]`}>
-            Start an enquiry
+          <Link
+            href="/#admissions"
+            className="rkps-btn-navy text-xs sm:text-sm shadow-xl"
+          >
+            Start an Enquiry ↗
           </Link>
-          <Link href="/#contact" className={`${BTN_OUTLINE_MAROON} bg-white/25 backdrop-blur-sm`}>
-            Plan a visit
+          <Link
+            href="/#contact"
+            className="inline-flex items-center justify-center rounded-full border-2 border-[var(--brand-maroon-dark)]/30 bg-white/30 px-5 py-2.5 text-xs sm:text-sm font-bold text-[var(--brand-maroon-dark)] backdrop-blur-sm transition hover:bg-white/50 active:scale-95"
+          >
+            Plan a Visit ›
           </Link>
         </div>
       </div>
@@ -380,128 +231,175 @@ function VisitBanner() {
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Instagram                                                                 */
-/* -------------------------------------------------------------------------- */
-
 function InstagramSection() {
   return (
     <Band id="instagram" tone="rose">
-      <div className="grid gap-8 lg:grid-cols-12">
-        <aside className="self-start rounded-2xl bg-[var(--brand-maroon-dark)] p-7 text-white lg:sticky lg:top-24 lg:col-span-4">
-          <span className="grid h-12 w-12 place-items-center rounded-xl bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)]">
-            <Icon name="instagram" className="h-6 w-6" />
-          </span>
-          <h2 className="mt-5 text-3xl font-bold tracking-tight">From our Instagram</h2>
-          <span aria-hidden className="mt-4 block h-1 w-12 rounded-full bg-[var(--brand-gold)]" />
-          <p className="mt-4 text-sm leading-relaxed text-white/75">Recent reels from @r.k.m.p.s. Video plays on Instagram’s embed.</p>
-          <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className={`${BTN_GOLD} mt-6 w-full`}>
-            Open profile
+      <RkpsSectionIntro
+        num="Social Community & Live Feed"
+        title="Live moments from our Instagram community"
+        description="Watch recent video reels, festival celebrations, and student spotlights straight from @r.k.m.p.s."
+        action={
+          <a
+            href={INSTAGRAM_PROFILE}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-white px-4 py-2 text-xs font-bold text-brand shadow-sm transition hover:bg-brand hover:text-white"
+          >
+            <span>View Instagram Profile</span>
+            <span>↗</span>
           </a>
+        }
+      />
+      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:items-stretch">
+        <aside className="flex min-h-[22rem] flex-col justify-between rounded-3xl bg-[var(--brand-maroon-dark)] p-6 text-white shadow-xl sm:col-span-2 sm:p-8 lg:col-span-1">
+          <div>
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)] shadow-md">
+              <Icon name="instagram" className="h-6 w-6" />
+            </span>
+            <h2 className="mt-5 text-2xl font-bold tracking-tight sm:text-3xl">From Our Instagram</h2>
+            <span aria-hidden className="mt-3 block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" />
+            <p className="mt-3 text-sm leading-relaxed text-white/80">
+              Watch recent video reels and photo stories from @r.k.m.p.s capturing life in full swing on our campus.
+            </p>
+          </div>
+          <div className="pt-6">
+            <a
+              href={INSTAGRAM_PROFILE}
+              target="_blank"
+              rel="noreferrer"
+              className="rkps-btn-gold w-full text-center text-xs sm:text-sm"
+            >
+              Follow @r.k.m.p.s ↗
+            </a>
+          </div>
         </aside>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:col-span-8">
-          {INSTAGRAM_REELS.map((reel) => (
-            <figure key={reel.id} className="overflow-hidden rounded-xl border border-brand/15 bg-white">
+        {INSTAGRAM_REELS.map((reel) => (
+          <figure
+            key={reel.id}
+            className="flex min-h-[22rem] flex-col overflow-hidden rounded-3xl border border-border/80 bg-white shadow-sm sm:min-h-0 lg:h-full"
+          >
+            <div className="relative min-h-[20rem] flex-1 sm:min-h-[22rem] lg:min-h-0">
               <iframe
                 title={reel.title}
                 src={`https://www.instagram.com/reel/${reel.id}/embed`}
-                className="min-h-[22rem] w-full bg-white sm:min-h-[26rem]"
+                className="absolute inset-0 h-full w-full bg-white"
                 loading="lazy"
                 allow="encrypted-media"
               />
-              <figcaption className="flex items-center justify-between gap-3 border-t border-brand/10 px-4 py-3">
-                <p className="text-sm font-semibold text-heading">{reel.title}</p>
-                <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className="shrink-0 text-xs font-semibold text-brand hover:underline">
-                  Watch on Instagram
-                </a>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+            </div>
+            <figcaption className="flex shrink-0 items-center justify-between gap-3 border-t border-border/70 p-4">
+              <p className="text-xs font-bold text-heading sm:text-sm">{reel.title}</p>
+              <a
+                href={INSTAGRAM_PROFILE}
+                target="_blank"
+                rel="noreferrer"
+                className="shrink-0 text-xs font-bold text-brand hover:underline"
+              >
+                Watch ↗
+              </a>
+            </figcaption>
+          </figure>
+        ))}
       </div>
     </Band>
   );
 }
 
-/* -------------------------------------------------------------------------- */
-/*  Portal                                                                    */
-/* -------------------------------------------------------------------------- */
-
 const PORTAL_FEATURES: { icon: IconName; label: string; body: string }[] = [
   {
     icon: "attendance",
-    label: "Attendance",
-    body: "Teachers mark each section present, absent, late, half-day or on leave. Students open their own record. The principal can see the school for the day.",
+    label: "Daily Attendance Tracker",
+    body: "Teachers record class check-ins. Students and parents view real-time monthly attendance metrics anytime.",
   },
   {
     icon: "clock",
-    label: "Timetables",
-    body: "Class timetables run Monday to Saturday. After the principal publishes one, students and teachers see the periods for their own class.",
+    label: "Timetables & Periods",
+    body: "Weekly schedules from Monday to Saturday, keeping subjects, lab sessions, and activity periods structured.",
   },
   {
     icon: "exam",
-    label: "Exams",
-    body: "The school sets the exam and teachers enter marks for their subjects. Students read results and report cards once they are published.",
+    label: "Examinations & Marks",
+    body: "Assessment schedules, term marks, and official digital report cards published securely for enrolled families.",
   },
   {
     icon: "bell",
-    label: "Notices",
-    body: "Announcements can go to the whole school, a chosen class, teachers or students. Each person sees only the notices meant for them.",
+    label: "Personalized Notices",
+    body: "Important announcements delivered directly to classes, faculty, or students without clutter.",
   },
 ];
 
 function PortalSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-[var(--brand-maroon-dark)] text-white">
+    <section
+      id="portal"
+      className="relative isolate scroll-mt-28 overflow-hidden bg-[var(--brand-maroon-dark)] py-16 text-white sm:py-20 lg:py-24"
+    >
       <div
-        className="absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 -z-10 bg-cover bg-center opacity-20"
         style={{ backgroundImage: "url('/marketing/portal-section-bg.jpg')" }}
         aria-hidden
       />
-      <div
-        className="absolute inset-0 -z-10 bg-[var(--brand-maroon-dark)]/88"
-        aria-hidden
-      />
-      <div className="mx-auto grid max-w-7xl items-stretch gap-10 px-3 py-14 sm:px-4 sm:py-20 lg:grid-cols-12 lg:gap-12">
-        <div className="lg:col-span-7">
-          <SectionHead
+      <div className="absolute inset-0 -z-10 bg-gradient-to-t from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/90 to-[var(--brand-maroon-dark)]/80" aria-hidden />
+
+      <div className="mx-auto grid max-w-7xl items-stretch gap-10 rkps-page-x lg:grid-cols-12 lg:gap-12">
+        <div className="lg:col-span-7 space-y-6">
+          <RkpsSectionIntro
             dark
-            title="Your RMPS account, one secure sign-in"
-            description="Students, teachers and principals use the portal for attendance, timetables, exams and notices."
+            num="Unified Digital Gateway"
+            title="Your RMPS Account, One Unified Sign-In"
+            description="Students, teachers, and principals use our secure portal for daily attendance, academic timetables, exam results, and circulars."
           />
-          <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+          <ul className="grid gap-3.5 sm:grid-cols-2 pt-2">
             {PORTAL_FEATURES.map((feature) => (
-              <li key={feature.label} className="rounded-2xl border border-white/15 bg-white/10 px-4 py-4">
-                <span className="grid h-9 w-9 place-items-center rounded-lg bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)]">
-                  <Icon name={feature.icon} className="h-[1.125rem] w-[1.125rem]" />
+              <li key={feature.label} className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur-md">
+                <span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)] shadow">
+                  <Icon name={feature.icon} className="h-5 w-5" />
                 </span>
-                <p className="mt-3 text-sm font-bold">{feature.label}</p>
-                <p className="mt-1 text-sm leading-relaxed text-white/80">{feature.body}</p>
+                <p className="mt-3 text-base font-bold text-white">{feature.label}</p>
+                <p className="mt-1 text-xs sm:text-sm leading-relaxed text-white/80">{feature.body}</p>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="flex w-full max-w-md lg:col-span-5 lg:max-w-none lg:justify-self-end">
-          <div className="flex h-full w-full flex-col rounded-2xl bg-white p-7 text-heading shadow-2xl shadow-black/30 sm:p-8">
-            <span className="grid h-11 w-11 place-items-center rounded-full bg-brand text-[var(--brand-gold)]">
-              <Icon name="lock" />
-            </span>
-            <h3 className="mt-4 text-xl font-bold tracking-tight sm:text-2xl">Sign in to the portal</h3>
-            <p className="mt-2 text-sm leading-relaxed text-muted sm:text-base">
-              One login for students, teachers and principals. The school issues your username and password — use them here, not on the public website forms.
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-              Open attendance, your class timetable, exam marks and report cards when they are published, and notices meant for you. Teachers mark sections and upload materials; students read their own records; the principal oversees the school from the same system.
-            </p>
-            <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-              If you cannot sign in, contact the school office or IT — they can reset access for enrolled families and staff.
-            </p>
-            <div className="mt-auto pt-6 sm:pt-8">
-              <Link href="/login" className={`${BTN_BASE} ${FOCUS_MAROON} w-full bg-brand text-white hover:brightness-110`}>
-                Login
+        <div className="flex w-full lg:col-span-5">
+          <div className="flex h-full w-full flex-col justify-between rounded-3xl border border-white/80 bg-white p-7 text-heading shadow-2xl sm:p-9">
+            <div className="space-y-3">
+              <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-[var(--brand-gold)] shadow-md">
+                <Icon name="lock" className="h-6 w-6" />
+              </span>
+              <h3 className="text-2xl font-bold tracking-tight text-heading">Sign In to School Portal</h3>
+              <p className="text-xs sm:text-sm leading-relaxed text-muted">
+                Official credentials issued by the school administration for students, parents, teachers, and leadership.
+              </p>
+              <div className="rounded-2xl bg-[var(--surface-muted)] p-4 text-xs text-muted space-y-2 border border-border/70">
+                <p className="font-bold text-heading">Portal Access Includes:</p>
+                <p className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
+                  <span>Student attendance and subject timetables</span>
+                </p>
+                <p className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
+                  <span>Digital examination results & term report cards</span>
+                </p>
+                <p className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-brand shrink-0" />
+                  <span>Official school administrative circulars</span>
+                </p>
+              </div>
+            </div>
+
+            <div className="pt-6">
+              <Link
+                href="/login"
+                className="rkps-btn-navy w-full text-center text-sm"
+              >
+                Launch Portal Login ↗
               </Link>
+              <p className="mt-2.5 text-center text-xs text-muted">
+                Need credential assistance? Contact the school IT helpdesk.
+              </p>
             </div>
           </div>
         </div>
@@ -509,10 +407,6 @@ function PortalSection() {
     </section>
   );
 }
-
-/* -------------------------------------------------------------------------- */
-/*  Page                                                                      */
-/* -------------------------------------------------------------------------- */
 
 export function RkpsHomePage() {
   return (
@@ -522,38 +416,48 @@ export function RkpsHomePage() {
         <RkpsCinematicHero />
 
         <div className={TONE_CLASS.warm}>
-          <StatsPanel />
+          <RkpsHeroBridge />
           <RkpsQuickJumpNav
             links={[
+              { href: "#explore-rmps", label: "Explore RMPS" },
               { href: "#about", label: "About" },
               { href: "#values", label: "Values" },
               { href: "#excellence", label: "Achievements" },
-              { href: "#top-students", label: "Honour roll" },
-              { href: "#school-life", label: "School life" },
+              { href: "#school-life", label: "School Life" },
               { href: "#academics", label: "Academics" },
               { href: "#facilities", label: "Campus" },
-              { href: "#admissions", label: "Admissions" },
+              { href: "#portal", label: "Portal" },
+              { href: "#admissions", label: "Admissions", highlight: true },
               { href: "#parent-reviews", label: "Reviews" },
               { href: "#contact", label: "Contact" },
             ]}
           />
         </div>
 
+        <Tint tone="warm">
+          <RkpsPathwayCards
+            heading="Explore R.K Memorial Public School"
+            sub="Three starting points for families, prospective learners, and campus visitors."
+            items={RKPS_HERO_CARDS.map((card, index) => ({
+              ...card,
+              photo: {
+                src: EXPLORE_PATHWAY_PHOTOS[index]?.src ?? EXPLORE_PATHWAY_PHOTOS[0].src,
+                alt: EXPLORE_PATHWAY_PHOTOS[index]?.alt ?? card.title,
+              },
+            }))}
+            notesTitle="Why Families Choose RMPS"
+            notes={WHY_US}
+          />
+        </Tint>
+
+        {/* Dynamic Motion Banner with dual scrolling ribbons & interactive slide showcase */}
+        <RkpsMotionBanner />
+
         <RkpsSpotlightCarousel />
 
         <RkpsHighlightBanner />
 
         <RkpsStoryRail />
-
-        <Tint tone="warm">
-          <RkpsPathwayCards
-            heading="Explore R.K Memorial Public School"
-            sub="Three starting points for families, learners and visitors."
-            items={RKPS_HERO_CARDS}
-            notesTitle="Why families choose RMPS"
-            notes={WHY_US}
-          />
-        </Tint>
 
         <Tint tone="rose">
           <RkpsAboutSection vision={RKPS_VISION} values={RKPS_VALUES} motto={BRAND.motto} schoolName={BRAND.name} />
@@ -563,11 +467,7 @@ export function RkpsHomePage() {
           <RkpsRecognitionSection />
         </Tint>
 
-        <Tint tone="rose">
-          <RkpsTopStudentsSection />
-        </Tint>
-
-        <SchoolLifeSection />
+        <RkpsSchoolLifeSection />
 
         <Tint tone="rose">
           <RkpsLearningJourneySection />
@@ -575,21 +475,21 @@ export function RkpsHomePage() {
 
         <CampusSection />
 
-        <Tint tone="warm">
-          <RkpsGallerySection
-            id={RKPS_GALLERY.id}
-            title={RKPS_GALLERY.title}
-            subtitle={RKPS_GALLERY.subtitle}
-            tabs={RKPS_GALLERY.tabs}
-            cta={RKPS_GALLERY.cta}
-            ctaHref="/school-life/events"
-            disclaimer={RKPS_GALLERY.disclaimer}
-            photos={INSTAGRAM_PHOTOS}
-            accentPhoto={instagramPhoto("campus-21.jpg")}
-          />
-        </Tint>
+        <RkpsGallerySection
+          id={RKPS_GALLERY.id}
+          title={RKPS_GALLERY.title}
+          subtitle={RKPS_GALLERY.subtitle}
+          tabs={RKPS_GALLERY.tabs}
+          cta={RKPS_GALLERY.cta}
+          ctaHref="/school-life/events"
+          disclaimer={RKPS_GALLERY.disclaimer}
+          photos={INSTAGRAM_PHOTOS}
+          accentPhoto={instagramPhoto("campus-21.jpg")}
+        />
 
         <VisitBanner />
+
+        <PortalSection />
 
         <InstagramSection />
 
@@ -632,8 +532,7 @@ export function RkpsHomePage() {
           />
         </Tint>
 
-        <Tint tone="rose">
-          <RkpsContactSection
+        <RkpsContactSection
             id={RKPS_CONTACT.id}
             title={RKPS_CONTACT.title}
             subtitle={RKPS_CONTACT.subtitle}
@@ -647,10 +546,7 @@ export function RkpsHomePage() {
             hoursNote={RKPS_CONTACT.hoursNote}
             reachOut={RKPS_CONTACT.reachOut}
             campusPhoto={instagramPhoto("campus-8.jpg")}
-          />
-        </Tint>
-
-        <PortalSection />
+        />
       </main>
       <RkpsFooter />
     </>

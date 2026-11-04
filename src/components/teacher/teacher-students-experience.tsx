@@ -272,7 +272,7 @@ export function TeacherStudentsExperience() {
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-        <div className={`space-y-2 ${selectedId && isDesktop ? "" : selectedId ? "hidden lg:block" : ""}`}>
+        <div className={`space-y-2 ${selectedId ? "hidden lg:block" : ""}`}>
           {listLoading ? (
             <p className="empty-state">Loading students…</p>
           ) : rows.length === 0 ? (
@@ -315,7 +315,7 @@ export function TeacherStudentsExperience() {
           )}
         </div>
 
-        <div className={!selectedId && isDesktop ? "hidden lg:block" : !selectedId ? "hidden" : ""}>
+        <div className="hidden lg:block">
           {!selectedId ? (
             <div className="empty-state lg:min-h-[20rem] lg:flex lg:flex-col lg:items-center lg:justify-center">
               <p className="font-medium text-heading">Select a student</p>

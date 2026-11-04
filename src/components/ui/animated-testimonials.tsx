@@ -37,7 +37,7 @@ export function AnimatedTestimonials({
   const current = testimonials[active];
 
   return (
-    <div className="mx-auto grid max-w-5xl items-center gap-8 px-3 py-10 sm:px-4 sm:py-12 md:grid-cols-2 md:gap-10 md:py-16 lg:px-5">
+    <div className="mx-auto grid max-w-5xl items-center gap-8 rkps-page-x py-10 sm:py-12 md:grid-cols-2 md:gap-10 md:py-16">
       <div className="relative mx-auto h-64 w-full max-w-md sm:h-80">
         {testimonials.map((item, index) => {
           const isActive = index === active;

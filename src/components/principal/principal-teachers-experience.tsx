@@ -264,7 +264,7 @@ export function PrincipalTeachersExperience() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
-            <div className={selectedTeacherId && !isDesktop ? "hidden lg:block" : ""}>
+            <div className={selectedTeacherId ? "hidden lg:block" : ""}>
               <PrincipalTeachersMobileList
                 rows={filteredRows}
                 loading={listLoading}
@@ -274,7 +274,7 @@ export function PrincipalTeachersExperience() {
               />
             </div>
 
-            <div className={!selectedTeacherId && isDesktop ? "hidden lg:block" : !selectedTeacherId ? "hidden" : ""}>
+            <div className="hidden lg:block">
               {!selectedTeacherId ? (
                 <div className="empty-state lg:min-h-[20rem] lg:flex lg:flex-col lg:items-center lg:justify-center">
                   <p className="font-medium text-heading">Select a teacher</p>

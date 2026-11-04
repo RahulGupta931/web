@@ -36,8 +36,8 @@ export function InfiniteMovingCards({
       style={
         scrolling
           ? {
-              maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
-              WebkitMaskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)",
+              maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+              WebkitMaskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
             }
           : undefined
       }
@@ -55,15 +55,22 @@ export function InfiniteMovingCards({
           <li
             key={`${item.name}-${index}`}
             aria-hidden={index >= items.length ? true : undefined}
-            className="w-[22rem] max-w-[80vw] shrink-0 rounded-[1.25rem] border border-border/80 bg-white px-6 py-6 shadow-[var(--shadow-card)] sm:w-[28rem]"
+            className="w-[20rem] max-w-[85vw] shrink-0 rounded-3xl border border-border/80 bg-white p-6 shadow-sm transition hover:shadow-md sm:w-[26rem]"
           >
             <blockquote>
-              <p className="text-base leading-relaxed text-heading">“{item.quote}”</p>
-              <footer className="mt-6">
+              <div className="flex items-center gap-1 text-[var(--brand-gold)] text-sm mb-3">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                <span className="ml-2 rounded-full bg-emerald-50 px-2 py-0.5 text-[0.625rem] font-bold text-emerald-700">
+                  Verified Parent
+                </span>
+              </div>
+              <p className="text-sm sm:text-base leading-relaxed text-heading font-medium">“{item.quote}”</p>
+              <footer className="mt-5 border-t border-border/60 pt-4 flex items-center justify-between">
                 <cite className="not-italic">
                   <span className="block text-sm font-bold text-heading">{item.name}</span>
-                  <span className="mt-1 block text-sm font-semibold text-brand">{item.title}</span>
+                  <span className="block text-xs font-semibold text-brand mt-0.5">{item.title}</span>
                 </cite>
+                <span className="text-xl opacity-30 font-serif">❝</span>
               </footer>
             </blockquote>
           </li>

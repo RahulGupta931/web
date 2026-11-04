@@ -18,12 +18,12 @@ import {
 const FILTERS = ["All recognition", "Academics", "Sport", "Creativity", "Leadership", "Service", "Personal progress"] as const;
 
 const CARDS = [
-  { cat: "Academics" as const, title: "Asking. Exploring. Understanding.", body: "A place to recognise thoughtful inquiry and the commitment to keep learning." },
-  { cat: "Sport" as const, title: "Playing with purpose.", body: "A place to celebrate practice, resilience and the teammate who lifts others up." },
-  { cat: "Creativity" as const, title: "Making room for imagination.", body: "A place to honour an original idea and the care taken to bring it to life." },
-  { cat: "Leadership" as const, title: "Helping others find their voice.", body: "A place to recognise listening, initiative and making space for everyone." },
-  { cat: "Service" as const, title: "Kindness, made practical.", body: "A place to celebrate a thoughtful contribution to a shared community." },
-  { cat: "Personal progress" as const, title: "A step further than yesterday.", body: "A place to notice persistence, growing confidence and a meaningful first attempt." },
+  { cat: "Academics" as const, title: "Asking. Exploring. Understanding.", body: "A place to recognise thoughtful inquiry, love for reading, and the commitment to deep intellectual exploration." },
+  { cat: "Sport" as const, title: "Playing with purpose.", body: "A place to celebrate consistent practice, resilience, teamwork, and the athlete who lifts everyone up." },
+  { cat: "Creativity" as const, title: "Making room for imagination.", body: "A place to honour original artistic ideas, musical expressions, stage performances, and creative storytelling." },
+  { cat: "Leadership" as const, title: "Helping others find their voice.", body: "A place to recognise active listening, initiative, empathy, and making inclusive space for peers." },
+  { cat: "Service" as const, title: "Kindness made practical.", body: "A place to celebrate environmental stewardship, community care, and selfless contributions to school life." },
+  { cat: "Personal progress" as const, title: "A step further than yesterday.", body: "A place to notice persistence, growing confidence, overcoming hurdles, and a courageous first attempt." },
 ];
 
 const FILTER_TO_CAT: Record<string, (typeof CARDS)[number]["cat"] | null> = {
@@ -36,10 +36,19 @@ const FILTER_TO_CAT: Record<string, (typeof CARDS)[number]["cat"] | null> = {
   "Personal progress": "Personal progress",
 };
 
+const CATEGORY_META: Record<(typeof CARDS)[number]["cat"], { icon: string; badge: string }> = {
+  Academics: { icon: "📚", badge: "border-sky-300/40 bg-sky-950/70 text-sky-200" },
+  Sport: { icon: "⚽", badge: "border-amber-300/40 bg-amber-950/70 text-amber-200" },
+  Creativity: { icon: "🎨", badge: "border-purple-300/40 bg-purple-950/70 text-purple-200" },
+  Leadership: { icon: "⭐", badge: "border-[var(--brand-gold)]/50 bg-[#162744]/80 text-[var(--brand-gold)]" },
+  Service: { icon: "🌱", badge: "border-emerald-300/40 bg-emerald-950/70 text-emerald-200" },
+  "Personal progress": { icon: "🚀", badge: "border-rose-300/40 bg-rose-950/70 text-rose-200" },
+};
+
 const HIGHLIGHTS = [
   { label: "Curiosity", value: "Questions that keep learning alive" },
-  { label: "Character", value: "Effort, kindness and integrity" },
-  { label: "Community", value: "We rise together" },
+  { label: "Character", value: "Effort, kindness, and integrity" },
+  { label: "Community", value: "We rise and thrive together" },
 ] as const;
 
 const BANNER_MOSAIC = [
@@ -51,28 +60,28 @@ const BANNER_MOSAIC = [
 const GALLERY_PREVIEW = 12;
 
 const ACHIEVERS_FOOTER_LINE =
-  "Every learner, their own kind of remarkable. Growth in class, on stage, on the field and in the community — honoured here without rankings. Curiosity, character, and the people we rise with.";
+  "Every learner, their own kind of remarkable. Growth in class, on stage, on the field and in the community — honoured here without comparisons. Curiosity, character, and the people we rise with.";
 
 const ZIGZAG_STORIES = [
   {
-    tag: "Featured · Instagram",
+    tag: "Curiosity & Inquiry",
     title: "The confidence to keep asking “what if?”",
-    kicker: "Curiosity & perseverance",
-    body: "Photos from recent programmes at R.K Memorial Public School. Verified student stories — names, class and recognition details — will be added after confirmation and appropriate permissions.",
+    kicker: "Perseverance & Innovation",
+    body: "From building first working circuits to conducting environmental surveys — our classrooms foster students who dare to test hypotheses, learn from initial trials, and think critically.",
     photo: ACHIEVEMENT_THEME_PHOTOS.featuredStory,
   },
   {
-    tag: "Culture & sport",
-    title: "Room to perform, compete and celebrate",
-    kicker: "Stage · field · festival",
-    body: "From dance and drama to team games and house events — we notice effort, teamwork and the courage to step into the spotlight.",
+    tag: "Athletics & Performing Arts",
+    title: "Room to perform, compete & celebrate",
+    kicker: "Stage · Track · Festival",
+    body: "From inter-house sports tournaments to annual theatre productions — we notice courage, teamwork, and the quiet dedication behind every rehearsal and practice drill.",
     photo: ACHIEVEMENT_THEME_PHOTOS.arts,
   },
   {
-    tag: "Community",
-    title: "Wins we share as one school family",
-    kicker: "Belonging & service",
-    body: "Celebrations, traditions and everyday kindness — recognition here includes the moments that bring learners and staff together.",
+    tag: "Kindness & Citizenship",
+    title: "Wins we share as one united family",
+    kicker: "Belonging & Service",
+    body: "Peer mentoring, green campus initiatives, and everyday gestures of empathy — recognition at RMPS shines equally bright on the small moments that make our community warm.",
     photo: ACHIEVEMENT_THEME_PHOTOS.community,
   },
 ] as const;
@@ -97,28 +106,33 @@ function StoryPanel({
   reverse?: boolean;
 }) {
   return (
-    <article className="grid items-center lg:grid-cols-12">
+    <article className="grid items-center gap-6 lg:grid-cols-12 lg:gap-8">
       <figure
-        className={`overflow-hidden rounded-[1.8rem] border border-white/10 shadow-[var(--shadow-card)] lg:col-span-7 lg:row-start-1 ${
-          reverse ? "lg:col-start-6" : "lg:col-start-1"
+        className={`overflow-hidden rounded-3xl border border-white/20 shadow-xl lg:col-span-7 ${
+          reverse ? "lg:order-2" : "lg:order-1"
         }`}
       >
         <img
           src={story.photo.src}
           alt={story.photo.alt}
-          className="aspect-[16/10] w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.03]"
+          className="aspect-[16/10] w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
           loading="lazy"
         />
       </figure>
       <div
-        className={`relative z-10 mt-4 rounded-[1.6rem] border border-[rgba(13,35,65,0.08)] bg-[rgba(255,255,255,0.82)] p-5 shadow-[0_20px_44px_rgba(11,61,120,0.08)] backdrop-blur-sm sm:mx-3 sm:-mt-12 sm:p-8 lg:col-span-6 lg:row-start-1 lg:mx-0 lg:mt-0 ${
-          reverse ? "lg:col-start-1 lg:mr-[-6%]" : "lg:col-start-7 lg:ml-[-6%]"
+        className={`rounded-3xl border border-border/80 bg-white/95 p-6 sm:p-8 lg:p-10 shadow-md backdrop-blur-md lg:col-span-5 ${
+          reverse ? "lg:order-1" : "lg:order-2"
         }`}
       >
-        <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-brand">{story.tag}</p>
-        <h3 className="mt-3 text-xl font-bold leading-snug tracking-tight text-heading sm:text-2xl md:text-[1.75rem]">{story.title}</h3>
-        <p className="mt-2 text-sm font-semibold text-[var(--brand-maroon)]">{story.kicker}</p>
-        <p className="mt-3 text-sm leading-relaxed text-muted">{story.body}</p>
+        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-brand/10 px-3 py-1 text-xs font-bold uppercase tracking-wider text-brand">
+          <span>★</span>
+          <span>{story.tag}</span>
+        </span>
+        <h3 className="rkps-display mt-3 text-2xl font-bold leading-snug tracking-tight text-heading sm:text-3xl">
+          {story.title}
+        </h3>
+        <p className="mt-1 text-sm font-semibold text-[var(--brand-maroon)]">{story.kicker}</p>
+        <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">{story.body}</p>
       </div>
     </article>
   );
@@ -134,10 +148,12 @@ function RecognitionCard({
   featured: boolean;
 }) {
   const photo = STUDENT_ACHIEVER_CARD_PHOTOS[card.cat];
+  const meta = CATEGORY_META[card.cat];
+
   return (
     <article
-      className={`rkps-ease group relative flex h-full flex-col justify-between overflow-hidden rounded-[1.85rem] border border-white/10 bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] transition hover:-translate-y-1 hover:shadow-[var(--shadow-card-hover)] ${
-        featured ? "min-h-[20rem] sm:min-h-[26rem] md:min-h-[30rem]" : "min-h-[18rem] sm:min-h-[22rem]"
+      className={`group relative flex h-full flex-col justify-between overflow-hidden rounded-3xl border border-white/15 bg-[var(--brand-maroon-dark)] shadow-[0_16px_36px_rgba(96,0,0,0.18)] transition duration-300 hover:-translate-y-1 hover:shadow-2xl ${
+        featured ? "min-h-[22rem] sm:min-h-[26rem] lg:min-h-[30rem]" : "min-h-[18rem] sm:min-h-[22rem]"
       }`}
     >
       <img
@@ -145,18 +161,34 @@ function RecognitionCard({
         alt={photo.alt}
         className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
       />
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,22,39,0.2)_0%,rgba(7,22,39,0.48)_35%,rgba(7,22,39,0.82)_100%)]" />
-      <div className="relative flex items-start justify-between gap-3 p-5 sm:p-6">
-        <span className="rounded-full border border-[var(--brand-gold)]/50 bg-[color-mix(in_srgb,var(--brand-gold)_14%,transparent)] px-3 py-1 text-[0.65rem] font-bold uppercase tracking-[0.14em] text-[var(--brand-gold)] backdrop-blur-sm">
-          {card.cat}
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/5"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/45 to-transparent sm:h-28"
+        aria-hidden
+      />
+
+      {/* Card Header */}
+      <div className="relative z-10 flex items-start justify-between gap-3 p-5 sm:p-6">
+        <span className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-bold uppercase tracking-wider backdrop-blur-md ${meta.badge}`}>
+          <span>{meta.icon}</span>
+          <span>{card.cat}</span>
         </span>
-        <span className="text-4xl font-black leading-none text-white/30" aria-hidden>
-          {String(index + 1).padStart(2, "0")}
+        <span className="text-3xl sm:text-4xl font-black text-white/30" aria-hidden="true">
+          0{index + 1}
         </span>
       </div>
-      <div className="relative max-w-xl p-5 sm:p-6">
-        <h3 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">{card.title}</h3>
-        <p className="mt-2 text-sm leading-relaxed text-white/90">{card.body}</p>
+
+      {/* Card Footer Content */}
+      <div className="relative z-10 max-w-xl p-5 sm:p-6 pt-0">
+        <h3 className="text-xl font-bold tracking-tight text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.4)] sm:text-2xl lg:text-3xl group-hover:text-[var(--brand-gold)] transition">
+          {card.title}
+        </h3>
+        <p className="mt-2 text-xs sm:text-sm leading-relaxed text-white/90">
+          {card.body}
+        </p>
       </div>
     </article>
   );
@@ -177,44 +209,52 @@ export function RkpsStudentAchieversPage() {
 
   return (
     <>
-      <RkpsHeader breadcrumb={[{ label: "Home", href: "/" }, { label: "School life" }, { label: "Student achievers" }]} />
+      <RkpsHeader breadcrumb={[{ label: "Home", href: "/" }, { label: "School Life" }, { label: "Student Achievers" }]} />
 
       <RkpsStoryHero
         slides={[
           {
             photo: pageHero,
-            kicker: "School life · Celebrating people, not rankings",
-            title: "Student achievers",
-            accent: "Every learner. Their own kind of remarkable.",
-            body: "Growth in class, on stage, on the field and in the community — honoured here without rankings or comparisons.",
+            kicker: "School Life · Celebrating Growth Without Rankings",
+            title: "Student Achievers",
+            accent: "Every learner, their own kind of remarkable.",
+            body: "Growth in classrooms, on stage, in sports arenas, and throughout our community — honoured here with respect, encouragement, and genuine joy.",
           },
           {
             photo: BANNER_MOSAIC[1],
             kicker: HIGHLIGHTS[0].label,
             title: HIGHLIGHTS[0].value,
-            accent: "Questions that keep going.",
-            body: "Names and details appear only after school confirmation. Photos are from our official Instagram.",
+            accent: "Questions that inspire lifelong discovery.",
+            body: "Everyday inquiry, hands-on experiments, and the curiosity to look deeper into the world around us.",
           },
           {
             photo: BANNER_MOSAIC[2],
             kicker: HIGHLIGHTS[2].label,
-            title: "We rise together",
+            title: "We Rise and Thrive Together",
             accent: HIGHLIGHTS[2].value,
-            body: "Stage, field and festival — effort is noticed without turning children into a ranking.",
+            body: "Effort, collaboration, and sportsmanship celebrated across every grade without comparisons or labels.",
           },
         ]}
-        primary={{ href: "#recognition", label: "Explore recognition" }}
+        primary={{ href: "#recognition", label: "Explore Recognition Areas" }}
         secondary={{ href: INSTAGRAM_PROFILE, label: "@r.k.m.p.s on Instagram", external: true }}
       />
-      <nav className="border-b border-border bg-surface" aria-label="On this page">
-        <div className="mx-auto flex max-w-7xl gap-2 overflow-x-auto px-3 py-2.5 scrollbar-none sm:px-4 sm:py-3 lg:px-5">
+
+      {/* Sticky Quick Nav */}
+      <nav className="border-b border-border bg-white sticky top-16 z-20 sm:top-[4.5rem]" aria-label="Page navigation">
+        <div className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto rkps-page-x py-2.5 scrollbar-none">
+          <span className="shrink-0 text-xs font-bold uppercase tracking-wider text-muted pr-1">Jump to:</span>
           {[
             { href: "#featured", label: "Stories" },
-            { href: "#recognition", label: "Recognition" },
+            { href: "#recognition", label: "Recognition Areas" },
+            { href: "#voices", label: "Voices" },
             { href: "#gallery", label: "Gallery" },
-            { href: "/school-life/events", label: "School events" },
+            { href: "/school-life/events", label: "School Events ↗" },
           ].map((item) => (
-            <Link key={item.href} href={item.href} className="shrink-0 rounded-full px-3.5 py-1.5 text-xs font-semibold text-brand hover:bg-brand/5">
+            <Link
+              key={item.href}
+              href={item.href}
+              className="shrink-0 rounded-full border border-border/80 bg-[var(--surface-elevated)] px-3.5 py-1 text-xs font-semibold text-muted transition hover:border-brand/40 hover:bg-brand hover:text-white"
+            >
               {item.label}
             </Link>
           ))}
@@ -222,69 +262,61 @@ export function RkpsStudentAchieversPage() {
       </nav>
 
       <main>
-        <RkpsPageSection id="featured" tone="paper" className="border-b-0">
+        {/* Section 01: Featured Stories */}
+        <RkpsPageSection id="featured" tone="paper">
           <RkpsSectionIntro
-            num="01 · Stories"
-            title="Moments worth celebrating"
-            description="Three glimpses from school life — image and story alternate as you scroll. More verified profiles coming soon."
+            num="01 · Inspiring Moments"
+            title="Stories worth celebrating"
+            description="Moments from daily school life highlighting perseverance, creative courage, and community empathy."
           />
-          <div className="mt-8 space-y-12 sm:mt-10 sm:space-y-16 md:space-y-20">
+          <div className="mt-8 space-y-12 sm:space-y-16 lg:space-y-20">
             {ZIGZAG_STORIES.map((story, index) => (
               <StoryPanel key={story.title} story={story} reverse={index % 2 === 1} />
             ))}
           </div>
-          <p className="mt-12 max-w-xl text-sm text-muted">
-            Source:{" "}
-            <a href={INSTAGRAM_PROFILE} className="font-semibold text-brand hover:underline" target="_blank" rel="noreferrer">
-              instagram.com/r.k.m.p.s
-            </a>
-          </p>
         </RkpsPageSection>
 
-        <RkpsPageSection id="recognition">
+        {/* Section 02: Recognition Categories */}
+        <RkpsPageSection id="recognition" tone="inset">
           <RkpsSectionIntro
-            num="02 · Recognition"
+            num="02 · Recognition Areas"
             title="Many talents. Many journeys."
-            description="Filter by the kind of growth you want to explore. Names, class and dates are added only after the school confirms each story."
+            description="Filter by area of growth. We honour effort, creativity, teamwork, leadership, and personal bests."
             action={
-              <p className="text-sm font-semibold text-brand">
-                {visible.length} {visible.length === 1 ? "area" : "areas"} shown
-              </p>
+              <span className="rounded-full bg-brand/10 px-3 py-1 text-xs font-bold text-brand">
+                {visible.length} {visible.length === 1 ? "area" : "areas"} displayed
+              </span>
             }
           />
 
-          <div className="mt-8 rounded-[1.25rem] border border-border/80 bg-white p-3 shadow-[var(--shadow-card)] sm:p-4">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-              <p className="shrink-0 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-brand">Theme</p>
-              <div
-                className="flex min-w-0 flex-1 gap-2 overflow-x-auto pb-0.5 scrollbar-none sm:flex-wrap sm:overflow-visible sm:pb-0"
-                role="tablist"
-                aria-label="Recognition categories"
-              >
-                {FILTERS.map((f) => {
-                  const active = filter === f;
-                  return (
-                    <button
-                      key={f}
-                      type="button"
-                      role="tab"
-                      aria-selected={active}
-                      onClick={() => setFilter(f)}
-                      className={`rkps-ease rkps-press shrink-0 rounded-full px-3.5 py-2 text-xs font-bold sm:px-4 ${
-                        active
-                          ? "bg-brand text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
-                          : "bg-[var(--rkps-paper)] text-muted hover:text-brand"
-                      }`}
-                    >
-                      {f}
-                    </button>
-                  );
-                })}
-              </div>
+          {/* Filter Pills */}
+          <div className="mt-8 rounded-3xl border border-border/80 bg-white p-3 sm:p-4 shadow-sm">
+            <div className="flex items-center gap-2 overflow-x-auto pb-1 sm:pb-0 scrollbar-none -mx-1 px-1">
+              <span className="shrink-0 text-xs font-bold uppercase tracking-wider text-muted pr-1">Area:</span>
+              {FILTERS.map((f) => {
+                const active = filter === f;
+                return (
+                  <button
+                    key={f}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    onClick={() => setFilter(f)}
+                    className={`rkps-pill-tab shrink-0 ${
+                      active
+                        ? "bg-[var(--brand-maroon-dark)] text-white shadow-md"
+                        : "border border-border/80 bg-[var(--surface-elevated)] text-heading hover:border-brand/40 hover:text-brand"
+                    }`}
+                  >
+                    <span>{f}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <ul className="rkps-stagger mt-6 grid gap-4 lg:grid-cols-12">
+          {/* Cards Grid */}
+          <ul className="rkps-stagger mt-8 grid gap-5 lg:grid-cols-12">
             {visible.map((c, i) => (
               <li key={c.title} className={recognitionGridClass(i, visible.length)} style={{ ["--rkps-i" as string]: i }}>
                 <RecognitionCard card={c} index={i} featured={visible.length > 1 && (i % 6 === 0 || i % 6 === 3)} />
@@ -293,10 +325,14 @@ export function RkpsStudentAchieversPage() {
           </ul>
         </RkpsPageSection>
 
-        <section className="bg-white" aria-label="School voices">
-          <div className="mx-auto max-w-7xl px-3 pt-10 sm:px-4 sm:pt-12 lg:px-5">
-            <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand">Voices</p>
-            <h2 className="mt-2 text-2xl font-bold leading-snug tracking-tight text-heading sm:text-3xl">From the school community</h2>
+        {/* Section 03: School Voices */}
+        <section id="voices" className="bg-white py-14 sm:py-20 scroll-mt-28 border-b border-border/80" aria-label="School voices">
+          <div className="mx-auto max-w-7xl rkps-page-x mb-8">
+            <RkpsSectionIntro
+              num="03 · Community Voices"
+              title="From our students, faculty & community"
+              description="Reflections on curiosity, sportsmanship, and growth from members of the RMPS family."
+            />
           </div>
           <AnimatedTestimonials
             testimonials={TESTIMONIALS.map((item, index) => ({
@@ -308,75 +344,110 @@ export function RkpsStudentAchieversPage() {
           />
         </section>
 
+        {/* Section 04: Photo Gallery */}
         <RkpsPageSection id="gallery" tone="paper">
           <RkpsSectionIntro
-            num="03 · Gallery"
+            num="04 · Photo Gallery"
             title="Moments from @r.k.m.p.s"
-            description="Programmes, performances and celebrations — a living album from our official Instagram."
+            description="Celebrations, performances, project presentations, and awards captured in our living album."
             action={
-              <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className="rkps-btn-ghost shrink-0 text-sm">
+              <a
+                href={INSTAGRAM_PROFILE}
+                target="_blank"
+                rel="noreferrer"
+                className="rkps-btn-gold text-xs sm:text-sm"
+              >
                 Open Instagram ↗
               </a>
             }
           />
 
-          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3">
+          <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
             {galleryPhotos.map((photo) => (
-              <figure key={photo.src} className="rkps-ease group relative aspect-[4/3] overflow-hidden rounded-[1.25rem] bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)]">
+              <figure key={photo.src} className="group relative aspect-[4/3] overflow-hidden rounded-3xl bg-slate-900 shadow-md">
                 <img
                   src={photo.src}
                   alt={photo.alt}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                  className="h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
                   loading="lazy"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-transparent opacity-85 group-hover:opacity-100 transition" />
+                <figcaption className="absolute inset-x-0 bottom-0 p-3 text-xs font-medium text-white line-clamp-2">
+                  {photo.alt}
+                </figcaption>
               </figure>
             ))}
           </div>
 
           {STUDENT_ACHIEVER_GALLERY.length > GALLERY_PREVIEW && (
-            <div className="mt-8">
+            <div className="mt-8 text-center">
               <button
                 type="button"
                 onClick={() => setGalleryExpanded((v) => !v)}
-                className="rkps-ease rkps-press rounded-xl border border-border/80 bg-surface px-6 py-2.5 text-sm font-semibold text-brand shadow-[var(--rkps-shadow-diffuse,var(--shadow-card))] hover:border-brand/30"
+                className="rkps-btn-navy text-xs sm:text-sm"
               >
-                {galleryExpanded ? "Show fewer photos" : `Show all ${STUDENT_ACHIEVER_GALLERY.length} photos`}
+                {galleryExpanded ? "Show Fewer Photos ↑" : `Show All ${STUDENT_ACHIEVER_GALLERY.length} Photos ↓`}
               </button>
             </div>
           )}
-
-          <p className="mt-8 max-w-2xl text-xs leading-relaxed text-muted">
-            No rankings or comparisons. Personal details appear only after school confirmation and appropriate permissions.
-          </p>
         </RkpsPageSection>
 
-        <div className="mx-auto max-w-7xl px-3 py-12 sm:px-4 sm:py-16 lg:px-5">
-        <section className="scroll-mt-28 relative min-h-[18rem] overflow-hidden rounded-2xl bg-[var(--brand-maroon-dark)] shadow-[var(--shadow-card)] sm:min-h-[22rem] sm:rounded-[1.75rem]">
-          <img src={ctaPhoto.src} alt={ctaPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-          <div className="absolute inset-0 bg-[var(--brand-maroon-dark)]/78 sm:bg-[var(--brand-maroon-dark)]/70" aria-hidden />
-          <div className="relative flex min-h-[18rem] max-w-xl flex-col justify-end p-6 text-white sm:min-h-[22rem] sm:p-10 md:p-12">
-            <p className="text-[0.65rem] font-bold uppercase tracking-[0.16em] text-[var(--brand-gold)]">Everyday wins matter</p>
-            <h2 className="mt-3 text-2xl font-bold leading-snug tracking-tight text-white sm:text-3xl md:text-4xl">Not every achievement comes with a medal</h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/90">First attempts. Quiet courage. Everyday progress — we make room for all of it.</p>
-            <div className="mt-6 flex flex-col gap-2.5 sm:mt-8 sm:flex-row sm:flex-wrap sm:gap-3">
-              <Link href="/#contact" className="rkps-ease rkps-press inline-flex justify-center rounded-lg bg-[var(--brand-gold)] px-5 py-2.5 text-sm font-bold text-[var(--brand-maroon-dark)]">
-                Contact the school office
+        {/* Section 05: Call to action block */}
+        <div className="mx-auto max-w-7xl rkps-page-x py-14 sm:py-20 space-y-8">
+          <RkpsSectionIntro
+            num="05 · Growth Beyond Medals"
+            title="Celebrating every child's courage and daily effort"
+            description="Everyday wins matter. First attempts and quiet progress are celebrated here without ranking or comparisons."
+          />
+
+          <section className="relative min-h-[20rem] overflow-hidden rounded-3xl bg-[var(--brand-maroon-dark)] shadow-2xl sm:min-h-[24rem]">
+            <img src={ctaPhoto.src} alt={ctaPhoto.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[var(--brand-maroon-dark)] via-[var(--brand-maroon-dark)]/85 to-[var(--brand-maroon-dark)]/60" />
+            <div className="relative flex min-h-[20rem] max-w-xl flex-col justify-center p-6 sm:p-10 lg:p-12 text-white space-y-3">
+              <span className="inline-flex w-fit rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-[var(--brand-gold)]">
+                Everyday Progress Counts
+              </span>
+              <h2 className="rkps-display text-2xl font-bold tracking-tight text-white sm:text-4xl">
+                Not every achievement comes with a medal
+              </h2>
+              <p className="text-xs sm:text-sm leading-relaxed text-white/90">
+                First attempts, quiet courage, curiosity, and kindness — we celebrate every meaningful step our students take.
+              </p>
+              <div className="flex flex-wrap gap-3 pt-2">
+                <Link href="/#contact" className="rkps-btn-gold text-xs sm:text-sm">
+                  Contact School Office
+                </Link>
+                <Link href="/school-life/events" className="inline-flex items-center justify-center rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white backdrop-blur-md hover:bg-white/20 transition">
+                  School Events Calendar ↗
+                </Link>
+              </div>
+            </div>
+          </section>
+
+          {/* Quick links footer */}
+          <section className="pt-6 space-y-4">
+            <RkpsSectionIntro
+              num="More Resources"
+              title="Explore deeper into school life"
+              description="Discover our full events calendar, verified competitive records, and main campus gateway."
+            />
+            <div className="grid gap-4 sm:grid-cols-2 pt-2">
+              <Link
+                href="/school-life/achievements"
+                className="flex items-center justify-between rounded-2xl border border-border/80 bg-[var(--surface-elevated)] p-4 text-sm font-bold text-heading hover:border-brand hover:text-brand transition shadow-sm"
+              >
+                <span>Explore School Achievements Archive</span>
+                <span>→</span>
               </Link>
-              <Link href="/school-life/events" className="rkps-ease rkps-press inline-flex justify-center rounded-lg border border-white/40 px-5 py-2.5 text-sm font-bold text-white hover:bg-white/10">
-                School events
+              <Link
+                href="/"
+                className="flex items-center justify-between rounded-2xl border border-border/80 bg-[var(--surface-elevated)] p-4 text-sm font-bold text-heading hover:border-brand hover:text-brand transition shadow-sm"
+              >
+                <span>Return to School Homepage</span>
+                <span>→</span>
               </Link>
             </div>
-          </div>
-        </section>
-
-        <div className="mt-8 flex flex-col gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:gap-4 pb-12 sm:pb-16">
-          <Link href="/school-life/achievements" className="rkps-btn-ghost">
-            School achievements ↗
-          </Link>
-          <Link href="/" className="rkps-btn-ghost">
-            Back to home ↗
-          </Link>
-        </div>
+          </section>
         </div>
       </main>
       <RkpsFooter prefooter={ACHIEVERS_FOOTER_LINE} />

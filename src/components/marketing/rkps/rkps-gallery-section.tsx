@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { RkpsPageSection, RkpsSectionIntro } from "@/components/marketing/rkps/rkps-marketing-blocks";
+import { RkpsPageSection } from "@/components/marketing/rkps/rkps-marketing-blocks";
+import { RkpsInView } from "@/components/marketing/rkps/rkps-motion-sections";
 import { INSTAGRAM_PROFILE } from "@/content/website/instagram-media";
 
 type Photo = { src: string; alt: string };
@@ -24,17 +25,16 @@ function photoMatchesTab(alt: string, tab: string): boolean {
   return true;
 }
 
-/** Mosaic spans inside a 12-column gallery grid (desktop). */
 function galleryMosaicClass(index: number): string {
   if (index === 0) return "col-span-2 row-span-2 sm:col-span-2 sm:row-span-2 lg:col-span-7 lg:row-span-2 lg:col-start-1 lg:row-start-1";
-  if (index === 1) return "lg:col-span-5 lg:col-start-8 lg:row-start-1";
-  if (index === 2) return "lg:col-span-5 lg:col-start-8 lg:row-start-2";
-  if (index === 3) return "lg:col-span-4 lg:col-start-1 lg:row-start-3";
-  if (index === 4) return "lg:col-span-4 lg:col-start-5 lg:row-start-3";
-  if (index === 5) return "lg:col-span-4 lg:col-start-9 lg:row-start-3";
-  if (index === 6) return "lg:col-span-4 lg:col-start-1 lg:row-start-4";
-  if (index === 7) return "lg:col-span-4 lg:col-start-5 lg:row-start-4";
-  if (index === 8) return "lg:col-span-4 lg:col-start-9 lg:row-start-4";
+  if (index === 1) return "col-span-1 lg:col-span-5 lg:col-start-8 lg:row-start-1";
+  if (index === 2) return "col-span-1 lg:col-span-5 lg:col-start-8 lg:row-start-2";
+  if (index === 3) return "col-span-1 lg:col-span-4 lg:col-start-1 lg:row-start-3";
+  if (index === 4) return "col-span-1 lg:col-span-4 lg:col-start-5 lg:row-start-3";
+  if (index === 5) return "col-span-2 sm:col-span-1 lg:col-span-4 lg:col-start-9 lg:row-start-3";
+  if (index === 6) return "col-span-1 lg:col-span-4 lg:col-start-1 lg:row-start-4";
+  if (index === 7) return "col-span-1 lg:col-span-4 lg:col-start-5 lg:row-start-4";
+  if (index === 8) return "col-span-2 sm:col-span-1 lg:col-span-4 lg:col-start-9 lg:row-start-4";
   return "lg:col-span-4";
 }
 
@@ -42,19 +42,34 @@ function GalleryTile({ photo, index, priority }: { photo: Photo; index: number; 
   const isHero = index === 0;
   return (
     <figure
-      className={`group relative overflow-hidden rounded-[1rem] border border-border/80 bg-surface shadow-[var(--rkps-shadow-diffuse,var(--shadow-card))] ${galleryMosaicClass(index)} ${
-        isHero ? "min-h-[12rem] lg:min-h-[20rem]" : "min-h-[7.5rem] lg:min-h-[9.75rem]"
+      className={`group relative overflow-hidden rounded-2xl border border-border/70 bg-surface shadow-sm lg:rounded-3xl ${galleryMosaicClass(index)} ${
+        isHero ? "min-h-[14rem] sm:min-h-[18rem] lg:min-h-[22rem]" : "min-h-[8.5rem] sm:min-h-[10rem] lg:min-h-[11rem]"
       }`}
     >
       <img
         src={photo.src}
         alt={photo.alt}
-        className={`absolute inset-0 h-full w-full object-cover transition duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06] ${isHero ? "rkps-ken" : ""}`}
+        className={`absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105 ${
+          isHero ? "rkps-ken" : ""
+        }`}
         loading={priority ? "eager" : "lazy"}
       />
-      <div className="pointer-events-none absolute inset-0 bg-black/50 opacity-80 lg:opacity-0 lg:transition-opacity lg:duration-300 lg:group-hover:opacity-100" />
-      <figcaption className="absolute inset-x-0 bottom-0 p-3 text-xs leading-snug text-white lg:translate-y-1 lg:opacity-0 lg:transition lg:duration-300 lg:group-hover:translate-y-0 lg:group-hover:opacity-100">
-        <span className="line-clamp-2">{photo.alt}</span>
+      <div
+        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-85 transition duration-300 group-hover:opacity-100"
+        aria-hidden
+      />
+      <figcaption className="absolute inset-x-0 bottom-0 p-3 sm:p-4">
+        {isHero ? (
+          <div className="rounded-xl border border-white/15 bg-black/45 p-3 backdrop-blur-md sm:p-3.5">
+            <p className="text-xs font-semibold leading-snug text-white sm:text-sm">
+              <span className="line-clamp-3">{photo.alt}</span>
+            </p>
+          </div>
+        ) : (
+          <p className="text-[0.6875rem] font-medium leading-snug text-white/95 drop-shadow-[0_1px_6px_rgba(0,0,0,0.5)] sm:text-xs">
+            <span className="line-clamp-2">{photo.alt}</span>
+          </p>
+        )}
       </figcaption>
     </figure>
   );
@@ -69,7 +84,7 @@ export function RkpsGallerySection({
   ctaHref,
   disclaimer,
   photos,
-  accentPhoto: _unusedAccentPhoto,
+  accentPhoto,
 }: {
   id: string;
   title: string;
@@ -81,7 +96,6 @@ export function RkpsGallerySection({
   photos: readonly Photo[];
   accentPhoto: Photo;
 }) {
-  void _unusedAccentPhoto;
   const [activeTab, setActiveTab] = useState(tabs[0] ?? "All moments");
   const filtered = useMemo(
     () => photos.filter((p) => photoMatchesTab(p.alt, activeTab)),
@@ -91,75 +105,112 @@ export function RkpsGallerySection({
   const visible = pool.slice(0, GALLERY_VISIBLE);
 
   return (
-    <RkpsPageSection id={id} tone="paper">
-      <RkpsSectionIntro
-        num="School life · Gallery"
-        title={title}
-        description={`${subtitle} Follow @r.k.m.p.s for the full feed.`}
-        action={
-          <Link href={ctaHref} className="rkps-btn-ghost shrink-0 text-sm">
-            {cta} ↗
-          </Link>
-        }
-      />
+    <RkpsPageSection id={id} tone="inset">
+      <RkpsInView>
+        <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgba(96,0,0,0.07)] sm:rounded-[2rem]">
+          <div className="grid lg:grid-cols-12 lg:items-stretch">
+            <aside className="flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
+              <span className="block h-1.5 w-12 rounded-full bg-[var(--brand-gold)]" aria-hidden="true" />
+              <p className="mt-4 text-xs font-bold uppercase tracking-[0.14em] text-brand">Campus Life · Gallery</p>
+              <h2 className="rkps-display mt-2 text-2xl font-bold tracking-tight text-heading [text-wrap:balance] sm:text-3xl">
+                {title}
+              </h2>
+              <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
+                {subtitle} Follow{" "}
+                <a href={INSTAGRAM_PROFILE} target="_blank" rel="noreferrer" className="font-semibold text-brand hover:underline">
+                  @r.k.m.p.s
+                </a>{" "}
+                for live stories and daily highlights.
+              </p>
 
-      <div className="mt-8 flex flex-col gap-4 border-b border-border/80 pb-8 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-muted">Browse by theme</p>
-          <div className="mt-3 flex flex-wrap gap-2" role="tablist" aria-label="Gallery themes">
-            {tabs.map((tab) => {
-              const active = activeTab === tab;
-              return (
-                <button
-                  key={tab}
-                  type="button"
-                  role="tab"
-                  aria-selected={active}
-                  onClick={() => setActiveTab(tab)}
-                  className={`rkps-ease rkps-press rounded-full px-4 py-2 text-xs font-bold ${
-                    active
-                      ? "bg-brand text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
-                      : "border border-border/80 bg-surface text-muted hover:border-brand/35 hover:text-brand"
-                  }`}
+              <figure className="relative mt-6 hidden overflow-hidden rounded-2xl border border-border/80 shadow-md lg:block">
+                <img src={accentPhoto.src} alt={accentPhoto.alt} className="aspect-[4/3] w-full object-cover" loading="lazy" />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" aria-hidden />
+                <figcaption className="absolute inset-x-0 bottom-0 p-3 text-[0.6875rem] font-medium leading-snug text-white">
+                  <span className="line-clamp-2">{accentPhoto.alt}</span>
+                </figcaption>
+              </figure>
+
+              <div className="mt-8">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">Browse by theme</p>
+                  <p className="text-[0.6875rem] font-semibold tabular-nums text-muted">
+                    {visible.length}/{pool.length}
+                  </p>
+                </div>
+                <div
+                  role="tablist"
+                  aria-label="Gallery themes"
+                  className="mt-3 flex flex-wrap gap-2 lg:flex-col lg:gap-1.5"
                 >
-                  {tab}
-                </button>
-              );
-            })}
+                  {tabs.map((tab) => {
+                    const active = activeTab === tab;
+                    return (
+                      <button
+                        key={tab}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        onClick={() => setActiveTab(tab)}
+                        className={`rkps-pill-tab w-full shrink-0 justify-start text-left lg:rounded-xl lg:px-4 lg:py-2.5 ${
+                          active
+                            ? "border-transparent bg-[var(--brand-maroon-dark)] text-white shadow-md"
+                            : "border border-border/80 bg-white text-heading hover:border-brand/40 hover:text-brand"
+                        }`}
+                      >
+                        <span>{tab}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-col gap-2.5 sm:flex-row lg:flex-col">
+                <Link href={ctaHref} className="rkps-btn-navy w-full justify-center text-center text-xs sm:text-sm">
+                  {cta} ↗
+                </Link>
+                <a
+                  href={INSTAGRAM_PROFILE}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex w-full items-center justify-center rounded-full border border-border/80 bg-white px-4 py-2.5 text-xs font-semibold text-brand transition hover:border-brand/40 hover:bg-brand/5 sm:text-sm"
+                >
+                  @r.k.m.p.s on Instagram
+                </a>
+              </div>
+
+              <p className="mt-6 text-xs leading-relaxed text-muted lg:mt-auto lg:pt-6">{disclaimer}</p>
+            </aside>
+
+            <div className="min-w-0 bg-[var(--background)] p-6 sm:p-8 lg:col-span-8 lg:p-8">
+              <div className="mb-5 flex flex-col gap-1 border-b border-border/60 pb-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <p className="text-[0.6875rem] font-bold uppercase tracking-[0.12em] text-muted">Campus mosaic</p>
+                  <p className="mt-0.5 text-sm font-semibold text-heading">
+                    {activeTab === "All moments" ? "A snapshot of life at RMPS" : activeTab}
+                  </p>
+                </div>
+                <Link
+                  href="/school-life/student-achievers"
+                  className="text-xs font-semibold text-brand transition hover:text-[var(--brand-maroon-dark)]"
+                >
+                  Student achievers →
+                </Link>
+              </div>
+
+              <div
+                className="rkps-stagger grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-12 lg:gap-4"
+                role="tabpanel"
+                aria-label={`Gallery: ${activeTab}`}
+              >
+                {visible.map((photo, i) => (
+                  <GalleryTile key={`${photo.src}-${activeTab}`} photo={photo} index={i} priority={i === 0} />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-        <p className="text-xs tabular-nums text-muted">
-          Showing {visible.length} of {pool.length} {pool.length === 1 ? "moment" : "moments"}
-        </p>
-      </div>
-
-      <div className="rkps-stagger mt-8 grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-12 lg:gap-3">
-        {visible.map((photo, i) => (
-          <GalleryTile key={`${photo.src}-${activeTab}`} photo={photo} index={i} priority={i === 0} />
-        ))}
-      </div>
-
-      <p className="mt-6 max-w-2xl text-xs leading-relaxed text-muted">{disclaimer}</p>
-
-      <div className="mt-8 flex flex-col gap-4 rounded-[1.25rem] border border-dashed border-border/90 bg-surface/80 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <p className="text-sm font-semibold text-heading">More on Instagram</p>
-          <p className="mt-1 text-sm text-muted">Daily photos from programmes, festivals and campus life.</p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <a
-            href={INSTAGRAM_PROFILE}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-primary rkps-ease rkps-press px-5 py-2 text-sm"
-          >
-            @r.k.m.p.s
-          </a>
-          <Link href="/school-life/student-achievers" className="btn-secondary rkps-ease rkps-press px-5 py-2 text-sm">
-            Student achievers
-          </Link>
-        </div>
-      </div>
+      </RkpsInView>
     </RkpsPageSection>
   );
 }
