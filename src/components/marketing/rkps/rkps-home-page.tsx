@@ -41,9 +41,9 @@ import { RkpsHeroBridge } from "@/components/marketing/rkps/rkps-hero-bridge";
 type Tone = "warm" | "rose" | "dark";
 
 const TONE_CLASS: Record<Tone, string> = {
-  warm: "bg-[var(--surface-muted)] text-heading",
-  rose: "bg-[var(--surface-elevated)] text-heading",
-  dark: "bg-[var(--brand-maroon-dark)] text-white",
+  warm: "bg-[var(--rkps-bg-subtle)] text-[var(--rkps-text-body)]",
+  rose: "bg-[var(--surface-elevated)] text-[var(--rkps-text-body)]",
+  dark: "bg-[var(--rkps-primary)] text-white",
 };
 
 type Photo = { src: string; alt?: string };
@@ -200,15 +200,15 @@ function CampusSection() {
 
 function VisitBanner() {
   return (
-    <section aria-label="Visit RMPS" className="bg-[#f7f4ee] py-16 text-[#1f1b16] sm:py-20">
+    <section aria-label="Visit RMPS" className="rkps-bg-inset-panel py-16 text-[var(--rkps-text-body)] sm:py-20">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 rkps-page-x md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl space-y-3">
           <span className="rkps-rule" aria-hidden="true" />
-          <p className="text-xs text-[#5e554a]">Visit the campus</p>
+          <p className="rkps-text-label text-xs">Visit the campus</p>
           <h2 className="rkps-display text-[1.75rem] leading-tight sm:text-4xl">
             See RMPS for yourself
           </h2>
-          <p className="max-w-xl text-sm leading-6 text-[#5e554a] sm:text-base">
+          <p className="max-w-xl text-sm leading-6 text-muted sm:text-base">
             Walk the corridors, see the laboratories, meet the faculty, and ask the admissions questions in person.
           </p>
         </div>
@@ -218,7 +218,7 @@ function VisitBanner() {
           </Link>
           <Link
             href="/#contact"
-            className="text-sm text-[#1f1b16] underline decoration-[rgba(31,27,22,0.25)] underline-offset-4 transition-colors hover:decoration-[#1f1b16]"
+            className="text-sm text-[var(--rkps-text-body)] underline decoration-[color-mix(in_srgb,var(--rkps-text-body)_25%,transparent)] underline-offset-4 transition-colors hover:decoration-[var(--rkps-text-body)]"
           >
             Plan a visit
           </Link>

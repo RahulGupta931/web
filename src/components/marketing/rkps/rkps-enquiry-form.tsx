@@ -33,13 +33,13 @@ export function RkpsEnquiryForm() {
   if (sent) {
     return (
       <div className="flex h-full min-h-[22rem] flex-col justify-center rounded-3xl border border-brand/20 bg-gradient-to-br from-white to-[var(--surface-muted)] p-6 sm:p-10 text-center shadow-xl">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-100 text-emerald-600 shadow-sm">
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[var(--rkps-success-soft)] text-[var(--rkps-success)] shadow-sm">
           <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <span className="mt-4 inline-flex self-center rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-emerald-700">
-          Enquiry Received
+        <span className="mt-4 inline-flex self-center rounded-full bg-[var(--rkps-success-soft)] px-3 py-1 text-xs font-medium text-[var(--rkps-secondary-dark)]">
+          Enquiry received
         </span>
         <h3 className="rkps-display mt-2 text-2xl font-bold text-heading sm:text-3xl">Thank You for Reaching Out</h3>
         <p className="mx-auto mt-2.5 max-w-md text-xs sm:text-sm leading-relaxed text-muted">

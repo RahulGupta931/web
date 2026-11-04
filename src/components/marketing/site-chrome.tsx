@@ -28,7 +28,7 @@ export function MarketingTopBar() {
 
 export function MarketingHeader() {
   return (
-    <header className="sticky top-0 z-30 border-b border-white/10 bg-[var(--brand-maroon-dark)] text-white shadow-[0_8px_28px_rgba(96,0,0,0.18)]">
+    <header className="sticky top-0 z-30 border-b border-[color-mix(in_srgb,var(--rkps-gold)_35%,transparent)] bg-[var(--rkps-burgundy)] text-[var(--rkps-text-on-primary)] shadow-[0_8px_28px_rgb(143_1_3_/_0.16)]">
       <MarketingTopBar />
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-3 px-4 sm:px-5">
         <Link href="/" className="flex min-w-0 items-center gap-2.5">

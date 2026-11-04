@@ -198,10 +198,10 @@ export function RkpsGallerySection({
         <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgba(96,0,0,0.07)] sm:rounded-[2rem]">
           <div className="grid lg:grid-cols-12 lg:items-stretch">
             {/* Mosaic — photos first on small screens */}
-            <div className="order-1 min-w-0 bg-[#f7f4ee] p-5 sm:p-7 lg:order-2 lg:col-span-8 lg:p-8">
+            <div className="order-1 min-w-0 rkps-bg-inset-panel p-5 sm:p-7 lg:order-2 lg:col-span-8 lg:p-8">
               <div className="mb-5 flex flex-col gap-4 border-b border-border/50 pb-5 sm:flex-row sm:items-end sm:justify-between">
                 <div className="min-w-0">
-                  <p className="text-xs text-[#7b7266]">
+                  <p className="rkps-text-label-soft text-xs">
                     {themeLabel}
                     <span className="mx-2 text-border">·</span>
                     <span className="tabular-nums">{visible.length} of {pool.length}</span>
@@ -238,7 +238,7 @@ export function RkpsGallerySection({
             {/* Intro + filters */}
             <aside className="order-2 flex flex-col border-t border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-t-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="mt-4 text-xs text-[#5e554a]">Campus Life · Gallery</p>
+              <p className="rkps-text-label mt-4 text-xs">Campus Life · Gallery</p>
               <h2 className="rkps-display mt-2 text-[1.75rem] leading-tight text-heading [text-wrap:balance] sm:text-3xl">
                 {title}
               </h2>
@@ -272,7 +272,7 @@ export function RkpsGallerySection({
               </p>
 
               <div className="mt-8 hidden lg:block">
-                <p className="text-xs text-[#7b7266]">Browse by theme</p>
+                <p className="rkps-text-label-soft text-xs">Browse by theme</p>
                 <div className="mt-3 overflow-hidden rounded-2xl border border-border/80 bg-[var(--surface-muted)] p-1.5">
                   <ThemeTabs tabs={tabs} activeTab={activeTab} onSelect={setActiveTab} layout="column" />
                 </div>

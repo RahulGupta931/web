@@ -654,7 +654,7 @@ export function RkpsCountValue({ value }: { value: string }) {
 export function RkpsSpotlightCarousel() {
   return (
     <section
-      className="border-y border-border/80 bg-[#f1f6fd] py-10 sm:py-14 lg:py-16"
+      className="border-y border-border/80 bg-[var(--rkps-bg-subtle)] py-10 sm:py-14 lg:py-16"
       aria-labelledby="rkps-spotlight-title"
     >
       <div className="mx-auto max-w-7xl rkps-page-x">
@@ -701,7 +701,7 @@ export function RkpsHighlightsReel() {
   const loop = [...HIGHLIGHTS, ...HIGHLIGHTS];
   return (
     <section
-      className="w-full overflow-hidden bg-[#fdf6e8] py-10 sm:py-14 lg:py-16"
+      className="w-full overflow-hidden bg-[color-mix(in_srgb,var(--rkps-highlight)_12%,var(--rkps-bg))] py-10 sm:py-14 lg:py-16"
       aria-labelledby="rkps-reel-title"
     >
       <div className="mx-auto max-w-7xl rkps-page-x">

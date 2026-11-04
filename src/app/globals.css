@@ -3,31 +3,73 @@
 @source "../**/*.{ts,tsx}";
 
 :root {
-  /* Sampled from /brand/rkmps-logo.png — maroon shield, gold trim */
-  --brand-maroon: #800000;
-  --brand-maroon-light: #a00000;
-  --brand-maroon-dark: #600000;
-  --brand-gold: #f0b000;
-  --brand-gold-muted: #c89400;
-  --brand-on-gold: #600000;
+  /*
+   * R.K. Memorial Public School — official website palette
+   * 1. Charcoal #29333D     — body text, footer
+   * 2. Burgundy #8F0103     — primary brand, navbar, main buttons, headings
+   * 3. Antique gold #D6AD45 — highlights, icons, borders, active states
+   * 4. Warm ivory #F8F5EF   — main background, page sections
+   * 5. Forest green #263D36 — secondary buttons, success
+   * 6. Soft taupe #E8DCD0   — subtle backgrounds, cards, dividers
+   */
+  --rkps-charcoal: #29333d;
+  --rkps-burgundy: #8f0103;
+  --rkps-gold: #d6ad45;
+  --rkps-ivory: #f8f5ef;
+  --rkps-forest: #263d36;
+  --rkps-taupe: #e8dcd0;
 
-  --background: #fffaf7;
-  --foreground: #4a1212;
-  --heading: #3a0808;
-  --muted: #7a5555;
-  --muted-foreground: #7a5555;
+  --rkps-text-body: var(--rkps-charcoal);
+  --rkps-text-muted: color-mix(in srgb, var(--rkps-charcoal) 68%, var(--rkps-ivory));
+  --rkps-text-muted-soft: color-mix(in srgb, var(--rkps-charcoal) 52%, var(--rkps-ivory));
+  --rkps-text-on-primary: color-mix(in srgb, var(--rkps-ivory) 96%, white);
+  --rkps-text-on-primary-muted: color-mix(in srgb, var(--rkps-ivory) 78%, transparent);
+
+  --rkps-primary: var(--rkps-burgundy);
+  --rkps-primary-light: #a50204;
+  --rkps-primary-dark: #6b0102;
+
+  --rkps-highlight: var(--rkps-gold);
+  --rkps-highlight-muted: #b8923a;
+  --rkps-on-highlight: var(--rkps-charcoal);
+
+  --rkps-bg: var(--rkps-ivory);
+  --rkps-bg-subtle: var(--rkps-taupe);
+  --rkps-bg-subtle-warm: color-mix(in srgb, var(--rkps-taupe) 55%, var(--rkps-ivory));
+
+  --rkps-secondary: var(--rkps-forest);
+  --rkps-secondary-dark: #1e312b;
+  --rkps-on-secondary: var(--rkps-ivory);
+  --rkps-success: var(--rkps-forest);
+  --rkps-success-soft: color-mix(in srgb, var(--rkps-forest) 10%, var(--rkps-ivory));
+
+  --rkps-divider: color-mix(in srgb, var(--rkps-charcoal) 12%, var(--rkps-taupe));
+
+  /* Legacy aliases (Tailwind + existing components) */
+  --brand-maroon: var(--rkps-primary);
+  --brand-maroon-light: var(--rkps-primary-light);
+  --brand-maroon-dark: var(--rkps-primary);
+  --brand-gold: var(--rkps-highlight);
+  --brand-gold-muted: var(--rkps-highlight-muted);
+  --brand-on-gold: var(--rkps-on-highlight);
+
+  --background: var(--rkps-bg);
+  --foreground: var(--rkps-text-body);
+  --heading: var(--rkps-primary);
+  --muted: var(--rkps-text-muted);
+  --muted-foreground: var(--rkps-text-muted);
 
   --surface: #ffffff;
-  --surface-elevated: #fff5f0;
+  --surface-elevated: color-mix(in srgb, var(--rkps-ivory) 70%, white);
   --surface-card: #ffffff;
-  --surface-muted: #fcefe9;
+  --surface-muted: var(--rkps-taupe);
 
-  --border: #e8c9c0;
-  --border-brand: #d4a59a;
-  --ring-focus: color-mix(in srgb, var(--brand-gold) 40%, transparent);
+  --border: color-mix(in srgb, var(--rkps-charcoal) 10%, var(--rkps-gold) 22%);
+  --border-brand: color-mix(in srgb, var(--rkps-gold) 55%, var(--rkps-burgundy) 12%);
+  --ring-focus: color-mix(in srgb, var(--rkps-gold) 50%, transparent);
 
-  --shadow-card: 0 12px 32px rgb(96 0 0 / 0.12);
-  --shadow-card-hover: 0 22px 44px rgb(96 0 0 / 0.16);
+  --shadow-card: 0 12px 32px rgb(143 1 3 / 0.08);
+  --shadow-card-hover: 0 22px 44px rgb(143 1 3 / 0.12);
   --radius-card: 1rem;
 
   /* RKPS marketing buttons */
@@ -36,7 +78,7 @@
   --rkps-btn-height: 2.75rem;
   --rkps-btn-height-sm: 2.5rem;
   --rkps-btn-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --rkps-btn-border: color-mix(in srgb, var(--foreground) 11%, transparent);
+  --rkps-btn-border: color-mix(in srgb, var(--rkps-text-body) 11%, transparent);
 }
 
 @theme inline {
@@ -47,6 +89,8 @@
   --color-brand-dark: var(--brand-maroon-dark);
   --color-brand-gold: var(--brand-gold);
   --color-brand-gold-muted: var(--brand-gold-muted);
+  --color-rkps-secondary: var(--rkps-secondary);
+  --color-rkps-success: var(--rkps-success);
   --color-surface: var(--surface);
   --color-surface-elevated: var(--surface-elevated);
   --color-surface-card: var(--surface-card);
@@ -86,7 +130,7 @@ body {
 }
 
 .panel-sidebar {
-  background: var(--brand-maroon-dark);
+  background: var(--rkps-burgundy);
 }
 
 .panel-topbar {
@@ -470,15 +514,27 @@ textarea.input-field {
 
 .rkps-section-num {
   font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--brand-maroon);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: var(--rkps-text-muted);
+}
+
+.rkps-text-label {
+  color: var(--rkps-text-muted);
+}
+
+.rkps-text-label-soft {
+  color: var(--rkps-text-muted-soft);
+}
+
+.rkps-bg-inset-panel {
+  background: var(--rkps-bg-subtle-warm);
 }
 
 .rkps-card {
   border-radius: 1.25rem;
-  border: 1px solid rgba(128, 0, 0, 0.1);
+  border: 1px solid color-mix(in srgb, var(--rkps-charcoal) 8%, var(--rkps-gold) 18%);
   background: rgba(255, 255, 255, 0.88);
   box-shadow: var(--shadow-card);
 }
@@ -495,7 +551,7 @@ textarea.input-field {
   display: block;
   width: 32px;
   height: 2px;
-  background: var(--brand-gold);
+  background: var(--rkps-gold);
 }
 
 /* ── RKPS button system (maroon primary, gold accent, warm outline secondary) ── */
@@ -576,53 +632,53 @@ textarea.input-field {
 
 .rkps-btn-primary,
 .rkps-btn-navy {
-  background: var(--brand-maroon);
-  color: #fff;
-  border-color: color-mix(in srgb, var(--brand-maroon-dark) 70%, black);
+  background: var(--rkps-primary);
+  color: var(--rkps-on-secondary);
+  border-color: color-mix(in srgb, var(--rkps-primary-dark) 70%, black);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    0 1px 2px rgba(96, 0, 0, 0.08);
+    0 1px 2px rgb(143 1 3 / 0.1);
 }
 
 .rkps-btn-primary:hover,
 .rkps-btn-navy:hover {
-  background: var(--brand-maroon-dark);
-  border-color: color-mix(in srgb, var(--brand-maroon-dark) 85%, black);
+  background: var(--rkps-primary-dark);
+  border-color: color-mix(in srgb, var(--rkps-primary-dark) 85%, black);
 }
 
 .rkps-btn-gold {
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--brand-gold) 96%, white) 0%,
-    var(--brand-gold) 100%
+    color-mix(in srgb, var(--rkps-highlight) 96%, white) 0%,
+    var(--rkps-highlight) 100%
   );
-  color: var(--brand-on-gold);
-  border-color: color-mix(in srgb, var(--brand-gold-muted) 45%, transparent);
+  color: var(--rkps-on-highlight);
+  border-color: color-mix(in srgb, var(--rkps-highlight-muted) 45%, transparent);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
-    0 1px 2px rgba(96, 0, 0, 0.06);
+    0 1px 2px rgb(143 1 3 / 0.08);
 }
 
 .rkps-btn-gold:hover {
   background: linear-gradient(
     180deg,
-    color-mix(in srgb, var(--brand-gold) 88%, var(--brand-gold-muted)) 0%,
-    color-mix(in srgb, var(--brand-gold) 94%, var(--brand-gold-muted)) 100%
+    color-mix(in srgb, var(--rkps-highlight) 88%, var(--rkps-highlight-muted)) 0%,
+    color-mix(in srgb, var(--rkps-highlight) 94%, var(--rkps-highlight-muted)) 100%
   );
-  border-color: color-mix(in srgb, var(--brand-gold-muted) 55%, transparent);
+  border-color: color-mix(in srgb, var(--rkps-highlight-muted) 55%, transparent);
 }
 
 .rkps-btn-secondary {
-  background: var(--surface);
-  color: var(--brand-maroon-dark);
-  border-color: var(--rkps-btn-border);
-  box-shadow: 0 1px 2px rgba(58, 8, 8, 0.04);
+  background: color-mix(in srgb, var(--rkps-secondary) 7%, var(--surface));
+  color: var(--rkps-secondary-dark);
+  border-color: color-mix(in srgb, var(--rkps-secondary) 32%, transparent);
+  box-shadow: 0 1px 2px rgba(42, 83, 70, 0.06);
 }
 
 .rkps-btn-secondary:hover {
-  background: color-mix(in srgb, var(--brand-maroon) 5%, var(--surface));
-  border-color: color-mix(in srgb, var(--brand-maroon) 22%, transparent);
-  color: var(--brand-maroon-dark);
+  background: color-mix(in srgb, var(--rkps-secondary) 12%, var(--surface));
+  border-color: color-mix(in srgb, var(--rkps-secondary) 42%, transparent);
+  color: var(--rkps-secondary-dark);
 }
 
 .rkps-btn-ghost {
@@ -686,8 +742,8 @@ textarea.input-field {
 
 .rkps-btn-icon:hover {
   background: var(--surface);
-  border-color: color-mix(in srgb, var(--brand-maroon) 20%, transparent);
-  color: var(--brand-maroon-dark);
+  border-color: color-mix(in srgb, var(--rkps-highlight) 35%, var(--rkps-text-body) 10%);
+  color: var(--rkps-primary);
 }
 
 /* Taste-skill motion baseline (MOTION_INTENSITY ~6): transform/opacity only */
@@ -827,10 +883,10 @@ html {
 }
 
 .rkps-glass-dark {
-  background: rgba(96, 0, 0, 0.85);
+  background: color-mix(in srgb, var(--rkps-burgundy) 88%, transparent);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid color-mix(in srgb, var(--rkps-gold) 22%, transparent);
 }
 
 .rkps-touch-target {

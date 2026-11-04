@@ -118,7 +118,7 @@ function ProgrammePicker({
                 : "border-border/80 bg-white text-muted hover:border-brand/20 hover:bg-[var(--surface-muted)]"
             }`}
           >
-            <span className="block text-[0.6875rem] tabular-nums text-[#7b7266]">{String(index + 1).padStart(2, "0")}</span>
+            <span className="block text-[0.6875rem] tabular-nums rkps-text-label-soft">{String(index + 1).padStart(2, "0")}</span>
             <span className="mt-0.5 block leading-snug">{story.short}</span>
           </button>
         );
@@ -147,7 +147,7 @@ export function RkpsCampusStoriesSection() {
           <div className="grid lg:grid-cols-12 lg:items-stretch">
             <aside className="order-2 flex flex-col border-t border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-t-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="mt-4 text-xs text-[#5e554a]">Campus life</p>
+              <p className="mt-4 rkps-text-label text-xs">Campus life</p>
               <h2
                 id="rkps-stories-title"
                 className="rkps-display mt-2 text-[1.75rem] leading-tight text-heading [text-wrap:balance] sm:text-3xl"
@@ -160,7 +160,7 @@ export function RkpsCampusStoriesSection() {
               </p>
 
               <div className="mt-8 hidden lg:block">
-                <p className="text-xs text-[#7b7266]">Programmes on campus</p>
+                <p className="rkps-text-label-soft text-xs">Programmes on campus</p>
                 <div className="mt-3">
                   <ProgrammePicker activeIndex={activeIndex} onSelect={setActiveIndex} layout="column" />
                 </div>
@@ -179,9 +179,9 @@ export function RkpsCampusStoriesSection() {
               </div>
             </aside>
 
-            <div className="order-1 flex min-h-0 flex-col bg-[#f7f4ee] p-5 sm:p-7 lg:order-2 lg:col-span-8 lg:p-8">
+            <div className="order-1 flex min-h-0 flex-col rkps-bg-inset-panel p-5 sm:p-7 lg:order-2 lg:col-span-8 lg:p-8">
               <div className="mb-4 flex items-end justify-between gap-3 border-b border-border/50 pb-4 lg:hidden">
-                <p className="text-xs text-[#7b7266]">Choose a programme</p>
+                <p className="rkps-text-label-soft text-xs">Choose a programme</p>
               </div>
               <div className="mb-5 lg:hidden">
                 <ProgrammePicker activeIndex={activeIndex} onSelect={setActiveIndex} layout="row" />
@@ -200,7 +200,7 @@ export function RkpsCampusStoriesSection() {
                 <article className="rounded-2xl border border-border/80 bg-white p-5 sm:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs text-[#7b7266]">
+                      <p className="rkps-text-label-soft text-xs">
                         Programme {String(activeIndex + 1).padStart(2, "0")} of {String(STORIES.length).padStart(2, "0")}
                       </p>
                       <h3 className="rkps-display mt-1 text-xl text-heading sm:text-2xl">{story.title}</h3>

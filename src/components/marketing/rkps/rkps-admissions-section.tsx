@@ -35,9 +35,9 @@ export function RkpsAdmissionsSection({
         <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgba(96,0,0,0.07)] sm:rounded-[2rem]">
           <div className="grid lg:grid-cols-12 lg:items-stretch">
             {/* Enquiry — first on small screens */}
-            <div className="order-1 flex min-h-0 flex-col bg-[#f7f4ee] p-5 sm:p-7 lg:order-2 lg:col-span-7 lg:p-8">
+            <div className="order-1 flex min-h-0 flex-col rkps-bg-inset-panel p-5 sm:p-7 lg:order-2 lg:col-span-7 lg:p-8">
               <div className="mb-5 border-b border-border/50 pb-5">
-                <p className="text-xs text-[#7b7266]">Session 2026–27 · Pre-Primary to Grade 12</p>
+                <p className="rkps-text-label-soft text-xs">Session 2026–27 · Pre-Primary to Grade 12</p>
                 <p className="rkps-display mt-1 text-xl text-heading sm:text-2xl">Admission enquiry</p>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
                   Share your details and the office will follow up with availability, documents and visit options.
@@ -49,7 +49,7 @@ export function RkpsAdmissionsSection({
             {/* Journey + FAQ */}
             <aside className="order-2 flex flex-col border-t border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-5 lg:border-t-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="mt-4 text-xs text-[#5e554a]">Admissions 2026–27</p>
+              <p className="rkps-text-label mt-4 text-xs">Admissions 2026–27</p>
               <h2 className="rkps-display mt-2 text-[1.75rem] leading-tight text-heading [text-wrap:balance] sm:text-3xl">
                 {title}
               </h2>
@@ -57,7 +57,7 @@ export function RkpsAdmissionsSection({
               <p className="mt-2 text-sm leading-relaxed text-muted">{lead}</p>
 
               <div className="mt-8">
-                <p className="text-xs text-[#7b7266]">How it works</p>
+                <p className="rkps-text-label-soft text-xs">How it works</p>
                 <ol className="mt-3 divide-y divide-border/70 overflow-hidden rounded-2xl border border-border/80 bg-white">
                   {steps.map((step) => (
                     <li key={step.num} className="flex gap-3.5 p-4 sm:p-5">
@@ -96,7 +96,7 @@ export function RkpsAdmissionsSection({
               </figure>
 
               <div id="faq" className="mt-8 scroll-mt-28">
-                <p className="text-xs text-[#7b7266]">Common questions</p>
+                <p className="rkps-text-label-soft text-xs">Common questions</p>
                 <div className="mt-3 space-y-2">
                   {faq.map((item) => (
                     <details

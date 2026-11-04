@@ -22,7 +22,7 @@ export function RkpsRecognitionSection() {
             {/* Intro + pillars */}
             <aside className="order-2 flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="mt-4 text-xs text-[#5e554a]">Recognition & Milestones</p>
+              <p className="rkps-text-label mt-4 text-xs">Recognition & Milestones</p>
               <h2 className="rkps-display mt-2 text-2xl font-bold tracking-tight text-heading [text-wrap:balance] sm:text-3xl">
                 Student achievements in focus
               </h2>
@@ -64,7 +64,7 @@ export function RkpsRecognitionSection() {
             <div className="order-1 bg-[var(--background)] p-6 sm:p-8 lg:order-2 lg:col-span-8 lg:p-8">
               <div className="mb-5 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
                 <div>
-                  <p className="text-xs text-[#7b7266]">Latest highlights</p>
+                  <p className="rkps-text-label-soft text-xs">Latest highlights</p>
                   <p className="mt-0.5 text-sm font-semibold text-heading">Three recent wins from across campus</p>
                 </div>
                 <span className="hidden shrink-0 rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/15 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-[var(--brand-maroon-dark)] sm:inline-flex">

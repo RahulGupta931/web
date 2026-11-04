@@ -89,7 +89,7 @@ function MoreNavDropdown({ panelAlign = "right" }: { panelAlign?: "left" | "righ
           id={menuId}
           role="menu"
           aria-labelledby={triggerId}
-          className={`absolute top-full z-[100] mt-2.5 min-w-[15rem] overflow-hidden rounded-2xl border border-white/15 bg-[var(--brand-maroon-dark)] p-2 text-white shadow-[0_20px_45px_rgba(0,0,0,0.45)] backdrop-blur-xl ${
+          className={`absolute top-full z-[100] mt-2.5 min-w-[15rem] overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--rkps-gold)_25%,transparent)] bg-[var(--rkps-burgundy)] p-2 text-[var(--rkps-text-on-primary)] shadow-[0_20px_45px_rgba(41,51,61,0.35)] backdrop-blur-xl ${
             panelAlign === "left" ? "left-0" : "right-0"
           }`}
         >
@@ -135,7 +135,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
 
   return (
     <>
-      <header className="sticky top-0 z-40 overflow-visible border-b border-white/10 bg-[var(--brand-maroon-dark)]/95 text-white backdrop-blur-md shadow-[0_8px_30px_rgba(96,0,0,0.22)]">
+      <header className="sticky top-0 z-40 overflow-visible border-b border-[color-mix(in_srgb,var(--rkps-gold)_35%,transparent)] bg-[var(--rkps-burgundy)]/95 text-[var(--rkps-text-on-primary)] backdrop-blur-md shadow-[0_8px_30px_rgb(143_1_3_/_0.18)]">
         <div className="mx-auto max-w-7xl rkps-page-x">
           <div className="flex h-16 items-center justify-between gap-3 sm:h-[4.5rem]">
             {/* Logo + School Info */}
@@ -144,16 +144,14 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
               className="group flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3 lg:flex-none"
               aria-label="R.K. Memorial Public School Home"
             >
-              <div className="relative shrink-0 overflow-hidden rounded-lg bg-white/10 p-1">
-                <Image
-                  src={BRAND.logoSrc}
-                  alt=""
-                  width={64}
-                  height={54}
-                  className="h-10 w-auto object-contain sm:h-12"
-                  priority
-                />
-              </div>
+              <Image
+                src={BRAND.logoSrc}
+                alt=""
+                width={72}
+                height={60}
+                className="h-10 w-auto shrink-0 object-contain sm:h-12"
+                priority
+              />
               <div className="min-w-0 leading-tight">
                 <p className="truncate text-base font-medium tracking-tight text-white">
                   <span className="sm:hidden">{BRAND.shortName}</span>
@@ -378,7 +376,7 @@ function RkpsMobileBottomBar() {
 
   return (
     <aside
-      className="fixed bottom-0 inset-x-0 z-30 lg:hidden border-t border-white/15 bg-[var(--brand-maroon-dark)]/95 p-2 px-3 backdrop-blur-lg shadow-[0_-8px_25px_rgba(0,0,0,0.35)]"
+      className="fixed bottom-0 inset-x-0 z-30 lg:hidden border-t border-[color-mix(in_srgb,var(--rkps-gold)_30%,transparent)] bg-[var(--rkps-burgundy)]/95 p-2 px-3 backdrop-blur-lg shadow-[0_-8px_25px_rgb(143_1_3_/_0.25)]"
       aria-label="Mobile quick actions"
     >
       <div className="mx-auto flex max-w-md items-center justify-around gap-1">

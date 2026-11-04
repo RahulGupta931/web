@@ -43,7 +43,7 @@ export function RkpsContactSection({
           <div className="grid lg:grid-cols-12 lg:items-stretch">
             <aside className="order-2 flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="mt-4 text-xs text-[#5e554a]">Contact & Location</p>
+              <p className="rkps-text-label mt-4 text-xs">Contact & Location</p>
               <h2 className="rkps-display mt-2 text-2xl font-bold tracking-tight text-heading [text-wrap:balance] sm:text-3xl">
                 {title}
               </h2>
@@ -113,7 +113,7 @@ export function RkpsContactSection({
                   href={telHref}
                   className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6"
                 >
-                  <span className="text-xs text-[#5e554a]">Call admissions</span>
+                  <span className="rkps-text-label text-xs">Call admissions</span>
                   <p className="mt-2 text-xl font-bold tabular-nums text-heading sm:text-2xl">{phone}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted">
                     Admissions assistance, visit scheduling, and fee guidance during school hours.
@@ -125,7 +125,7 @@ export function RkpsContactSection({
                   href={mailHref}
                   className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6"
                 >
-                  <span className="text-xs text-[#5e554a]">Email inquiries</span>
+                  <span className="rkps-text-label text-xs">Email inquiries</span>
                   <p className="mt-2 break-all text-base font-bold text-heading sm:text-lg">{email}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted">
                     Documentation, transcript queries, or detailed questions for the administrative office.

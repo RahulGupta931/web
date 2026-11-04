@@ -107,7 +107,7 @@ export function RkpsSchoolLifeSection() {
           <div className="grid lg:grid-cols-12 lg:items-stretch">
             <aside className="order-2 flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="mt-4 text-xs text-[#5e554a]">Campus Life & Culture</p>
+              <p className="rkps-text-label mt-4 text-xs">Campus Life & Culture</p>
               <h2 className="rkps-display mt-2 text-2xl font-bold tracking-tight text-heading [text-wrap:balance] sm:text-3xl">
                 See learners in vibrant action
               </h2>
@@ -116,7 +116,7 @@ export function RkpsSchoolLifeSection() {
               </p>
 
               <div className="mt-8">
-                <p className="text-xs text-[#7b7266]">Daily rhythms</p>
+                <p className="rkps-text-label-soft text-xs">Daily rhythms</p>
                 <ul className="mt-3 divide-y divide-border/70 overflow-hidden rounded-2xl border border-border/80 bg-white">
                   {STUDENT_LIFE.map((item) => (
                     <li key={item.title} className="flex gap-3 p-4 sm:p-5">
@@ -153,7 +153,7 @@ export function RkpsSchoolLifeSection() {
             <div className="order-1 bg-[var(--background)] p-6 sm:p-8 lg:order-2 lg:col-span-8 lg:p-8">
               <div className="mb-5 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
                 <div>
-                  <p className="text-xs text-[#7b7266]">On campus this term</p>
+                  <p className="rkps-text-label-soft text-xs">On campus this term</p>
                   <p className="mt-0.5 text-sm font-semibold text-heading">Stories, events, and community wins</p>
                 </div>
                 <span className="hidden shrink-0 rounded-full border border-brand/20 bg-brand/5 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-brand sm:inline-flex">

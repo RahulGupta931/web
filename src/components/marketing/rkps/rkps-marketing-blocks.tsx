@@ -87,7 +87,7 @@ export function RkpsSectionIntro({
       <div className="max-w-2xl space-y-1.5">
         <span className="rkps-rule" aria-hidden="true" />
         {num ? (
-          <p className={`text-xs ${dark ? "text-white/70" : "text-[#5e554a]"}`}>
+          <p className={`text-xs ${dark ? "text-white/70" : "rkps-text-label"}`}>
             {num}
           </p>
         ) : null}
@@ -380,7 +380,7 @@ export function RkpsQuickJumpNav({
     >
       <div className="mx-auto max-w-7xl rkps-page-x py-3 sm:py-3.5">
         <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-4">
-          <p className="shrink-0 text-xs text-[#5e554a]">On this page</p>
+          <p className="rkps-text-label shrink-0 text-xs">On this page</p>
           <div className="relative min-w-0 flex-1">
             <div className="flex gap-x-4 gap-y-2 overflow-x-auto pb-0.5 scrollbar-none sm:flex-wrap sm:overflow-visible">
               {links.map((link) => (
@@ -390,7 +390,7 @@ export function RkpsQuickJumpNav({
                   className={`shrink-0 py-1 text-sm transition-colors ${
                     link.highlight
                       ? "text-[var(--brand-maroon)] underline decoration-[var(--brand-gold)] decoration-2 underline-offset-4"
-                      : "text-[#1f1b16] hover:text-[var(--brand-maroon)]"
+                      : "text-[var(--rkps-text-body)] hover:text-[var(--rkps-primary-light)]"
                   }`}
                 >
                   {link.label}
