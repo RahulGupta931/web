@@ -141,22 +141,22 @@ export function RkpsCampusStoriesSection() {
   }, []);
 
   return (
-    <RkpsPageSection id="campus-programmes" tone="inset">
+    <RkpsPageSection id="beyond" tone="inset">
       <RkpsInView>
         <div className="overflow-hidden rounded-[1.75rem] border border-border/80 bg-white shadow-[0_24px_60px_rgba(96,0,0,0.07)] sm:rounded-[2rem]">
           <div className="grid lg:grid-cols-12 lg:items-stretch">
             <aside className="order-2 flex flex-col border-t border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-t-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="mt-4 rkps-text-label text-xs">Campus life</p>
+              <p className="mt-4 rkps-text-label text-xs">Life beyond lessons</p>
               <h2
                 id="rkps-stories-title"
                 className="rkps-display mt-2 text-[1.75rem] leading-tight text-heading [text-wrap:balance] sm:text-3xl"
               >
-                Your child’s day, told in programmes and people
+                A large visual of programmes and people
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-                From morning assembly to afternoon clubs — a rhythm of sport, stage, labs, and community that stays
-                consistent through the year.
+                Sports week, parent meetings, exhibitions, well-being, stage and clubs — photographs from campus, with
+                Instagram for live updates.
               </p>
 
               <div className="mt-8 hidden lg:block">
@@ -168,14 +168,16 @@ export function RkpsCampusStoriesSection() {
 
               <div className="mt-8 flex flex-col gap-2 sm:flex-row lg:mt-auto lg:flex-col lg:pt-8">
                 <Link href="/school-life/events" className="rkps-btn-navy rkps-btn-sm w-full justify-center text-center sm:text-sm">
-                  School events calendar
+                  School event highlights
                 </Link>
-                <Link
-                  href="/#gallery"
+                <a
+                  href="https://www.instagram.com/r.k.m.p.s/"
+                  target="_blank"
+                  rel="noreferrer"
                   className="rkps-btn-secondary rkps-btn-sm w-full justify-center text-center sm:text-sm"
                 >
-                  Browse photo gallery
-                </Link>
+                  Instagram
+                </a>
               </div>
             </aside>
 

@@ -529,6 +529,8 @@ export function RkpsAboutSection({
     title: string;
     subtitle: string;
     body: string;
+    mission?: string;
+    philosophy?: string;
     cta: string;
     href: string;
   };
@@ -558,6 +560,18 @@ export function RkpsAboutSection({
               </h2>
               <p className="text-lg font-bold text-white/95 sm:text-xl">{vision.subtitle}</p>
               <p className="max-w-[65ch] text-sm leading-relaxed text-white/85 sm:text-base">{vision.body}</p>
+              {vision.mission ? (
+                <p className="max-w-[65ch] text-sm leading-relaxed text-white/85 sm:text-base">
+                  <span className="font-semibold text-[var(--brand-gold)]">Mission. </span>
+                  {vision.mission}
+                </p>
+              ) : null}
+              {vision.philosophy ? (
+                <p className="max-w-[65ch] text-sm leading-relaxed text-white/85 sm:text-base">
+                  <span className="font-semibold text-[var(--brand-gold)]">Educational philosophy. </span>
+                  {vision.philosophy}
+                </p>
+              ) : null}
 
               <div className="flex flex-wrap gap-3 pt-2">
                 <Link
@@ -623,11 +637,11 @@ export function RkpsAboutSection({
           </div>
         </div>
 
-        <ol className="mt-8 grid gap-5 md:grid-cols-3">
+        <ol className="mt-8 grid gap-5 lg:grid-cols-12">
           {values.items.map((v, i) => {
             const isFeatured = i === values.items.length - 1;
             return (
-              <li key={v.title}>
+              <li key={v.title} className={i === 0 ? "lg:col-span-7" : i === 1 ? "lg:col-span-5" : "lg:col-span-12"}>
                 <article
                   className={`flex h-full flex-col justify-between rounded-3xl border p-6 sm:p-8 transition duration-300 hover:-translate-y-1 ${
                     isFeatured
@@ -646,7 +660,7 @@ export function RkpsAboutSection({
                     <p className={`mt-4 text-xs font-bold uppercase tracking-wider ${
                       isFeatured ? "text-[var(--brand-gold)]" : "text-brand"
                     }`}>
-                      {i === 0 ? "Inquiry" : i === 1 ? "Character" : "Growth"}
+                      Principle 0{i + 1}
                     </p>
                     <h3 className={`rkps-display mt-1 text-xl font-bold tracking-tight ${
                       isFeatured ? "text-white" : "text-heading"

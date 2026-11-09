@@ -13,7 +13,7 @@ import {
 } from "react";
 import { RKPS_HERO } from "@/content/website/rkps-copy";
 import { LATEST_NEWS } from "@/content/website/public-site";
-import { INSTAGRAM_PHOTOS, instagramPhoto } from "@/content/website/instagram-media";
+import { instagramPhoto } from "@/content/website/instagram-media";
 
 /* -------------------------------------------------------------------------- */
 /*  Shared constants & helpers                                                 */
@@ -31,25 +31,25 @@ const FOCUS_LIGHT =
 
 const SLIDES = [
   {
-    photo: INSTAGRAM_PHOTOS[0],
+    photo: {
+      src: "/marketing/hero/staff-and-students-crest.webp",
+      alt: "Teachers and students of R.K Memorial Public School together beneath the school crest",
+    },
     kicker: RKPS_HERO.eyebrow,
-    title: RKPS_HERO.line1,
-    accent: RKPS_HERO.line2,
-    body: RKPS_HERO.lead,
   },
   {
-    photo: instagramPhoto("campus-7.jpg"),
-    kicker: "School Life & Celebrations",
-    title: "A place to belong.",
-    accent: "Celebrations that stay with you.",
-    body: "Festivals, sport and everyday kindness sit beside rigorous academic learning.",
+    photo: {
+      src: "/marketing/hero/dpsg-cup-podium.jpg",
+      alt: "Students with medals and certificates on the podium at the DPSG Cup",
+    },
+    kicker: "Medals at the DPSG Cup · Sport and the school day",
   },
   {
-    photo: instagramPhoto("campus-4.jpg"),
-    kicker: `Admissions ${SESSION} Open`,
-    title: "Your next chapter",
-    accent: "starts with a warm hello.",
-    body: "Visit our campus and talk to the admissions team about the learning journey you are exploring.",
+    photo: {
+      src: "/marketing/hero/field-trip-drizzling-land.webp",
+      alt: "Students in school uniform with their teachers on a field trip to Drizzling Land",
+    },
+    kicker: `Field trips and campus life · Admissions ${SESSION}`,
   },
 ] as const;
 
@@ -506,7 +506,7 @@ export function RkpsCinematicHero() {
     >
       {SLIDES.map((item, i) => (
         <div
-          key={item.title}
+          key={item.photo.src}
           className={`absolute inset-0 overflow-hidden transition-opacity duration-1000 motion-reduce:transition-none ${
             i === c.index ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
@@ -534,7 +534,7 @@ export function RkpsCinematicHero() {
 
       <div className="relative z-10 mx-auto flex min-h-[32rem] max-w-7xl flex-col rkps-page-x pb-4 pt-16 sm:min-h-[38rem] sm:pt-20 lg:min-h-[calc(100dvh-4.5rem)] lg:pb-6">
         <div
-          key={slide.title}
+          key={slide.kicker}
           className="flex flex-1 flex-col justify-end space-y-4 lg:max-w-3xl lg:justify-center"
           aria-live={c.playing ? "off" : "polite"}
         >
@@ -544,15 +544,15 @@ export function RkpsCinematicHero() {
           </div>
 
           <h1 className="rkps-display max-w-[16ch] text-[2.25rem] leading-[1.05] text-white [text-wrap:balance] sm:text-5xl lg:text-[4.5rem]">
-            {slide.title}
-            <span className="mt-2 block text-white/80">{slide.accent}</span>
+            {RKPS_HERO.line1}
+            <span className="mt-2 block text-white/80">{RKPS_HERO.line2}</span>
           </h1>
 
           <p className="rkps-reveal max-w-xl text-sm leading-7 text-white/80 sm:text-lg">
-            {slide.body}
+            {RKPS_HERO.lead}
           </p>
 
-          <div className="rkps-reveal flex flex-col items-start gap-3 pt-2 sm:flex-row sm:items-center">
+          <div className="rkps-reveal flex flex-col items-start gap-3 pt-2 sm:flex-row sm:flex-wrap sm:items-center">
             <Link
               href={RKPS_HERO.primary.href}
               className={`rkps-btn-gold w-full sm:w-auto ${FOCUS_DARK}`}
@@ -561,22 +561,43 @@ export function RkpsCinematicHero() {
             </Link>
             <Link
               href={RKPS_HERO.secondary.href}
-              className={`inline-flex min-h-11 items-center text-sm text-white/90 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white hover:decoration-white ${FOCUS_DARK}`}
+              className={`rkps-btn-secondary w-full border-white/30 bg-white/10 text-white hover:bg-white/20 sm:w-auto ${FOCUS_DARK}`}
             >
               {RKPS_HERO.secondary.label}
+            </Link>
+            <Link
+              href={RKPS_HERO.enquiry.href}
+              className={`inline-flex min-h-11 items-center text-sm text-white/90 underline decoration-white/30 underline-offset-4 transition-colors hover:text-white hover:decoration-white ${FOCUS_DARK}`}
+            >
+              {RKPS_HERO.enquiry.label}
             </Link>
           </div>
         </div>
 
         <div className="mt-8 flex items-center justify-between gap-3 border-t border-white/15 pt-2">
           <div className="flex items-center gap-2">
-            <SlideDots labels={SLIDES.map((s) => s.title)} index={c.index} onSelect={c.go} />
+            <SlideDots labels={SLIDES.map((s) => s.kicker)} index={c.index} onSelect={c.go} />
             <span className="text-xs font-semibold tabular-nums text-white/65">
               {pad(c.index + 1)} / {pad(SLIDES.length)}
             </span>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="hidden text-xs text-white/60 md:inline">Scroll</span>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              onClick={c.prev}
+              aria-label="Previous slide"
+              className={`grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-95 ${FOCUS_DARK}`}
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              onClick={c.next}
+              aria-label="Next slide"
+              className={`grid h-10 w-10 place-items-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-md transition hover:bg-white/20 active:scale-95 ${FOCUS_DARK}`}
+            >
+              →
+            </button>
             {!c.reduced ? <PauseButton tone="dark" paused={c.userPaused} onToggle={c.togglePaused} /> : null}
           </div>
         </div>
@@ -596,12 +617,13 @@ function parseStat(value: string) {
 }
 
 export function RkpsCountValue({ value }: { value: string }) {
+  const placeholder = !/[\d]/.test(value);
   const { prefix, target, suffix } = parseStat(value);
   const [shown, setShown] = useState(0);
   const [node, setNode] = useState<HTMLElement | null>(null);
 
   useEffect(() => {
-    if (!node) return;
+    if (placeholder || !node) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce || target === 0) {
       setShown(target);
@@ -630,7 +652,11 @@ export function RkpsCountValue({ value }: { value: string }) {
       observer.disconnect();
       cancelAnimationFrame(frame);
     };
-  }, [node, target]);
+  }, [node, target, placeholder]);
+
+  if (placeholder) {
+    return <span>{value}</span>;
+  }
 
   const formatted = target >= 1000 ? shown.toLocaleString("en-IN") : String(shown);
   return (

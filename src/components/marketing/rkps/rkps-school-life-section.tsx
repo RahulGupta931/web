@@ -48,8 +48,8 @@ function CampusStoryCard({
   return (
     <Link
       href={href}
-      className={`group relative isolate flex h-full min-h-[14rem] flex-col justify-between overflow-hidden rounded-3xl border border-white/15 shadow-[0_16px_36px_rgba(96,0,0,0.12)] transition duration-300 hover:-translate-y-0.5 hover:shadow-2xl sm:min-h-[16rem] ${
-        featured ? "min-h-[22rem] sm:min-h-[26rem] lg:min-h-[28rem]" : ""
+      className={`group relative isolate flex h-full min-h-[14rem] flex-col justify-between overflow-hidden rounded-3xl border border-white/15 shadow-[0_16px_36px_rgba(96,0,0,0.12)] transition-shadow duration-300 hover:shadow-2xl sm:min-h-[16rem] ${
+        featured ? "min-h-[22rem] sm:min-h-[26rem] lg:min-h-0" : "lg:min-h-0"
       } ${className}`}
     >
       <img
@@ -67,7 +67,7 @@ function CampusStoryCard({
         className="pointer-events-none absolute inset-x-0 top-0 h-24 -z-10 bg-gradient-to-b from-black/45 to-transparent sm:h-28"
       />
 
-      <span className="relative z-10 m-4 inline-flex w-fit max-w-[calc(100%-2rem)] items-center rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/20 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-[var(--brand-gold)] backdrop-blur-md sm:m-5">
+      <span className="relative z-10 m-4 inline-flex w-fit max-w-[calc(100%-2rem)] items-center rounded-full border border-[var(--brand-gold)]/40 bg-[var(--brand-gold)]/20 px-3 py-1 text-xs font-medium text-[var(--brand-gold)] backdrop-blur-md sm:m-5">
         {badge}
       </span>
 
@@ -107,9 +107,9 @@ export function RkpsSchoolLifeSection() {
           <div className="grid lg:grid-cols-12 lg:items-stretch">
             <aside className="order-2 flex flex-col border-b border-border/70 bg-[var(--surface-elevated)] p-6 sm:p-8 lg:order-1 lg:col-span-4 lg:border-b-0 lg:border-r lg:p-10">
               <span className="rkps-rule" aria-hidden="true" />
-              <p className="rkps-text-label mt-4 text-xs">Campus Life & Culture</p>
+              <p className="rkps-text-label mt-4 text-xs">School life and culture</p>
               <h2 className="rkps-display mt-2 text-2xl font-bold tracking-tight text-heading [text-wrap:balance] sm:text-3xl">
-                See learners in vibrant action
+                Sports, programmes, clubs and celebrations
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
                 Inspiring celebrations, cultural galas, and day-to-day school moments from our vibrant campus.
@@ -150,23 +150,23 @@ export function RkpsSchoolLifeSection() {
               </div>
             </aside>
 
-            <div className="order-1 bg-[var(--background)] p-6 sm:p-8 lg:order-2 lg:col-span-8 lg:p-8">
+            <div className="order-1 flex flex-col bg-[var(--background)] p-6 sm:p-8 lg:order-2 lg:col-span-8 lg:p-10">
               <div className="mb-5 flex items-end justify-between gap-4 border-b border-border/60 pb-4">
                 <div>
                   <p className="rkps-text-label-soft text-xs">On campus this term</p>
                   <p className="mt-0.5 text-sm font-semibold text-heading">Stories, events, and community wins</p>
                 </div>
-                <span className="hidden shrink-0 rounded-full border border-brand/20 bg-brand/5 px-3 py-1 text-[0.6875rem] font-bold uppercase tracking-wider text-brand sm:inline-flex">
+                <span className="hidden shrink-0 rounded-full border border-brand/20 bg-brand/5 px-3 py-1 text-xs font-medium text-brand sm:inline-flex">
                   Co-curricular
                 </span>
               </div>
 
-              <div className="rkps-stagger grid gap-4 sm:gap-5 lg:grid-cols-12 lg:grid-rows-2 lg:items-stretch lg:gap-5">
-                <div className="min-h-0 lg:col-span-7 lg:row-span-2" style={{ ["--rkps-i" as string]: 0 }}>
+              <div className="rkps-stagger grid flex-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-12 lg:grid-rows-2 lg:items-stretch">
+                <div className="min-h-0 sm:col-span-2 lg:col-span-7 lg:row-span-2" style={{ ["--rkps-i" as string]: 0 }}>
                   <CampusStoryCard
                     featured
                     href="/school-life/student-achievers"
-                    photo={instagramPhoto("campus-28.jpg")}
+                    photo={{ src: "/marketing/school-day/dpsg-cup-girls.jpg", alt: "Girls with medals and certificates on the podium at the DPSG Cup" }}
                     badge="Student Achievers"
                     title="Every learner, their own kind of remarkable"
                     kicker="Recognition without comparisons"
@@ -189,12 +189,12 @@ export function RkpsSchoolLifeSection() {
                 </div>
                 <Link
                   href="/#gallery"
-                  className="group relative flex min-h-[14rem] flex-col overflow-hidden rounded-3xl border border-border/80 bg-[var(--brand-maroon-dark)] shadow-md transition hover:-translate-y-0.5 hover:shadow-xl lg:col-span-5 lg:row-span-1 lg:h-full lg:min-h-0"
+                  className="group relative flex min-h-[16rem] flex-col overflow-hidden rounded-3xl border border-border/80 bg-[var(--brand-maroon-dark)] shadow-md transition-shadow hover:shadow-xl lg:col-span-5 lg:row-span-1 lg:h-full lg:min-h-0"
                   style={{ ["--rkps-i" as string]: 2 }}
                 >
-                  <div className="grid min-h-[5.5rem] min-h-0 flex-1 auto-rows-fr grid-cols-3 gap-1 p-1 sm:min-h-[6.5rem]">
+                  <div className="grid min-h-[10rem] flex-1 grid-cols-3 gap-1 p-1 lg:min-h-0">
                     {GALLERY_TEASE.map((photo) => (
-                      <div key={photo.src} className="relative min-h-[4.5rem] overflow-hidden rounded-2xl sm:min-h-0">
+                      <div key={photo.src} className="relative overflow-hidden rounded-2xl">
                         <img
                           src={photo.src}
                           alt=""
@@ -206,7 +206,7 @@ export function RkpsSchoolLifeSection() {
                   </div>
                   <div className="flex items-center justify-between gap-3 border-t border-white/10 px-4 py-3.5 text-white sm:px-5">
                     <div>
-                      <p className="text-[0.6875rem] font-bold uppercase tracking-wider text-[var(--brand-gold)]">Campus gallery</p>
+                      <p className="text-xs font-medium text-[var(--brand-gold)]">Campus gallery</p>
                       <p className="text-sm font-semibold">More moments from school life</p>
                     </div>
                     <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/10 text-[var(--brand-gold)] transition group-hover:bg-white/15">

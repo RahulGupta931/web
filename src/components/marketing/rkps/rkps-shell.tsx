@@ -9,6 +9,9 @@ import { RKPS_CONTACT, RKPS_HEADER_CTA, RKPS_NAV_MORE, RKPS_NAV_PRIMARY } from "
 import { RkpsNewsMarquee } from "@/components/marketing/rkps/rkps-motion-sections";
 
 function routeNavIsActive(pathname: string, href: string): boolean {
+  if (href === "/") {
+    return pathname === "/";
+  }
   if (href.startsWith("/#")) {
     return false;
   }
@@ -42,32 +45,44 @@ function MoreNavDropdown({ panelAlign = "right" }: { panelAlign?: "left" | "righ
     setOpen(false);
   }, [pathname]);
 
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
+    if (!open) return;
     function onDocClick(e: MouseEvent) {
       if (rootRef.current && !rootRef.current.contains(e.target as Node)) {
         setOpen(false);
       }
     }
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
+    }
+    // Close when keyboard focus leaves the panel (Tab past the last link).
+    function onFocusIn(e: FocusEvent) {
+      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);
     }
     document.addEventListener("mousedown", onDocClick);
     document.addEventListener("keydown", onKey);
+    document.addEventListener("focusin", onFocusIn);
     return () => {
       document.removeEventListener("mousedown", onDocClick);
       document.removeEventListener("keydown", onKey);
+      document.removeEventListener("focusin", onFocusIn);
     };
-  }, []);
+  }, [open]);
 
   return (
-    <div className="relative" ref={rootRef}>
+    <div className="relative shrink-0" ref={rootRef}>
       <button
+        ref={buttonRef}
         type="button"
         id={triggerId}
         onClick={() => setOpen((v) => !v)}
         className={`${navLinkClass(open)} flex shrink-0 items-center gap-1.5`}
         aria-expanded={open}
-        aria-haspopup="menu"
         aria-controls={menuId}
       >
         <span>Explore</span>
@@ -87,29 +102,34 @@ function MoreNavDropdown({ panelAlign = "right" }: { panelAlign?: "left" | "righ
       {open ? (
         <div
           id={menuId}
-          role="menu"
           aria-labelledby={triggerId}
-          className={`absolute top-full z-[100] mt-2.5 min-w-[15rem] overflow-hidden rounded-2xl border border-[color-mix(in_srgb,var(--rkps-gold)_25%,transparent)] bg-[var(--rkps-burgundy)] p-2 text-[var(--rkps-text-on-primary)] shadow-[0_20px_45px_rgba(41,51,61,0.35)] backdrop-blur-xl ${
+          className={`rkps-dropdown-in absolute top-full z-[100] mt-3 w-80 overflow-hidden rounded-2xl border border-black/5 bg-white p-2 text-[var(--rkps-text-body)] shadow-[0_24px_60px_-12px_rgba(41,51,61,0.35)] ${
             panelAlign === "left" ? "left-0" : "right-0"
           }`}
         >
-          <div className="px-3 py-2 border-b border-white/10">
-            <p className="text-[0.625rem] font-bold uppercase tracking-wider text-[var(--brand-gold)]">Quick Destinations</p>
-          </div>
-          <div className="py-1 space-y-0.5">
+          <p className="px-3 pb-1 pt-2 text-xs text-muted">More from the school</p>
+          <ul className="space-y-0.5">
             {RKPS_NAV_MORE.map((item) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                role="menuitem"
-                className="flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-white/90 transition hover:bg-white/10 hover:text-[var(--brand-gold)]"
-                onClick={() => setOpen(false)}
-              >
-                <span>{item.label}</span>
-                <span className="text-white/40 text-[0.7rem]">↗</span>
-              </Link>
+              <li key={item.label}>
+                <Link
+                  href={item.href}
+                  className="group flex items-start gap-3 rounded-xl px-3 py-2.5 transition-colors duration-150 hover:bg-[var(--surface-muted)] focus-visible:bg-[var(--surface-muted)] focus-visible:outline-none"
+                  onClick={() => setOpen(false)}
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-medium text-heading">{item.label}</span>
+                    <span className="mt-0.5 block text-xs leading-relaxed text-muted">{item.description}</span>
+                  </span>
+                  <span
+                    className="mt-0.5 text-brand opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                    aria-hidden
+                  >
+                    →
+                  </span>
+                </Link>
+              </li>
             ))}
-          </div>
+          </ul>
         </div>
       ) : null}
     </div>
@@ -182,8 +202,9 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
                     </Link>
                   );
                 })}
-                <MoreNavDropdown panelAlign="right" />
               </div>
+              {/* Kept outside the scrolling row: overflow-x-auto also clips vertically, which hid the panel. */}
+              <MoreNavDropdown panelAlign="right" />
             </nav>
 
             {/* Right CTAs */}
@@ -203,7 +224,8 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
                 href={RKPS_HEADER_CTA.login.href}
                 className="hidden text-sm text-white/75 transition-colors hover:text-white md:inline"
               >
-                {RKPS_HEADER_CTA.login.label}
+                <span className="xl:hidden">Portal login</span>
+                <span className="hidden xl:inline">{RKPS_HEADER_CTA.login.label}</span>
               </Link>
 
               <Link
@@ -287,7 +309,7 @@ export function RkpsHeader({ breadcrumb }: { breadcrumb?: { label: string; href?
                           onClick={() => setMobileOpen(false)}
                         >
                           <span>{item.label}</span>
-                          <span className="text-white/40 text-xs">↗</span>
+                          <span className="text-white/40">›</span>
                         </Link>
                       </li>
                     ))}

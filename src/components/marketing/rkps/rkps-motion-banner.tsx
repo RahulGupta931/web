@@ -7,61 +7,46 @@ import { RkpsSectionIntro } from "@/components/marketing/rkps/rkps-marketing-blo
 const MOTION_SLIDES = [
   {
     id: "admissions",
-    tag: "Admissions 2026–27 Open",
-    badgeColor: "bg-emerald-500/20 text-emerald-300 border-emerald-400/40",
-    dotColor: "bg-emerald-400",
+    tag: "Admissions Open",
     title: "Step Into Tomorrow With Confidence & Character",
-    accent: "Pre-Primary to Grade 12 Enrollment",
+    accent: "Pre-Primary to Grade 12 — confirm seats with the office",
     description:
-      "Join a legacy of academic rigor, holistic personality development, and individualized mentorship. Experience our world-class laboratories and activity centres.",
-    image: "/marketing/rkps-promotional-banner.jpg",
-    primaryCta: { label: "Start Admission Enquiry", href: "/#admissions" },
-    secondaryCta: { label: "Book a Campus Tour", href: "/#contact" },
+      "Start with an enquiry, visit the campus, and complete admission with the school office. Availability and documents are confirmed in person.",
+    image: "/marketing/school-day/break-friends.webp",
+    primaryCta: { label: "Start Admission Enquiry", href: "/#enquiry" },
+    secondaryCta: { label: "Book a Campus Tour", href: "/#visit" },
   },
   {
     id: "campus",
-    tag: "25+ Years of Educational Trust",
-    badgeColor: "bg-[var(--brand-gold)]/20 text-[var(--brand-gold)] border-[var(--brand-gold)]/40",
-    dotColor: "bg-[var(--brand-gold)]",
+    tag: "School Excellence",
     title: "Where Curiosity Meets Purposeful Learning",
-    accent: "State-of-the-Art Campus Facilities",
+    accent: "Classrooms, laboratories and grounds",
     description:
-      "Sprawling sports grounds, high-tech robotics and STEM labs, multimedia classrooms, and dedicated fine arts studios built for all-around growth.",
-    image: "/marketing/rkps-school-banner.jpg",
+      "Smart classrooms, science and computer labs, library and sports spaces — see them on a campus visit rather than in a brochure statistic.",
+    image: "/marketing/school-day/lab-lesson.jpg",
     primaryCta: { label: "Explore Campus Facilities", href: "/#facilities" },
-    secondaryCta: { label: "View Learning Journey", href: "/#academics" },
+    secondaryCta: { label: "View Academic Curriculum", href: "/#academics" },
   },
   {
     id: "achievers",
-    tag: "Student Achievers & Honor Roll",
-    badgeColor: "bg-sky-500/20 text-sky-300 border-sky-400/40",
-    dotColor: "bg-sky-400",
+    tag: "Student Achievers",
     title: "Nurturing Independence, Empathy & Leadership",
-    accent: "Growth Celebrated Across Every Grade",
+    accent: "Growth noticed across academics, sport and stage",
     description:
-      "Celebrating academic Olympiad winners, state athletic champions, and everyday milestones without superficial comparisons or pressure.",
-    image: "/marketing/instagram/campus-28.jpg",
+      "We recognise effort, curiosity and character — not a published ranking. Browse recognition areas and ask the office for the current session’s records.",
+    image: "/marketing/instagram/campus-26.jpg",
     primaryCta: { label: "Meet Student Achievers", href: "/school-life/student-achievers" },
     secondaryCta: { label: "Browse Events Calendar", href: "/school-life/events" },
   },
 ] as const;
 
-const TICKER_TOP = [
-  { text: "Admissions Open for Session 2026–27" },
-  { text: "98% CBSE Board Distinction & Honors" },
-  { text: "Advanced STEM, Physics & Robotics Labs" },
-  { text: "Multi-Sport Athletics & Cricket Grounds" },
-  { text: "Creative Arts, Music & Theater Studios" },
-  { text: "25+ Years of Educational Excellence" },
-];
-
-const TICKER_BOTTOM = [
-  { text: "Pre-Primary Foundation to Grade 12" },
-  { text: "1:15 Dedicated Teacher-to-Student Mentorship" },
-  { text: "Safe GPS-Tracked Transportation Network" },
-  { text: "Inquiry-Driven Experiential Curriculum" },
-  { text: "Inter-House Academic & Sports Tournaments" },
-  { text: "Visit Our Campus for Open Days" },
+const FEATURE_NOTES = [
+  { text: "Admissions open for session 2026–27 — confirm with the office" },
+  { text: "Pre-Primary through Grade 12" },
+  { text: "Science, computer labs and library on campus" },
+  { text: "Sports week, exhibitions and annual programmes" },
+  { text: "Secure portal for attendance, timetable and notices" },
+  { text: "Campus visits by appointment" },
 ];
 
 export function RkpsMotionBanner() {
@@ -81,18 +66,18 @@ export function RkpsMotionBanner() {
 
   return (
     <section
-      id="motion-showcase"
+      id="featured-banner"
       className="relative scroll-mt-28 overflow-hidden bg-[var(--brand-maroon-dark)] py-14 text-white sm:py-20 lg:py-24"
-      aria-label="Campus Motion Showcase"
+      aria-label="Featured banners"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div className="relative mx-auto max-w-7xl rkps-page-x">
         <RkpsSectionIntro
           dark
-          num="This year"
-          title="Campus, admissions, and the year ahead"
-          description="Photographs from the school, with the sessions and programmes families ask about."
+          num="Highlights"
+          title="Admissions, excellence, and student achievers"
+          description="Three stories from campus — enrolment, purposeful learning, and the way we notice growth."
         />
       </div>
 
@@ -202,7 +187,7 @@ export function RkpsMotionBanner() {
       </div>
 
       <div className="relative mx-auto mt-12 grid max-w-7xl gap-x-10 gap-y-2 rkps-page-x sm:grid-cols-2">
-        {[...TICKER_TOP, ...TICKER_BOTTOM].map((item) => (
+        {FEATURE_NOTES.map((item) => (
           <p key={item.text} className="border-t border-white/10 py-3 text-sm text-white/75">
             {item.text}
           </p>

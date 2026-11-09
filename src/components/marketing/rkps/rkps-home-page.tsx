@@ -14,7 +14,7 @@ import {
   RKPS_VISION,
 } from "@/content/website/rkps-copy";
 import { FACILITIES, LATEST_NEWS, WHY_US } from "@/content/website/public-site";
-import { INSTAGRAM_PHOTOS, INSTAGRAM_PROFILE, INSTAGRAM_REELS, instagramPhoto } from "@/content/website/instagram-media";
+import { INSTAGRAM_PHOTOS, instagramPhoto } from "@/content/website/instagram-media";
 import { BRAND } from "@/config/branding";
 import { RkpsEnquiryForm } from "@/components/marketing/rkps/rkps-enquiry-form";
 import { RkpsGallerySection } from "@/components/marketing/rkps/rkps-gallery-section";
@@ -26,7 +26,7 @@ import { RkpsParentResourcesSection } from "@/components/marketing/rkps/rkps-par
 import { RkpsParentReviews } from "@/components/marketing/rkps/rkps-parent-reviews";
 import { RkpsFooter, RkpsHeader } from "@/components/marketing/rkps/rkps-shell";
 import { RkpsMotionBanner } from "@/components/marketing/rkps/rkps-motion-banner";
-import { RkpsCinematicHero, RkpsHighlightBanner, RkpsSpotlightCarousel } from "@/components/marketing/rkps/rkps-motion-sections";
+import { RkpsCinematicHero } from "@/components/marketing/rkps/rkps-motion-sections";
 import { RkpsCampusStoriesSection } from "@/components/marketing/rkps/rkps-campus-stories-section";
 import { RkpsAdmissionsSection } from "@/components/marketing/rkps/rkps-admissions-section";
 import {
@@ -37,6 +37,12 @@ import {
   RkpsSectionIntro,
 } from "@/components/marketing/rkps/rkps-marketing-blocks";
 import { RkpsHeroBridge } from "@/components/marketing/rkps/rkps-hero-bridge";
+import {
+  RkpsSchoolDaySection,
+  RkpsSchoolYearSection,
+  RkpsScrollProgress,
+  RkpsScrollReveal,
+} from "@/components/marketing/rkps/rkps-scroll-sections";
 
 type Tone = "warm" | "rose" | "dark";
 
@@ -198,9 +204,111 @@ function CampusSection() {
   );
 }
 
+function WhyChooseSection() {
+  const photos = [
+    instagramPhoto("campus-8.jpg"),
+    instagramPhoto("campus-12.jpg"),
+    instagramPhoto("campus-19.jpg"),
+    { src: "/marketing/school-day/lab-lesson.jpg", alt: "A teacher explaining an experiment to students in the chemistry laboratory" },
+  ];
+
+  return (
+    <Band id="why-choose" tone="rose">
+      <RkpsSectionIntro
+        num="Why choose us"
+        title="Four reasons families start here"
+        description="Holistic education, care, a digital campus, and academic work you can verify with the office — not marketing scores."
+      />
+      {/* One featured tile beside three stacked tiles; on tablets, featured on top, then 2 + 1 full-width. */}
+      <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-12 lg:grid-rows-3">
+        {WHY_US.map((item, index) => {
+          const photo = photos[index] ?? photos[0];
+          const featured = index === 0;
+          const span = featured
+            ? "sm:col-span-2 lg:col-span-7 lg:row-span-3"
+            : index === WHY_US.length - 1
+              ? "sm:col-span-2 lg:col-span-5"
+              : "lg:col-span-5";
+          return (
+            <li key={item.title} className={span}>
+              <article
+                className={`relative h-full overflow-hidden rounded-[1.25rem] border border-border/80 ${
+                  featured ? "min-h-[20rem] sm:min-h-[24rem] lg:min-h-[34rem]" : "min-h-[12rem] lg:min-h-0"
+                }`}
+              >
+                <img src={photo.src} alt={photo.alt} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/10" aria-hidden />
+                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+                  <p className="text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-[var(--brand-gold)]">
+                    {String(index + 1).padStart(2, "0")}
+                  </p>
+                  <h3 className={`rkps-display mt-1 text-white ${featured ? "text-2xl sm:text-3xl" : "text-xl"}`}>
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/85">{item.body}</p>
+                </div>
+              </article>
+            </li>
+          );
+        })}
+      </ul>
+    </Band>
+  );
+}
+
+/**
+ * Campus life bento: one large tile with two stacked beside it, then a row of three.
+ * Spans add up to 12 on every desktop row; on tablets the last tile fills the row.
+ */
+const CAMPUS_LIFE_CELLS = [
+  "sm:col-span-2 lg:col-span-8 lg:row-span-2",
+  "lg:col-span-4",
+  "lg:col-span-4",
+  "lg:col-span-4",
+  "lg:col-span-4",
+  "sm:col-span-2 lg:col-span-4",
+] as const;
+
+function CampusLifeSection() {
+  const items = [
+    { title: "Sports Week", href: "/school-life/events", photo: instagramPhoto("campus-22.jpg") },
+    { title: "Parent Meetings", href: "/#parent-resources", photo: instagramPhoto("campus-8.jpg") },
+    { title: "Science Exhibition", href: "/school-life/events", photo: instagramPhoto("campus-19.jpg") },
+    { title: "Well-being Activities", href: "/school-life/events", photo: instagramPhoto("campus-15.jpg") },
+    { title: "Arts and Stage", href: "/school-life/events", photo: instagramPhoto("campus-7.jpg") },
+    { title: "Clubs and Community Service", href: "/school-life/student-achievers", photo: instagramPhoto("campus-21.jpg") },
+  ] as const;
+
+  return (
+    <Band id="campus-life" tone="warm">
+      <RkpsSectionIntro
+        num="Campus life"
+        title="A week that is more than periods"
+        description="Sports week, parent meetings, exhibitions, well-being, stage and clubs — see them on campus and on the events calendar."
+      />
+      <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
+        {items.map((item, index) => (
+          <li key={item.title} className={CAMPUS_LIFE_CELLS[index] ?? "lg:col-span-4"}>
+            <Link
+              href={item.href}
+              className={`group relative flex h-full overflow-hidden rounded-[1.25rem] border border-border/80 ${
+                index === 0 ? "min-h-[16rem] sm:min-h-[20rem] lg:min-h-[26rem]" : "min-h-[12rem] lg:min-h-[12.5rem]"
+              }`}
+            >
+              <img src={item.photo.src} alt={item.photo.alt} className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" loading="lazy" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent" aria-hidden />
+              <span className="relative z-10 mt-auto p-5 text-lg font-semibold text-white sm:text-xl">{item.title}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </Band>
+  );
+}
+
 function VisitBanner() {
   return (
-    <section aria-label="Visit RMPS" className="rkps-bg-inset-panel py-16 text-[var(--rkps-text-body)] sm:py-20">
+    <section id="visit" aria-label="Visit RMPS" className="scroll-mt-28 rkps-bg-inset-panel py-16 text-[var(--rkps-text-body)] sm:py-20">
       <div className="mx-auto flex max-w-7xl flex-col gap-8 rkps-page-x md:flex-row md:items-end md:justify-between">
         <div className="max-w-2xl space-y-3">
           <span className="rkps-rule" aria-hidden="true" />
@@ -225,81 +333,6 @@ function VisitBanner() {
         </div>
       </div>
     </section>
-  );
-}
-
-function InstagramSection() {
-  return (
-    <Band id="instagram" tone="rose">
-      <RkpsSectionIntro
-        num="Social Community & Live Feed"
-        title="Live moments from our Instagram community"
-        description="Watch recent video reels, festival celebrations, and student spotlights straight from @r.k.m.p.s."
-        action={
-          <a
-            href={INSTAGRAM_PROFILE}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-1.5 rounded-full border border-brand/20 bg-white px-4 py-2 text-xs font-bold text-brand shadow-sm transition hover:bg-brand hover:text-white"
-          >
-            <span>View Instagram Profile</span>
-            <span>↗</span>
-          </a>
-        }
-      />
-      <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:items-stretch">
-        <aside className="flex min-h-[22rem] flex-col justify-between rounded-3xl bg-[var(--brand-maroon-dark)] p-6 text-white shadow-xl sm:col-span-2 sm:p-8 lg:col-span-1">
-          <div>
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-[var(--brand-gold)] text-[var(--brand-maroon-dark)] shadow-md">
-              <Icon name="instagram" className="h-6 w-6" />
-            </span>
-            <h2 className="mt-5 text-2xl font-bold tracking-tight sm:text-3xl">From Our Instagram</h2>
-            <span aria-hidden className="rkps-rule mt-3" />
-            <p className="mt-3 text-sm leading-relaxed text-white/80">
-              Watch recent video reels and photo stories from @r.k.m.p.s capturing life in full swing on our campus.
-            </p>
-          </div>
-          <div className="pt-6">
-            <a
-              href={INSTAGRAM_PROFILE}
-              target="_blank"
-              rel="noreferrer"
-              className="rkps-btn-gold w-full text-center text-xs sm:text-sm"
-            >
-              Follow @r.k.m.p.s ↗
-            </a>
-          </div>
-        </aside>
-
-        {INSTAGRAM_REELS.map((reel) => (
-          <figure
-            key={reel.id}
-            className="flex min-h-[22rem] flex-col overflow-hidden rounded-3xl border border-border/80 bg-white shadow-sm sm:min-h-0 lg:h-full"
-          >
-            <div className="relative min-h-[20rem] flex-1 sm:min-h-[22rem] lg:min-h-0">
-              <iframe
-                title={reel.title}
-                src={`https://www.instagram.com/reel/${reel.id}/embed`}
-                className="absolute inset-0 h-full w-full bg-white"
-                loading="lazy"
-                allow="encrypted-media"
-              />
-            </div>
-            <figcaption className="flex shrink-0 items-center justify-between gap-3 border-t border-border/70 p-4">
-              <p className="text-xs font-bold text-heading sm:text-sm">{reel.title}</p>
-              <a
-                href={INSTAGRAM_PROFILE}
-                target="_blank"
-                rel="noreferrer"
-                className="shrink-0 text-xs font-bold text-brand hover:underline"
-              >
-                Watch ↗
-              </a>
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </Band>
   );
 }
 
@@ -366,7 +399,22 @@ function PortalSection() {
               <span className="grid h-12 w-12 place-items-center rounded-2xl bg-brand text-[var(--brand-gold)] shadow-md">
                 <Icon name="lock" className="h-6 w-6" />
               </span>
-              <h3 className="text-2xl font-bold tracking-tight text-heading">Sign In to School Portal</h3>
+              <h3 className="text-2xl font-bold tracking-tight text-heading">Sign in to the school portal</h3>
+              <p className="text-sm leading-relaxed text-muted">
+                One login desk for students, teachers and the principal. Attendance, timetable, examination results, and
+                notices live here once the office has enabled your account.
+              </p>
+              <div className="grid gap-2 sm:grid-cols-3">
+                {[
+                  { label: "Student login", href: "/login" },
+                  { label: "Teacher login", href: "/login" },
+                  { label: "Principal login", href: "/login" },
+                ].map((role) => (
+                  <Link key={role.label} href={role.href} className="rkps-btn-secondary rkps-btn-sm justify-center text-center">
+                    {role.label}
+                  </Link>
+                ))}
+              </div>
               <p className="text-xs sm:text-sm leading-relaxed text-muted">
                 Official credentials issued by the school administration for students, parents, teachers, and leadership.
               </p>
@@ -408,24 +456,24 @@ function PortalSection() {
 export function RkpsHomePage() {
   return (
     <>
+      <RkpsScrollProgress />
+      <RkpsScrollReveal />
       <RkpsHeader />
       <main>
         <RkpsCinematicHero />
 
         <div className={TONE_CLASS.warm}>
-          <RkpsHeroBridge />
           <RkpsQuickJumpNav
             links={[
-              { href: "#explore-rmps", label: "Explore RMPS" },
+              { href: "#explore-rmps", label: "Explore" },
+              { href: "#why-choose", label: "Why RMPS" },
+              { href: "#school-day", label: "Campus moments" },
               { href: "#about", label: "About" },
-              { href: "#values", label: "Values" },
               { href: "#excellence", label: "Achievements" },
-              { href: "#school-life", label: "School Life" },
               { href: "#academics", label: "Academics" },
-              { href: "#facilities", label: "Campus" },
+              { href: "#gallery", label: "Gallery" },
               { href: "#portal", label: "Portal" },
               { href: "#admissions", label: "Admissions", highlight: true },
-              { href: "#parent-reviews", label: "Reviews" },
               { href: "#contact", label: "Contact" },
             ]}
           />
@@ -433,8 +481,8 @@ export function RkpsHomePage() {
 
         <Tint tone="warm">
           <RkpsPathwayCards
-            heading="Explore R.K Memorial Public School"
-            sub="Three starting points for families, prospective learners, and campus visitors."
+            heading="Explore Our School"
+            sub="Love of Learning, a Place to Belong, and Your Next Chapter."
             items={RKPS_HERO_CARDS.map((card, index) => ({
               ...card,
               photo: {
@@ -442,19 +490,20 @@ export function RkpsHomePage() {
                 alt: EXPLORE_PATHWAY_PHOTOS[index]?.alt ?? card.title,
               },
             }))}
-            notesTitle="Why Families Choose RMPS"
-            notes={WHY_US}
           />
         </Tint>
 
-        {/* Dynamic Motion Banner with dual scrolling ribbons & interactive slide showcase */}
+        <WhyChooseSection />
+
+        <RkpsSchoolDaySection />
+
         <RkpsMotionBanner />
 
-        <RkpsSpotlightCarousel />
+        <div className={TONE_CLASS.warm}>
+          <RkpsHeroBridge />
+        </div>
 
-        <RkpsHighlightBanner />
-
-        <RkpsCampusStoriesSection />
+        <CampusLifeSection />
 
         <Tint tone="rose">
           <RkpsAboutSection vision={RKPS_VISION} values={RKPS_VALUES} motto={BRAND.motto} schoolName={BRAND.name} />
@@ -465,6 +514,8 @@ export function RkpsHomePage() {
         </Tint>
 
         <RkpsSchoolLifeSection />
+
+        <RkpsSchoolYearSection />
 
         <Tint tone="rose">
           <RkpsLearningJourneySection />
@@ -484,11 +535,11 @@ export function RkpsHomePage() {
           accentPhoto={instagramPhoto("campus-21.jpg")}
         />
 
+        <RkpsCampusStoriesSection />
+
         <VisitBanner />
 
         <PortalSection />
-
-        <InstagramSection />
 
         <Tint tone="warm">
           <RkpsNoticeboardSection
@@ -530,19 +581,19 @@ export function RkpsHomePage() {
         </Tint>
 
         <RkpsContactSection
-            id={RKPS_CONTACT.id}
-            title={RKPS_CONTACT.title}
-            subtitle={RKPS_CONTACT.subtitle}
-            lead={RKPS_CONTACT.lead}
-            detail={RKPS_CONTACT.detail}
-            visitBlurb={RKPS_CONTACT.visitBlurb}
-            visit={RKPS_CONTACT.visit}
-            phone={RKPS_CONTACT.phone}
-            email={RKPS_CONTACT.email}
-            hours={RKPS_CONTACT.hours}
-            hoursNote={RKPS_CONTACT.hoursNote}
-            reachOut={RKPS_CONTACT.reachOut}
-            campusPhoto={instagramPhoto("campus-8.jpg")}
+          id={RKPS_CONTACT.id}
+          title={RKPS_CONTACT.title}
+          subtitle={RKPS_CONTACT.subtitle}
+          lead={RKPS_CONTACT.lead}
+          detail={RKPS_CONTACT.detail}
+          visitBlurb={RKPS_CONTACT.visitBlurb}
+          visit={RKPS_CONTACT.visit}
+          phone={RKPS_CONTACT.phone}
+          email={RKPS_CONTACT.email}
+          hours={RKPS_CONTACT.hours}
+          hoursNote={RKPS_CONTACT.hoursNote}
+          reachOut={RKPS_CONTACT.reachOut}
+          campusPhoto={instagramPhoto("campus-8.jpg")}
         />
       </main>
       <RkpsFooter />

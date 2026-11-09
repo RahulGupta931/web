@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useSyncExternalStore } from "react";
-import { logResponsiveDebug } from "@/lib/responsive-debug-log";
+import { useSyncExternalStore } from "react";
 
 function subscribe(query: string, onStoreChange: () => void) {
   const mq = window.matchMedia(query);
@@ -14,22 +13,9 @@ function getServerSnapshot() {
 }
 
 export function useMediaQuery(query: string): boolean {
-  const matches = useSyncExternalStore(
+  return useSyncExternalStore(
     (onStoreChange) => subscribe(query, onStoreChange),
     () => window.matchMedia(query).matches,
     getServerSnapshot
   );
-
-  useEffect(() => {
-    // #region agent log
-    logResponsiveDebug({
-      location: "use-media-query.ts:sync",
-      message: "media-query-snapshot",
-      hypothesisId: "A",
-      data: { query, matches, innerWidth: window.innerWidth },
-    });
-    // #endregion
-  }, [query, matches]);
-
-  return matches;
 }

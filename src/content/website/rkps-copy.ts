@@ -4,24 +4,41 @@ import { BRAND } from "@/config/branding";
 import { CONTACT as SITE_CONTACT } from "@/content/website/public-site";
 
 export const RKPS_NAV_PRIMARY = [
-  { href: "/#about", label: "About" },
+  { href: "/", label: "Home" },
+  { href: "/#about", label: "About Us" },
   { href: "/#academics", label: "Academics" },
-  { href: "/school-life/student-achievers", label: "Student achievers" },
+  { href: "/school-life/student-achievers", label: "Student Achievers" },
   { href: "/school-life/events", label: "Events" },
   { href: "/#admissions", label: "Admissions" },
   { href: "/#contact", label: "Contact" },
 ] as const;
 
 export const RKPS_NAV_MORE = [
-  { href: "/school-life/achievements", label: "School achievements" },
-  { href: "/#parent-resources", label: "Parent resources" },
-  { href: "/#noticeboard", label: "Noticeboard" },
-  { href: "/#contact", label: "Plan a visit" },
+  {
+    href: "/school-life/achievements",
+    label: "School achievements",
+    description: "Competition records and milestones confirmed by the office",
+  },
+  {
+    href: "/#parent-resources",
+    label: "Parent resources",
+    description: "Forms, the portal and everything families need in one place",
+  },
+  {
+    href: "/#noticeboard",
+    label: "Noticeboard",
+    description: "Latest circulars, exam dates and school announcements",
+  },
+  {
+    href: "/#visit",
+    label: "Plan a visit",
+    description: "See the classrooms and labs and meet the admissions desk",
+  },
 ] as const;
 
 export const RKPS_HEADER_CTA = {
-  login: { label: "Login", href: "/login" },
-  enquire: { label: "Enquire", href: "/#enquiry" },
+  login: { label: "School Portal Login", href: "/login" },
+  enquire: { label: "Enquire Now", href: "/#enquiry" },
 } as const;
 
 /** @deprecated Use RKPS_NAV_PRIMARY + RKPS_NAV_MORE */
@@ -32,32 +49,33 @@ export const RKPS_NAV = [
 
 export const RKPS_HERO = {
   eyebrow: `Welcome to ${BRAND.name.replace("R.K. ", "R.K ")}`,
-  line1: "Little discoveries.",
-  line2: "Limitless possibilities.",
+  line1: "Little Discoveries.",
+  line2: "Limitless Possibilities.",
   lead:
-    "A place to ask big questions, find new passions and grow into who you're meant to be.",
-  primary: { label: "Discover RMPS", href: "/#about" },
-  secondary: { label: "Explore admissions", href: "/#admissions" },
+    "Learning here is built for curious minds — classrooms, labs, grounds and stages where children practise questions, kindness and the confidence to grow.",
+  primary: { label: "Discover Our School", href: "/#about" },
+  secondary: { label: "Explore Admissions", href: "/#admissions" },
+  enquiry: { label: "Admission enquiry", href: "/#enquiry" },
 };
 
 export const RKPS_HERO_CARDS = [
   {
     num: "01",
-    title: "A love of learning",
+    title: "Love of Learning",
     body: "From early years to senior secondary, classrooms make room for questions, practice and the confidence to think for yourself.",
     cta: "Explore our approach",
     href: "/#academics",
   },
   {
     num: "02",
-    title: "A place to belong",
+    title: "A Place to Belong",
     body: "Sport, arts, houses and everyday kindness sit beside academics, so every learner has more than one way to be known.",
     cta: "Discover school life",
     href: "/school-life/student-achievers",
   },
   {
     num: "03",
-    title: "Your next chapter",
+    title: "Your Next Chapter",
     body: "Tell us about your child, visit the campus and confirm classes, documents and timelines with the school office.",
     cta: "Start an admission enquiry",
     href: "/#enquiry",
@@ -71,6 +89,10 @@ export const RKPS_VISION = {
   subtitle: "A foundation for life.",
   body:
     "At R.K Memorial Public School, education begins with a simple belief: every child deserves the space to be curious, the encouragement to try and the confidence to grow. Our vision brings purposeful learning together with kindness, creativity and character — so children can discover not only what they know, but who they can become.",
+  mission:
+    "Our mission is to give every learner a rigorous, caring school day — strong teaching, clear routines, and room for sport, arts and service — so families can see progress without comparison.",
+  philosophy:
+    "We teach through questions, practice and reflection. Character sits beside curriculum: empathy, effort and integrity are noticed in classrooms, on the field and in the corridor.",
   cta: "Get to know RMPS",
   href: "/#values",
 };
@@ -80,15 +102,15 @@ export const RKPS_VALUES = {
   kicker: "Small moments. Meaningful beginnings. RMPS",
   items: [
     {
-      title: "Curiosity first",
+      title: "Inquiry",
       body: "Making room for questions, exploration and the joy of discovery.",
     },
     {
-      title: "Character always",
+      title: "Character",
       body: "Growing with empathy, respect and a sense of responsibility.",
     },
     {
-      title: "Every child, encouraged",
+      title: "Growth",
       body: "Recognising individual strengths and celebrating personal progress.",
     },
   ],
@@ -96,9 +118,9 @@ export const RKPS_VALUES = {
 
 export const RKPS_LEARNING = {
   id: "academics",
-  title: "The learning journey",
-  subtitle: "A world to learn. A future to shape.",
-  cta: "Explore academics",
+  title: "Academic curriculum",
+  subtitle: "Pre-Primary through Senior Secondary — Science, Commerce and Humanities.",
+  cta: "Speak with the office",
   phases: [
     {
       tags: "Wonder • Play • Explore",
@@ -139,11 +161,11 @@ export const RKPS_DISCOVER = {
 
 export const RKPS_GALLERY = {
   id: "gallery",
-  title: "Life beyond lessons",
-  subtitle: "Where memories become part of you.",
-  tabs: ["All moments", "Learning", "Sports & play", "Arts & culture"],
-  cta: "Explore the gallery",
-  disclaimer: "Illustrative school-life imagery. Explore the campus in person to get to know RMPS.",
+  title: "Moments That Make Memories",
+  subtitle: "Every photograph tells a story of learning, friendship, achievement and growth.",
+  tabs: ["All", "Learning", "Sports", "Arts and Culture", "Events"] as const,
+  cta: "Open Instagram",
+  disclaimer: "Campus photographs from school life. Confirm dates and programmes with the office.",
 };
 
 export const RKPS_NOTICE = {
@@ -202,9 +224,9 @@ export const RKPS_JOURNEY = {
   lead:
     "Choosing a school is a big step. Let's make the first conversation simple, personal and helpful.",
   steps: [
-    { num: "01", title: "Tell us about your child", body: "Share your interests and the class you're exploring." },
-    { num: "02", title: "Get to know the school", body: "Request a visit and discuss learning, school life and your questions." },
-    { num: "03", title: "Plan the next step", body: "Confirm eligibility, documents, fees and the application process with the office." },
+    { num: "01", title: "Submit enquiry", body: "Share parent details, the student name and the class you are exploring." },
+    { num: "02", title: "Visit the school", body: "Walk the campus, meet the office and ask about learning and school life." },
+    { num: "03", title: "Complete admission process", body: "Confirm eligibility, documents, fees and timelines with the school office." },
   ],
   disclaimer:
     "Admission requirements, class availability and timelines are to be confirmed by the school. An enquiry is not an admission offer.",
@@ -230,6 +252,14 @@ export const RKPS_FAQ = [
   {
     q: "How can parents receive school updates?",
     a: "Published notices appear on this noticeboard and in the student portal when enabled. Circulars may also be shared by the office.",
+  },
+  {
+    q: "What is the fee structure?",
+    a: "Fees, instalments and any concessions are confirmed by the school office for the class you are enquiring about. We do not publish unverified figures on this site.",
+  },
+  {
+    q: "How do enrolled families use the parent portal?",
+    a: "Students, teachers and the principal sign in at School Portal Login. Attendance, timetables, results and circulars appear there once the office has enabled access for your class.",
   },
 ];
 

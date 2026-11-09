@@ -2,7 +2,7 @@
 
 export const INSTAGRAM_PROFILE = "https://www.instagram.com/r.k.m.p.s/";
 
-export const INSTAGRAM_PHOTOS = [
+const ALL_INSTAGRAM_PHOTOS = [
   {
     src: "/marketing/instagram/campus-8.jpg",
     alt: "Students and teachers of R.K Memorial Public School together in the hall",
@@ -165,10 +165,41 @@ export const INSTAGRAM_PHOTOS = [
   },
 ] as const;
 
+type InstagramPhoto = { readonly src: string; readonly alt: string };
+
+/**
+ * Files listed in the profile export that were never downloaded into public/.
+ * Each one points at a saved photo of the same kind of moment so no card renders a broken image.
+ */
+const MISSING_PHOTO_SUBSTITUTES: Record<string, string> = {
+  "campus-2.jpg": "campus-8.jpg",
+  "campus-7.jpg": "campus-25.jpg",
+  "campus-9.jpg": "campus-10.jpg",
+  "campus-13.jpg": "campus-25.jpg",
+  "campus-14.jpg": "campus-16.jpg",
+  "campus-28.jpg": "campus-17.jpg",
+  "campus-29.jpg": "campus-18.jpg",
+  "campus-30.jpg": "campus-26.jpg",
+  "campus-31.jpg": "campus-23.jpg",
+  "campus-32.jpg": "campus-26.jpg",
+  "campus-33.jpg": "campus-24.jpg",
+  "campus-42.jpg": "campus-34.jpg",
+};
+
+const fileOf = (src: string) => src.slice(src.lastIndexOf("/") + 1);
+
+/** Only photos that exist under public/marketing/instagram. */
+export const INSTAGRAM_PHOTOS: readonly InstagramPhoto[] = ALL_INSTAGRAM_PHOTOS.filter(
+  (p) => !(fileOf(p.src) in MISSING_PHOTO_SUBSTITUTES),
+);
+
 /** Resolve a downloaded file under public/marketing/instagram (array order ≠ campus number). */
-export function instagramPhoto(file: `campus-${number}.jpg`) {
-  const src = `/marketing/instagram/${file}`;
-  const photo = INSTAGRAM_PHOTOS.find((p) => p.src === src);
+export function instagramPhoto(file: `campus-${number}.jpg`): InstagramPhoto {
+  const original = ALL_INSTAGRAM_PHOTOS.find((p) => p.src === `/marketing/instagram/${file}`);
+  const substitute = MISSING_PHOTO_SUBSTITUTES[file];
+  const src = `/marketing/instagram/${substitute ?? file}`;
+  const saved = INSTAGRAM_PHOTOS.find((p) => p.src === src);
+  const photo = saved && original ? { src: saved.src, alt: substitute ? saved.alt : original.alt } : saved;
   if (!photo) {
     throw new Error(`Missing Instagram photo: ${src}`);
   }
@@ -176,10 +207,13 @@ export function instagramPhoto(file: `campus-${number}.jpg`) {
 }
 
 /** Extra photos for the student achievers page gallery (excludes logo-only crest). */
-export const STUDENT_ACHIEVER_GALLERY = INSTAGRAM_PHOTOS.filter((p) => p.src !== "/marketing/instagram/campus-2.jpg");
+export const STUDENT_ACHIEVER_GALLERY = INSTAGRAM_PHOTOS;
 
 /** Celebrations, performances and community events — for the events page. */
-export const SCHOOL_EVENTS_GALLERY = [
+const uniqueBySrc = (photos: InstagramPhoto[]) =>
+  photos.filter((p, i) => photos.findIndex((q) => q.src === p.src) === i);
+
+export const SCHOOL_EVENTS_GALLERY = uniqueBySrc([
   instagramPhoto("campus-4.jpg"),
   instagramPhoto("campus-5.jpg"),
   instagramPhoto("campus-6.jpg"),
@@ -198,7 +232,7 @@ export const SCHOOL_EVENTS_GALLERY = [
   instagramPhoto("campus-40.jpg"),
   instagramPhoto("campus-41.jpg"),
   instagramPhoto("campus-42.jpg"),
-] as const;
+]);
 
 export const SCHOOL_EVENTS_CARD_PHOTOS = {
   learning: instagramPhoto("campus-19.jpg"),
@@ -218,7 +252,7 @@ export const ACHIEVEMENT_THEME_PHOTOS = {
 
 export const STUDENT_ACHIEVER_CARD_PHOTOS: Record<
   "Academics" | "Sport" | "Creativity" | "Leadership" | "Service" | "Personal progress",
-  (typeof INSTAGRAM_PHOTOS)[number]
+  InstagramPhoto
 > = {
   Academics: instagramPhoto("campus-19.jpg"),
   Sport: instagramPhoto("campus-22.jpg"),

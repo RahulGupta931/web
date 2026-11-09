@@ -23,11 +23,14 @@ export type Achievement = {
 };
 
 export const SCHOOL_STATS = [
-  { label: "Years of excellence", value: "25+" },
-  { label: "Students", value: "1,200+" },
-  { label: "Faculty", value: "80+" },
-  { label: "Board pass rate", value: "98%" },
+  { label: "Years of excellence", value: "—" },
+  { label: "Total students", value: "—" },
+  { label: "Faculty members", value: "—" },
+  { label: "Board examination results", value: "—" },
 ] as const;
+
+export const SCHOOL_STATS_NOTE =
+  "Figures to be confirmed by the school office. Placeholders are shown until official numbers are published.";
 
 export const WHY_US = [
   {
@@ -43,12 +46,16 @@ export const WHY_US = [
     body: "Attendance, timetables, exams, and notices on one secure school portal.",
   },
   {
-    title: "Strong results",
-    body: "Consistent board performance and competitive exam preparation across streams.",
+    title: "Strong academic results",
+    body: "Board outcomes and competitive-exam support are confirmed by the office for each session — ask during your visit.",
   },
 ] as const;
 
 export const ACADEMICS_BANDS = [
+  {
+    band: "Pre-Primary",
+    points: ["Play, stories and early language", "Number sense through activity", "Care, routine and belonging"],
+  },
   {
     band: "Primary (Classes 1–5)",
     points: ["Foundational literacy and numeracy", "Activity-based learning", "Life skills and EVS"],
@@ -63,14 +70,31 @@ export const ACADEMICS_BANDS = [
   },
   {
     band: "Senior secondary (11–12)",
-    points: ["Science, Commerce, and Arts streams", "JEE/NEET and CUET guidance", "Project and lab work"],
+    points: ["Science, Commerce, and Humanities streams", "Subject labs and project work", "Guidance confirmed with the office"],
   },
 ] as const;
 
 export const STUDENT_LIFE = [
-  { title: "Sports & fitness", body: "Cricket, athletics, kabaddi, and annual sports day." },
-  { title: "Cultural programs", body: "Annual day, inter-house competitions, music and dance." },
-  { title: "Clubs & service", body: "Eco club, robotics, debate, and community outreach." },
+  { title: "Sports", body: "Games periods, house matches and the annual sports week on campus grounds." },
+  { title: "Cultural programmes", body: "Music, dance, theatre and inter-house performances through the year." },
+  { title: "Clubs", body: "Interest groups such as eco, debate and making — confirmed each session by the office." },
+  { title: "Annual functions", body: "Stage programmes where classes present work, music and movement together." },
+  { title: "School celebrations", body: "Festivals and assemblies that mark the calendar as a community." },
+] as const;
+
+export const ACADEMIC_STREAMS = [
+  {
+    title: "Science",
+    body: "Laboratory work and science subjects in the senior years. Exact combinations are confirmed with the office.",
+  },
+  {
+    title: "Commerce",
+    body: "Commerce subjects for learners who choose this stream. Seat availability is session-specific.",
+  },
+  {
+    title: "Humanities",
+    body: "Humanities and related electives as offered each year. Ask the office for the current list.",
+  },
 ] as const;
 
 export const FACILITIES = [
@@ -175,9 +199,9 @@ export const LATEST_NEWS: NewsItem[] = [
   },
   {
     id: "n3",
-    title: "Science exhibition winners",
+    title: "Science exhibition on campus",
     date: "2026-09-28",
-    excerpt: "Senior projects on sustainability and robotics featured in the achievements gallery.",
+    excerpt: "Project displays from science classes. Confirm dates and class lists with the office.",
   },
 ];
 

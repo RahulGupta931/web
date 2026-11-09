@@ -84,6 +84,13 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--surface-card);
+  --color-card-foreground: var(--foreground);
+  --color-muted: var(--surface-muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--brand-gold);
+  --color-chart-2: var(--rkps-forest);
   --color-brand: var(--brand-maroon);
   --color-brand-light: var(--brand-maroon-light);
   --color-brand-dark: var(--brand-maroon-dark);
@@ -892,4 +899,156 @@ html {
 .rkps-touch-target {
   min-height: 44px;
   min-width: 44px;
+}
+/* Scroll reveal — classes are added from JS (RkpsScrollReveal), so content is visible without it */
+.rkps-sr {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.rkps-sr.rkps-sr-in {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rkps-sr {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Section surfaces — each one taken from school life, assigned per section   */
+/*  so neighbouring sections never share the same flat colour.                */
+/* -------------------------------------------------------------------------- */
+
+.rkps-site {
+  --surface-paper: #f8f5ef;
+  --surface-sand: #efe4d6;
+  --surface-gold: #f6ecd4;
+  --surface-wall: #ebdfcf;
+  --surface-cork: #e6d2b3;
+  --surface-chalk: #23372f;
+  --chalk-text: #f3efe6;
+  --chalk-muted: color-mix(in srgb, #f3efe6 72%, transparent);
+}
+
+/* Paper — ivory with a faint notebook dot grid */
+.rkps-site :is(#school-day, #values, #beyond, #parent-resources, #highlights, #featured, #explore-achievers) {
+  background-color: var(--surface-paper);
+  background-image: radial-gradient(color-mix(in srgb, var(--rkps-charcoal) 10%, transparent) 1px, transparent 1.3px);
+  background-size: 22px 22px;
+}
+
+/* Sand — warm beige with light falling from the top edge */
+.rkps-site :is(#why-choose, #campus-life, #school-life, #admissions, #contact, #recognition, #explore-events) {
+  background-color: var(--surface-sand);
+  background-image: linear-gradient(180deg, color-mix(in srgb, white 45%, transparent), transparent 22rem);
+}
+
+/* Gold — pale honey tint with a warm corner, for moments that invite action */
+.rkps-site :is(#excellence, #visit, #calendar) {
+  background-color: var(--surface-gold);
+  background-image: radial-gradient(ellipse 55% 70% at 100% 0%, color-mix(in srgb, var(--rkps-gold) 22%, transparent), transparent 70%);
+}
+
+/* Ruled — exercise-book lines and a red margin, for academics and FAQs */
+.rkps-site :is(#academics, #faq) {
+  background-color: #fbf9f4;
+  background-image:
+    linear-gradient(90deg, transparent 0 calc(var(--rkps-gutter-x) * 0.5 + 1.5rem), color-mix(in srgb, var(--rkps-burgundy) 26%, transparent) calc(var(--rkps-gutter-x) * 0.5 + 1.5rem) calc(var(--rkps-gutter-x) * 0.5 + 1.5rem + 1px), transparent 0),
+    repeating-linear-gradient(180deg, transparent 0 31px, color-mix(in srgb, #4f6f94 14%, transparent) 31px 32px);
+}
+
+/* Gallery wall — warm wall lit from above, behind the hanging frames */
+.rkps-site #gallery {
+  background-color: var(--surface-wall);
+  background-image:
+    radial-gradient(ellipse 60% 70% at 50% -10%, color-mix(in srgb, #fff8e6 95%, transparent), transparent 70%),
+    linear-gradient(180deg, transparent 75%, color-mix(in srgb, var(--rkps-charcoal) 6%, transparent));
+}
+
+/* Cork — the school noticeboard */
+.rkps-site #noticeboard {
+  background-color: var(--surface-cork);
+  background-image:
+    radial-gradient(color-mix(in srgb, #7a4a1e 22%, transparent) 1px, transparent 1.6px),
+    radial-gradient(color-mix(in srgb, white 40%, transparent) 1px, transparent 1.6px),
+    radial-gradient(color-mix(in srgb, #7a4a1e 14%, transparent) 1.5px, transparent 2px);
+  background-size: 7px 7px, 11px 11px, 17px 17px;
+  background-position: 0 0, 3px 5px, 8px 2px;
+}
+
+/* Chalkboard — deep green with chalk dust, for voices and reviews */
+.rkps-site :is(#parent-reviews, #voices) {
+  background-color: var(--surface-chalk);
+  background-image:
+    radial-gradient(ellipse 70% 60% at 25% 15%, color-mix(in srgb, white 7%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 50% at 85% 90%, color-mix(in srgb, white 4%, transparent), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color: var(--chalk-text);
+}
+
+/* Maroon bands — a fine pinstripe and a lit corner instead of flat red */
+.rkps-site :is(#about, #school-year, #facilities, #sanskriti-sangam) {
+  background-image:
+    radial-gradient(ellipse 60% 80% at 0% 0%, color-mix(in srgb, #c2181b 45%, transparent), transparent 65%),
+    repeating-linear-gradient(135deg, color-mix(in srgb, white 4%, transparent) 0 1px, transparent 1px 14px);
+}
+
+/* Text on the chalkboard surface */
+.rkps-site #voices :is(h2, h3, blockquote, .text-heading),
+.rkps-site #parent-reviews > div:first-child :is(h2, .text-heading) {
+  color: var(--chalk-text);
+}
+.rkps-site #voices :is(p, .text-muted),
+.rkps-site #parent-reviews > div:first-child :is(p, .text-muted) {
+  color: var(--chalk-muted);
+}
+.rkps-site #voices :is(.text-brand, .rkps-text-label),
+.rkps-site #parent-reviews > div:first-child .rkps-text-label {
+  color: var(--rkps-gold);
+}
+.rkps-site #voices :is(ul, li) {
+  border-color: color-mix(in srgb, var(--chalk-text) 16%, transparent);
+}
+.rkps-site #voices li button::before {
+  background-color: transparent;
+}
+.rkps-site #voices li button[aria-pressed="true"]::before {
+  background-color: var(--rkps-gold);
+}
+.rkps-site #voices li button[aria-pressed="true"] .text-heading {
+  color: var(--rkps-gold);
+}
+.rkps-site #voices .rkps-btn-icon {
+  border-color: color-mix(in srgb, var(--chalk-text) 30%, transparent);
+  background: transparent;
+  color: var(--chalk-text);
+}
+
+/* Enquiry — deep maroon with a lit corner and a fine pinstripe; the form sits on a white card */
+.rkps-site #enquiry {
+  background-color: var(--rkps-primary-dark);
+  background-image:
+    radial-gradient(ellipse 55% 70% at 100% 0%, color-mix(in srgb, #c2181b 40%, transparent), transparent 70%),
+    radial-gradient(ellipse 50% 60% at 0% 100%, color-mix(in srgb, var(--rkps-gold) 14%, transparent), transparent 70%),
+    repeating-linear-gradient(135deg, color-mix(in srgb, white 3.5%, transparent) 0 1px, transparent 1px 14px);
+}
+
+/* Header dropdown — short fade and rise from the trigger */
+@keyframes rkps-dropdown-in {
+  from { opacity: 0; transform: translate3d(0, -4px, 0); }
+  to { opacity: 1; transform: none; }
+}
+.rkps-dropdown-in {
+  animation: rkps-dropdown-in 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rkps-dropdown-in { animation: none; }
 }

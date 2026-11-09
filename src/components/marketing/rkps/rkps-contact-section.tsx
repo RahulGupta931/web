@@ -108,29 +108,43 @@ export function RkpsContactSection({
                 </figcaption>
               </figure>
 
-              <div className="grid gap-4 sm:grid-cols-2">
+              <div className="grid gap-4 lg:grid-cols-12">
                 <a
                   href={telHref}
-                  className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6"
+                  className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6 lg:col-span-5"
                 >
-                  <span className="rkps-text-label text-xs">Call admissions</span>
+                  <span className="rkps-text-label text-xs">Phone</span>
                   <p className="mt-2 text-xl font-bold tabular-nums text-heading sm:text-2xl">{phone}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted">
-                    Admissions assistance, visit scheduling, and fee guidance during school hours.
+                    Placeholder until the school publishes the official number. Confirm with the office.
                   </p>
                   <span className="mt-4 text-xs font-bold text-brand transition group-hover:translate-x-0.5">Dial now →</span>
                 </a>
 
                 <a
                   href={mailHref}
-                  className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6"
+                  className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6 lg:col-span-7"
                 >
-                  <span className="rkps-text-label text-xs">Email inquiries</span>
+                  <span className="rkps-text-label text-xs">Email</span>
                   <p className="mt-2 break-all text-base font-bold text-heading sm:text-lg">{email}</p>
                   <p className="mt-2 text-xs leading-relaxed text-muted">
-                    Documentation, transcript queries, or detailed questions for the administrative office.
+                    Placeholder address. Documentation and visits are confirmed by the school office.
                   </p>
                   <span className="mt-4 text-xs font-bold text-brand transition group-hover:translate-x-0.5">Send email →</span>
+                </a>
+
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(visit)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group flex flex-col rounded-2xl border border-border/80 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-brand/40 hover:shadow-md sm:p-6 lg:col-span-12"
+                >
+                  <span className="rkps-text-label text-xs">Google Maps</span>
+                  <p className="mt-2 text-base font-bold text-heading">{visit}</p>
+                  <p className="mt-2 text-xs leading-relaxed text-muted">
+                    Map search uses the placeholder campus address. Pin the official location after the office confirms it.
+                  </p>
+                  <span className="mt-4 text-xs font-bold text-brand">Open in Google Maps →</span>
                 </a>
               </div>
             </div>
